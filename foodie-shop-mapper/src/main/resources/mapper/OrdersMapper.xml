@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.myst.web.mapper.OrdersMapper">
+  <resultMap id="BaseResultMap" type="cn.myst.web.pojo.Orders">
+    <!--@mbg.generated-->
+    <!--@Table orders-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="receiver_name" jdbcType="VARCHAR" property="receiverName" />
+    <result column="receiver_mobile" jdbcType="VARCHAR" property="receiverMobile" />
+    <result column="receiver_address" jdbcType="VARCHAR" property="receiverAddress" />
+    <result column="total_amount" jdbcType="INTEGER" property="totalAmount" />
+    <result column="real_pay_amount" jdbcType="INTEGER" property="realPayAmount" />
+    <result column="post_amount" jdbcType="INTEGER" property="postAmount" />
+    <result column="pay_method" jdbcType="INTEGER" property="payMethod" />
+    <result column="left_msg" jdbcType="VARCHAR" property="leftMsg" />
+    <result column="extand" jdbcType="VARCHAR" property="extand" />
+    <result column="is_comment" jdbcType="INTEGER" property="isComment" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_id, receiver_name, receiver_mobile, receiver_address, total_amount, real_pay_amount, 
+    post_amount, pay_method, left_msg, extand, is_comment, is_delete, created_time, updated_time
+  </sql>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update orders
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="user_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.userId != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.userId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="receiver_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.receiverName != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.receiverName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="receiver_mobile = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.receiverMobile != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.receiverMobile,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="receiver_address = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.receiverAddress != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.receiverAddress,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="total_amount = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.totalAmount != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.totalAmount,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="real_pay_amount = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.realPayAmount != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.realPayAmount,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="post_amount = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.postAmount != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.postAmount,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="pay_method = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.payMethod != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.payMethod,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="left_msg = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.leftMsg != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.leftMsg,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="extand = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.extand != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.extand,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="is_comment = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.isComment != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.isComment,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="is_delete = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.isDelete != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.isDelete,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="created_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.createdTime != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.createdTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="updated_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.updatedTime != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.updatedTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=VARCHAR}
+    </foreach>
+  </update>
+  <insert id="batchInsert" parameterType="map">
+    <!--@mbg.generated-->
+    insert into orders
+    (id, user_id, receiver_name, receiver_mobile, receiver_address, total_amount, real_pay_amount, 
+      post_amount, pay_method, left_msg, extand, is_comment, is_delete, created_time, 
+      updated_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id,jdbcType=VARCHAR}, #{item.userId,jdbcType=VARCHAR}, #{item.receiverName,jdbcType=VARCHAR}, 
+        #{item.receiverMobile,jdbcType=VARCHAR}, #{item.receiverAddress,jdbcType=VARCHAR}, 
+        #{item.totalAmount,jdbcType=INTEGER}, #{item.realPayAmount,jdbcType=INTEGER}, #{item.postAmount,jdbcType=INTEGER}, 
+        #{item.payMethod,jdbcType=INTEGER}, #{item.leftMsg,jdbcType=VARCHAR}, #{item.extand,jdbcType=VARCHAR}, 
+        #{item.isComment,jdbcType=INTEGER}, #{item.isDelete,jdbcType=INTEGER}, #{item.createdTime,jdbcType=TIMESTAMP}, 
+        #{item.updatedTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+</mapper>

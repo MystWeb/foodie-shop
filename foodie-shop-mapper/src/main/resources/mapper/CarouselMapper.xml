@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.myst.web.mapper.CarouselMapper">
+  <resultMap id="BaseResultMap" type="cn.myst.web.pojo.Carousel">
+    <!--@mbg.generated-->
+    <!--@Table carousel-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+    <result column="background_color" jdbcType="VARCHAR" property="backgroundColor" />
+    <result column="item_id" jdbcType="VARCHAR" property="itemId" />
+    <result column="cat_id" jdbcType="VARCHAR" property="catId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="is_show" jdbcType="INTEGER" property="isShow" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, image_url, background_color, item_id, cat_id, `type`, sort, is_show, create_time, 
+    update_time
+  </sql>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update carousel
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="image_url = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.imageUrl != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.imageUrl,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="background_color = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.backgroundColor != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.backgroundColor,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="item_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.itemId != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.itemId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="cat_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.catId != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.catId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="`type` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.type != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.type,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="sort = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.sort != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.sort,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="is_show = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.isShow != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.isShow,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="create_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.createTime != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.createTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="update_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.updateTime != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.updateTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=VARCHAR}
+    </foreach>
+  </update>
+  <insert id="batchInsert" parameterType="map">
+    <!--@mbg.generated-->
+    insert into carousel
+    (id, image_url, background_color, item_id, cat_id, `type`, sort, is_show, create_time, 
+      update_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id,jdbcType=VARCHAR}, #{item.imageUrl,jdbcType=VARCHAR}, #{item.backgroundColor,jdbcType=VARCHAR}, 
+        #{item.itemId,jdbcType=VARCHAR}, #{item.catId,jdbcType=VARCHAR}, #{item.type,jdbcType=INTEGER}, 
+        #{item.sort,jdbcType=INTEGER}, #{item.isShow,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, 
+        #{item.updateTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+</mapper>

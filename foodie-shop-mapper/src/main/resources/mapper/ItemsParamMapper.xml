@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.myst.web.mapper.ItemsParamMapper">
+  <resultMap id="BaseResultMap" type="cn.myst.web.pojo.ItemsParam">
+    <!--@mbg.generated-->
+    <!--@Table items_param-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="item_id" jdbcType="VARCHAR" property="itemId" />
+    <result column="produc_place" jdbcType="VARCHAR" property="producPlace" />
+    <result column="foot_period" jdbcType="VARCHAR" property="footPeriod" />
+    <result column="brand" jdbcType="VARCHAR" property="brand" />
+    <result column="factory_name" jdbcType="VARCHAR" property="factoryName" />
+    <result column="factory_address" jdbcType="VARCHAR" property="factoryAddress" />
+    <result column="packaging_method" jdbcType="VARCHAR" property="packagingMethod" />
+    <result column="weight" jdbcType="VARCHAR" property="weight" />
+    <result column="storage_method" jdbcType="VARCHAR" property="storageMethod" />
+    <result column="eat_method" jdbcType="VARCHAR" property="eatMethod" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, item_id, produc_place, foot_period, brand, factory_name, factory_address, packaging_method, 
+    weight, storage_method, eat_method, created_time, updated_time
+  </sql>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update items_param
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="item_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.itemId != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.itemId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="produc_place = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.producPlace != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.producPlace,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="foot_period = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.footPeriod != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.footPeriod,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="brand = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.brand != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.brand,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="factory_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.factoryName != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.factoryName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="factory_address = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.factoryAddress != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.factoryAddress,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="packaging_method = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.packagingMethod != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.packagingMethod,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="weight = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.weight != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.weight,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="storage_method = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.storageMethod != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.storageMethod,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="eat_method = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.eatMethod != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.eatMethod,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="created_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.createdTime != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.createdTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="updated_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.updatedTime != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.updatedTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=VARCHAR}
+    </foreach>
+  </update>
+  <insert id="batchInsert" parameterType="map">
+    <!--@mbg.generated-->
+    insert into items_param
+    (id, item_id, produc_place, foot_period, brand, factory_name, factory_address, packaging_method, 
+      weight, storage_method, eat_method, created_time, updated_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id,jdbcType=VARCHAR}, #{item.itemId,jdbcType=VARCHAR}, #{item.producPlace,jdbcType=VARCHAR}, 
+        #{item.footPeriod,jdbcType=VARCHAR}, #{item.brand,jdbcType=VARCHAR}, #{item.factoryName,jdbcType=VARCHAR}, 
+        #{item.factoryAddress,jdbcType=VARCHAR}, #{item.packagingMethod,jdbcType=VARCHAR}, 
+        #{item.weight,jdbcType=VARCHAR}, #{item.storageMethod,jdbcType=VARCHAR}, #{item.eatMethod,jdbcType=VARCHAR}, 
+        #{item.createdTime,jdbcType=TIMESTAMP}, #{item.updatedTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+</mapper>

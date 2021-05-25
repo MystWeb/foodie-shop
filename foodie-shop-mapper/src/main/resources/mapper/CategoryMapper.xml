@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.myst.web.mapper.CategoryMapper">
+  <resultMap id="BaseResultMap" type="cn.myst.web.pojo.Category">
+    <!--@mbg.generated-->
+    <!--@Table category-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="father_id" jdbcType="INTEGER" property="fatherId" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="slogan" jdbcType="VARCHAR" property="slogan" />
+    <result column="cat_image" jdbcType="VARCHAR" property="catImage" />
+    <result column="bg_color" jdbcType="VARCHAR" property="bgColor" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, `type`, father_id, logo, slogan, cat_image, bg_color
+  </sql>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update category
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="`name` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.name != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.name,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="`type` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.type != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.type,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="father_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.fatherId != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.fatherId,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="logo = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.logo != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.logo,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="slogan = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.slogan != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.slogan,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="cat_image = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.catImage != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.catImage,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="bg_color = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.bgColor != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.bgColor,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into category
+    (`name`, `type`, father_id, logo, slogan, cat_image, bg_color)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.name,jdbcType=VARCHAR}, #{item.type,jdbcType=INTEGER}, #{item.fatherId,jdbcType=INTEGER}, 
+        #{item.logo,jdbcType=VARCHAR}, #{item.slogan,jdbcType=VARCHAR}, #{item.catImage,jdbcType=VARCHAR}, 
+        #{item.bgColor,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+</mapper>

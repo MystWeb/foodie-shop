@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.myst.web.mapper.OrderItemsMapper">
+  <resultMap id="BaseResultMap" type="cn.myst.web.pojo.OrderItems">
+    <!--@mbg.generated-->
+    <!--@Table order_items-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="item_id" jdbcType="VARCHAR" property="itemId" />
+    <result column="item_img" jdbcType="VARCHAR" property="itemImg" />
+    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+    <result column="item_spec_id" jdbcType="VARCHAR" property="itemSpecId" />
+    <result column="item_spec_name" jdbcType="VARCHAR" property="itemSpecName" />
+    <result column="price" jdbcType="INTEGER" property="price" />
+    <result column="buy_counts" jdbcType="INTEGER" property="buyCounts" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, order_id, item_id, item_img, item_name, item_spec_id, item_spec_name, price, 
+    buy_counts
+  </sql>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update order_items
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="order_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.orderId != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.orderId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="item_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.itemId != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.itemId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="item_img = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.itemImg != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.itemImg,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="item_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.itemName != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.itemName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="item_spec_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.itemSpecId != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.itemSpecId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="item_spec_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.itemSpecName != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.itemSpecName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="price = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.price != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.price,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="buy_counts = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.buyCounts != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.buyCounts,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=VARCHAR}
+    </foreach>
+  </update>
+  <insert id="batchInsert" parameterType="map">
+    <!--@mbg.generated-->
+    insert into order_items
+    (id, order_id, item_id, item_img, item_name, item_spec_id, item_spec_name, price, 
+      buy_counts)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id,jdbcType=VARCHAR}, #{item.orderId,jdbcType=VARCHAR}, #{item.itemId,jdbcType=VARCHAR}, 
+        #{item.itemImg,jdbcType=VARCHAR}, #{item.itemName,jdbcType=VARCHAR}, #{item.itemSpecId,jdbcType=VARCHAR}, 
+        #{item.itemSpecName,jdbcType=VARCHAR}, #{item.price,jdbcType=INTEGER}, #{item.buyCounts,jdbcType=INTEGER}
+        )
+    </foreach>
+  </insert>
+</mapper>

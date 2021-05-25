@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.myst.web.mapper.ItemsCommentsMapper">
+  <resultMap id="BaseResultMap" type="cn.myst.web.pojo.ItemsComments">
+    <!--@mbg.generated-->
+    <!--@Table items_comments-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="item_id" jdbcType="VARCHAR" property="itemId" />
+    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+    <result column="item_spec_id" jdbcType="VARCHAR" property="itemSpecId" />
+    <result column="sepc_name" jdbcType="VARCHAR" property="sepcName" />
+    <result column="comment_level" jdbcType="INTEGER" property="commentLevel" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_id, item_id, item_name, item_spec_id, sepc_name, comment_level, content, 
+    created_time, updated_time
+  </sql>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update items_comments
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="user_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.userId != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.userId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="item_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.itemId != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.itemId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="item_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.itemName != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.itemName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="item_spec_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.itemSpecId != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.itemSpecId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="sepc_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.sepcName != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.sepcName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="comment_level = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.commentLevel != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.commentLevel,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="content = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.content != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.content,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="created_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.createdTime != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.createdTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="updated_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.updatedTime != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.updatedTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=VARCHAR}
+    </foreach>
+  </update>
+  <insert id="batchInsert" parameterType="map">
+    <!--@mbg.generated-->
+    insert into items_comments
+    (id, user_id, item_id, item_name, item_spec_id, sepc_name, comment_level, content, 
+      created_time, updated_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id,jdbcType=VARCHAR}, #{item.userId,jdbcType=VARCHAR}, #{item.itemId,jdbcType=VARCHAR}, 
+        #{item.itemName,jdbcType=VARCHAR}, #{item.itemSpecId,jdbcType=VARCHAR}, #{item.sepcName,jdbcType=VARCHAR}, 
+        #{item.commentLevel,jdbcType=INTEGER}, #{item.content,jdbcType=VARCHAR}, #{item.createdTime,jdbcType=TIMESTAMP}, 
+        #{item.updatedTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+</mapper>

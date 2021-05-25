@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.myst.web.mapper.ItemsSpecMapper">
+  <resultMap id="BaseResultMap" type="cn.myst.web.pojo.ItemsSpec">
+    <!--@mbg.generated-->
+    <!--@Table items_spec-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="item_id" jdbcType="VARCHAR" property="itemId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="stock" jdbcType="INTEGER" property="stock" />
+    <result column="discounts" jdbcType="DECIMAL" property="discounts" />
+    <result column="price_discount" jdbcType="INTEGER" property="priceDiscount" />
+    <result column="price_normal" jdbcType="INTEGER" property="priceNormal" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, item_id, `name`, stock, discounts, price_discount, price_normal, created_time, 
+    updated_time
+  </sql>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update items_spec
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="item_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.itemId != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.itemId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="`name` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.name != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.name,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="stock = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.stock != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.stock,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="discounts = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.discounts != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.discounts,jdbcType=DECIMAL}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="price_discount = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.priceDiscount != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.priceDiscount,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="price_normal = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.priceNormal != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.priceNormal,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="created_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.createdTime != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.createdTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="updated_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.updatedTime != null">
+            when id = #{item.id,jdbcType=VARCHAR} then #{item.updatedTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=VARCHAR}
+    </foreach>
+  </update>
+  <insert id="batchInsert" parameterType="map">
+    <!--@mbg.generated-->
+    insert into items_spec
+    (id, item_id, `name`, stock, discounts, price_discount, price_normal, created_time, 
+      updated_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id,jdbcType=VARCHAR}, #{item.itemId,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, 
+        #{item.stock,jdbcType=INTEGER}, #{item.discounts,jdbcType=DECIMAL}, #{item.priceDiscount,jdbcType=INTEGER}, 
+        #{item.priceNormal,jdbcType=INTEGER}, #{item.createdTime,jdbcType=TIMESTAMP}, #{item.updatedTime,jdbcType=TIMESTAMP}
+        )
+    </foreach>
+  </insert>
+</mapper>
