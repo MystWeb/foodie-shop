@@ -3,18 +3,17 @@ package cn.myst.web.enums;
 /**
  * @author ziming.xing
  * Create Date：2021/5/20
- * 性别 枚举
+ * 是否 枚举
  */
-public enum EnumSex {
-    WOMAN(0, "女"),
-    MAN(1, "男"),
-    SECRET(2, "保密"),
+public enum YesOrNo {
+    NO(0, "否"),
+    YES(1, "是"),
     ;
 
     public final Integer type;
     public final String value;
 
-    EnumSex(Integer type, String value) {
+    YesOrNo(Integer type, String value) {
         this.type = type;
         this.value = value;
     }
