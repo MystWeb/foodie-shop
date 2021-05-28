@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.myst.web.mapper.CategoryCustomMapper">
+  <!--
+   collection 标签：用于定义关联的list集合类型的封装规则
+   property：对应三级分类的list属性名
+   ofType：集合的类型，三级分类的VO
+   -->
+  <resultMap id="MyCategoryVO" type="cn.myst.web.pojo.vo.CategoryVO">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="type" jdbcType="INTEGER" property="type"/>
+    <result column="father_id" jdbcType="INTEGER" property="fatherId"/>
+    <collection property="subCatList" ofType="cn.myst.web.pojo.vo.SubCategoryVO">
+      <id column="sub_id" jdbcType="INTEGER" property="subId"/>
+      <result column="sub_name" jdbcType="VARCHAR" property="subName"/>
+      <result column="sub_type" jdbcType="INTEGER" property="subType"/>
+      <result column="sub_father_id" jdbcType="INTEGER" property="subFatherId"/>
+    </collection>
+  </resultMap>
+
+  <select id="getSubCatList" resultMap="MyCategoryVO">
+    SELECT f.id,
+           f.`name`,
+           f.type,
+           f.father_id,
+           c.id        AS sub_id,
+           c.`name`    AS sub_name,
+           c.type      AS sub_type,
+           c.father_id AS sub_father_id
+    FROM `category` AS f
+                 LEFT JOIN `category` AS c ON f.id = c.father_id
+    WHERE f.father_id = #{rootCatId,jdbcType=INTEGER}
+  </select>
+</mapper>

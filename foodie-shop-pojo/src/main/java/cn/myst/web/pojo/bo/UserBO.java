@@ -9,6 +9,7 @@ import java.io.Serializable;
 /**
  * @author ziming.xing
  * Create Date：2021/5/20
+ * 业务层交互数据 用户BO
  */
 @ApiModel(value = "用户BO", description = "客户端，用户传入的数据封装在此entity中")
 @Data

@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.Objects;
 public class CarouselServiceImpl implements CarouselService {
     private final CarouselMapper carouselMapper;
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public List<Carousel> queryAll(Integer isShow) {
         if (Objects.isNull(isShow)) {

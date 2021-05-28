@@ -5,7 +5,7 @@ package cn.myst.web.enums;
  * Create Date：2021/5/20
  * 是否 枚举
  */
-public enum YesOrNo {
+public enum EnumYesOrNo {
     NO(0, "否"),
     YES(1, "是"),
     ;
@@ -13,7 +13,7 @@ public enum YesOrNo {
     public final Integer type;
     public final String value;
 
-    YesOrNo(Integer type, String value) {
+    EnumYesOrNo(Integer type, String value) {
         this.type = type;
         this.value = value;
     }
