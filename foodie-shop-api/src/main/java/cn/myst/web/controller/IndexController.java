@@ -4,6 +4,7 @@ import cn.myst.web.enums.EnumYesOrNo;
 import cn.myst.web.pojo.Carousel;
 import cn.myst.web.pojo.Category;
 import cn.myst.web.pojo.vo.CategoryVO;
+import cn.myst.web.pojo.vo.NewItemsVO;
 import cn.myst.web.service.CarouselService;
 import cn.myst.web.service.CategoryService;
 import cn.myst.web.utils.IMOOCJSONResult;
@@ -37,8 +38,8 @@ public class IndexController {
     @ApiOperation(value = "获取首页轮播图", notes = "获取首页轮播图列表")
     @GetMapping("/carousel")
     public IMOOCJSONResult carousel() {
-        List<Carousel> carouselList = carouselService.queryAll(EnumYesOrNo.YES.type);
-        return IMOOCJSONResult.ok(carouselList);
+        List<Carousel> list = carouselService.queryAll(EnumYesOrNo.YES.type);
+        return IMOOCJSONResult.ok(list);
     }
 
     /**
@@ -49,8 +50,8 @@ public class IndexController {
     @ApiOperation(value = "获取商品分类（一级）", notes = "获取商品分类（一级）")
     @GetMapping("/cats")
     public IMOOCJSONResult cats() {
-        List<Category> categoryList = categoryService.queryAllRootLevelCat();
-        return IMOOCJSONResult.ok(categoryList);
+        List<Category> list = categoryService.queryAllRootLevelCat();
+        return IMOOCJSONResult.ok(list);
     }
 
     @ApiOperation(value = "获取商品子分类", notes = "获取商品子分类")
@@ -61,7 +62,19 @@ public class IndexController {
         if (Objects.isNull(rootCatId)) {
             return IMOOCJSONResult.errorMsg(CLASSIFICATION_NOT_EXIST);
         }
-        List<CategoryVO> subCatList = categoryService.getSubCatList(rootCatId);
-        return IMOOCJSONResult.ok(subCatList);
+        List<CategoryVO> list = categoryService.getSubCatList(rootCatId);
+        return IMOOCJSONResult.ok(list);
+    }
+
+    @ApiOperation(value = "查询每个一级分类下的最新6条商品数据", notes = "查询每个一级分类下的最新6条商品数据")
+    @GetMapping("/sixNewItems/{rootCatId}")
+    public IMOOCJSONResult sixNewItems(
+            @ApiParam(name = "rootCatId", value = "一级分类id", readOnly = true)
+            @PathVariable Integer rootCatId) {
+        if (Objects.isNull(rootCatId)) {
+            return IMOOCJSONResult.errorMsg(CLASSIFICATION_NOT_EXIST);
+        }
+        List<NewItemsVO> list = categoryService.getSixNewItemLazy(rootCatId);
+        return IMOOCJSONResult.ok(list);
     }
 }

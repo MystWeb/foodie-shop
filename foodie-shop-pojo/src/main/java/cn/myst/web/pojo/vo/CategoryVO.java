@@ -32,7 +32,7 @@ public class CategoryVO implements Serializable {
     /**
      * 三级分类VO List
      */
-    @ApiModelProperty(value = "主键")
+    @ApiModelProperty(value = "三级分类VO List")
     private List<SubCategoryVO> subCatList;
 
 }

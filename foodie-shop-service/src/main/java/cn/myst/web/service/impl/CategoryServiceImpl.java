@@ -5,6 +5,7 @@ import cn.myst.web.mapper.CategoryCustomMapper;
 import cn.myst.web.mapper.CategoryMapper;
 import cn.myst.web.pojo.Category;
 import cn.myst.web.pojo.vo.CategoryVO;
+import cn.myst.web.pojo.vo.NewItemsVO;
 import cn.myst.web.service.CategoryService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author ziming.xing
@@ -43,5 +42,16 @@ public class CategoryServiceImpl implements CategoryService {
             return Collections.emptyList();
         }
         return categoryCustomMapper.getSubCatList(rootCatId);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<NewItemsVO> getSixNewItemLazy(Integer rootCatId) {
+        if (Objects.isNull(rootCatId)) {
+            return Collections.emptyList();
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("rootCatId", rootCatId);
+        return categoryCustomMapper.getSixNewItemLazy(map);
     }
 }
