@@ -27,8 +27,6 @@ import java.util.Objects;
 @RequestMapping("/passport")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class PassportController {
-    private final UserService userService;
-
     public static final String USER_REGISTER_INFO_EMPTY = "用户注册信息不能为空";
     public static final String USERNAME_IS_EMPTY = "用户名不能为空";
     public static final String USERNAME_PASSWORD_IS_EMPTY = "用户名或密码不能为空";
@@ -37,6 +35,8 @@ public class PassportController {
     public static final String INCONSISTENT_PASSWORDS = "两次密码输入不一致";
     public static final String INCORRECT_USERNAME_OR_PASSWORD = "用户名或密码错误";
     public static final String USER_COOKIE_NAME = "user";
+
+    private final UserService userService;
 
     @ApiOperation(value = "用户名是否存在")
     @GetMapping("/usernameIsExist")

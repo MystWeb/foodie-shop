@@ -30,10 +30,10 @@ import java.util.Objects;
 @RequestMapping("/index")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class IndexController {
+    public static final String CLASSIFICATION_NOT_EXIST = "分类不存在";
+
     private final CarouselService carouselService;
     private final CategoryService categoryService;
-
-    public static final String CLASSIFICATION_NOT_EXIST = "分类不存在";
 
     @ApiOperation(value = "获取首页轮播图", notes = "获取首页轮播图列表")
     @GetMapping("/carousel")
