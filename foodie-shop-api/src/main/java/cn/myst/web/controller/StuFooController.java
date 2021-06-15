@@ -4,6 +4,7 @@ import cn.myst.web.pojo.Stu;
 import cn.myst.web.service.StuService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -13,7 +14,9 @@ import springfox.documentation.annotations.ApiIgnore;
  * Create Date：2021/5/18
  */
 @ApiIgnore
+@Slf4j
 @RestController
+@RequestMapping("/students")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class StuFooController {
     private final StuService stuService;
@@ -39,7 +42,7 @@ public class StuFooController {
     }
 
     @ApiOperation("删除学生")
-    @PostMapping("/deleteStu")
+    @DeleteMapping("/deleteStu")
     public Object deleteStu(@RequestParam int id) {
         stuService.deleteStu(id);
         return "OK";
