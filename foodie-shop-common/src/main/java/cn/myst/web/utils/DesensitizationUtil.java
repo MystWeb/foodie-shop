@@ -1,7 +1,5 @@
 package cn.myst.web.utils;
 
-import sun.applet.Main;
-
 /**
  * 通用脱敏工具类
  * 可用于：

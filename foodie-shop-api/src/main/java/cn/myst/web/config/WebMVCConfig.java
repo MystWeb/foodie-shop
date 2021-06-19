@@ -36,12 +36,6 @@ public class WebMVCConfig implements WebMvcConfigurer {
                 .maxAge(3600);
     }
 
-    /*@Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/swagger-ui/")
-                .setViewName("forward:/swagger-ui/index.html");
-    }*/
-
     /**
      * 解决：An invalid character [34] was present in the Cookie value
      * 上面的 [34] 中的 34 是指 ASCII 码（十进制）对应的字符 "（双引号）
@@ -50,7 +44,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
      */
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> cookieProcessorCustomizer() {
-        return (factory) -> factory.addContextCustomizers(
-                (context) -> context.setCookieProcessor(new LegacyCookieProcessor()));
+        return factory -> factory.addContextCustomizers(
+                context -> context.setCookieProcessor(new LegacyCookieProcessor()));
     }
 }

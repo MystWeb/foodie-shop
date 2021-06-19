@@ -57,7 +57,7 @@ public class IndexController {
     @ApiOperation(value = "获取商品子分类", notes = "获取商品子分类")
     @GetMapping("/subCat/{rootCatId}")
     public IMOOCJSONResult subCat(
-            @ApiParam(name = "rootCatId", value = "一级分类id", readOnly = true)
+            @ApiParam(name = "rootCatId", value = "一级分类id", required = true)
             @PathVariable Integer rootCatId) {
         if (Objects.isNull(rootCatId)) {
             return IMOOCJSONResult.errorMsg(CLASSIFICATION_NOT_EXIST);
@@ -69,7 +69,7 @@ public class IndexController {
     @ApiOperation(value = "查询每个一级分类下的最新6条商品数据", notes = "查询每个一级分类下的最新6条商品数据")
     @GetMapping("/sixNewItems/{rootCatId}")
     public IMOOCJSONResult sixNewItems(
-            @ApiParam(name = "rootCatId", value = "一级分类id", readOnly = true)
+            @ApiParam(name = "rootCatId", value = "一级分类id", required = true)
             @PathVariable Integer rootCatId) {
         if (Objects.isNull(rootCatId)) {
             return IMOOCJSONResult.errorMsg(CLASSIFICATION_NOT_EXIST);

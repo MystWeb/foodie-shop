@@ -1,15 +1,17 @@
 package cn.myst.web.service.impl;
 
-import cn.myst.web.mapper.ItemsImgMapper;
-import cn.myst.web.mapper.ItemsMapper;
-import cn.myst.web.mapper.ItemsParamMapper;
-import cn.myst.web.mapper.ItemsSpecMapper;
-import cn.myst.web.pojo.Items;
-import cn.myst.web.pojo.ItemsImg;
-import cn.myst.web.pojo.ItemsParam;
-import cn.myst.web.pojo.ItemsSpec;
+import cn.myst.web.entity.base.BasePagingQuery;
+import cn.myst.web.enums.EnumCommentLevel;
+import cn.myst.web.mapper.*;
+import cn.myst.web.pojo.*;
+import cn.myst.web.pojo.vo.CommentLevelCountsVO;
+import cn.myst.web.pojo.vo.ItemCommentVO;
 import cn.myst.web.service.ItemService;
+import cn.myst.web.utils.DesensitizationUtil;
+import cn.myst.web.utils.PagedGridResult;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author ziming.xing
@@ -31,6 +32,8 @@ public class ItemServiceImpl implements ItemService {
     private final ItemsImgMapper itemsImgMapper;
     private final ItemsSpecMapper itemsSpecMapper;
     private final ItemsParamMapper itemsParamMapper;
+    private final ItemsCommentsMapper itemsCommentsMapper;
+    private final ItemsCustomMapper itemsCustomMapper;
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
@@ -73,4 +76,62 @@ public class ItemServiceImpl implements ItemService {
         queryWrapper.eq(ItemsParam::getItemId, itemId);
         return itemsParamMapper.selectOne(queryWrapper);
     }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public CommentLevelCountsVO queryCommentCountsByItemId(String itemId) {
+        Integer goodCounts = getCommentCounts(itemId, EnumCommentLevel.GOOD.type);
+        Integer normalCounts = getCommentCounts(itemId, EnumCommentLevel.NORMAL.type);
+        Integer badCounts = getCommentCounts(itemId, EnumCommentLevel.BAD.type);
+        Integer totalCounts = goodCounts + normalCounts + badCounts;
+        CommentLevelCountsVO commentLevelCountsVO = new CommentLevelCountsVO();
+        commentLevelCountsVO.setTotalCounts(totalCounts);
+        commentLevelCountsVO.setGoodCounts(goodCounts);
+        commentLevelCountsVO.setNormalCounts(normalCounts);
+        commentLevelCountsVO.setBadCounts(badCounts);
+        return commentLevelCountsVO;
+    }
+
+    /**
+     * 根据商品id，商品评价等级查询商品评价数量
+     */
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Integer getCommentCounts(String itemId, Integer level) {
+        if (StringUtils.isBlank(itemId)) {
+            return null;
+        }
+        LambdaQueryWrapper<ItemsComments> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ItemsComments::getItemId, itemId);
+        if (Objects.nonNull(level)) {
+            queryWrapper.eq(ItemsComments::getCommentLevel, level);
+        }
+        return itemsCommentsMapper.selectCount(queryWrapper);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedGridResult queryPagedComments(String itemId, Integer level, BasePagingQuery query) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("itemId", itemId);
+        map.put("level", level);
+//        return PageHelper.startPage(query.getPageNum(), query.getPageSize())
+//                .doSelectPageInfo(() -> itemsCustomMapper.queryItemComments(map));
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        List<ItemCommentVO> list = itemsCustomMapper.queryItemComments(map);
+        list.forEach(vo -> {
+            vo.setNickname(DesensitizationUtil.commonDisplay(vo.getNickname()));
+        });
+        return setterPagedGrid(query.getPageNum(), list);
+    }
+
+    private PagedGridResult setterPagedGrid(Integer pageNum, List<?> list) {
+        PageInfo<?> pageInfo = new PageInfo<>(list);
+        PagedGridResult pagedGridResult = new PagedGridResult();
+        pagedGridResult.setPage(pageNum);
+        pagedGridResult.setRows(list);
+        pagedGridResult.setTotal(pageInfo.getPageSize());
+        pagedGridResult.setRecords(pageInfo.getTotal());
+        return pagedGridResult;
+    }
+
 }
