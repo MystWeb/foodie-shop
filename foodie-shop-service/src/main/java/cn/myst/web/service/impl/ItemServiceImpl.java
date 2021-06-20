@@ -1,11 +1,11 @@
 package cn.myst.web.service.impl;
 
-import cn.myst.web.entity.base.BasePagingQuery;
 import cn.myst.web.enums.EnumCommentLevel;
 import cn.myst.web.mapper.*;
 import cn.myst.web.pojo.*;
 import cn.myst.web.pojo.vo.CommentLevelCountsVO;
 import cn.myst.web.pojo.vo.ItemCommentVO;
+import cn.myst.web.pojo.vo.SearchItemsVO;
 import cn.myst.web.service.ItemService;
 import cn.myst.web.utils.DesensitizationUtil;
 import cn.myst.web.utils.PagedGridResult;
@@ -110,28 +110,42 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public PagedGridResult queryPagedComments(String itemId, Integer level, BasePagingQuery query) {
+    public PagedGridResult queryPagedComments(String itemId, Integer level, Integer page, Integer pageSize) {
+        if (StringUtils.isBlank(itemId)) {
+            return null;
+        }
         Map<String, Object> map = new HashMap<>();
         map.put("itemId", itemId);
         map.put("level", level);
-//        return PageHelper.startPage(query.getPageNum(), query.getPageSize())
+//        return PageHelper.startPage(page, pageSize)
 //                .doSelectPageInfo(() -> itemsCustomMapper.queryItemComments(map));
-        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        PageHelper.startPage(page, pageSize);
         List<ItemCommentVO> list = itemsCustomMapper.queryItemComments(map);
-        list.forEach(vo -> {
-            vo.setNickname(DesensitizationUtil.commonDisplay(vo.getNickname()));
-        });
-        return setterPagedGrid(query.getPageNum(), list);
+        list.forEach(vo -> vo.setNickname(DesensitizationUtil.commonDisplay(vo.getNickname())));
+        return setterPagedGrid(page, list);
     }
 
-    private PagedGridResult setterPagedGrid(Integer pageNum, List<?> list) {
+    private PagedGridResult setterPagedGrid(Integer page, List<?> list) {
         PageInfo<?> pageInfo = new PageInfo<>(list);
         PagedGridResult pagedGridResult = new PagedGridResult();
-        pagedGridResult.setPage(pageNum);
+        pagedGridResult.setPage(page);
         pagedGridResult.setRows(list);
         pagedGridResult.setTotal(pageInfo.getPageSize());
         pagedGridResult.setRecords(pageInfo.getTotal());
         return pagedGridResult;
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedGridResult searchItems(String keywords, String sort, Integer page, Integer pageSize) {
+        if (StringUtils.isBlank(keywords)) {
+            return null;
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("keywords", keywords);
+        map.put("sort", sort);
+        PageHelper.startPage(page, pageSize);
+        List<SearchItemsVO> list = itemsCustomMapper.searchItems(map);
+        return setterPagedGrid(page, list);
+    }
 }

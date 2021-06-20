@@ -1,6 +1,5 @@
 package cn.myst.web.controller;
 
-import cn.myst.web.entity.base.BasePagingQuery;
 import cn.myst.web.pojo.Items;
 import cn.myst.web.pojo.ItemsImg;
 import cn.myst.web.pojo.ItemsParam;
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author ziming.xing
@@ -29,7 +27,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
-public class ItemsController {
+public class ItemsController extends BaseController {
 
     private final ItemService itemService;
 
@@ -81,16 +79,40 @@ public class ItemsController {
         if (StringUtils.isBlank(itemId)) {
             return IMOOCJSONResult.errorMsg(null);
         }
-        BasePagingQuery query = new BasePagingQuery();
-        if (Objects.isNull(page)) {
-            page = query.getPageNum();
+        if (page == null) {
+            page = PAGE;
         }
-        if (Objects.isNull(pageSize)) {
-            pageSize = query.getPageSize();
+
+        if (pageSize == null) {
+            pageSize = COMMON_PAGE_SIZE;
         }
-        query.setPageNum(page);
-        query.setPageSize(pageSize);
-        PagedGridResult grid = itemService.queryPagedComments(itemId, level, query);
+        PagedGridResult grid = itemService.queryPagedComments(itemId, level, page, pageSize);
+        return IMOOCJSONResult.ok(grid);
+    }
+
+    @ApiOperation(value = "搜索商品列表", notes = "搜索商品列表")
+    @GetMapping("/search")
+    public IMOOCJSONResult getComments(
+            @ApiParam(value = "关键字", required = true)
+            @RequestParam String keywords,
+            @ApiParam(value = "排序")
+            @RequestParam(required = false) String sort,
+            @ApiParam(value = "查询下一页的第几页")
+            @RequestParam Integer page,
+            @ApiParam(value = "分页的每一页显示的条数")
+            @RequestParam Integer pageSize
+    ) {
+        if (StringUtils.isBlank(keywords)) {
+            return IMOOCJSONResult.errorMsg(null);
+        }
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = PAGE_SIZE;
+        }
+        PagedGridResult grid = itemService.searchItems(keywords, sort, page, pageSize);
         return IMOOCJSONResult.ok(grid);
     }
 

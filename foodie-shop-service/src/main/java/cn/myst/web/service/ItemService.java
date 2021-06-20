@@ -1,6 +1,5 @@
 package cn.myst.web.service;
 
-import cn.myst.web.entity.base.BasePagingQuery;
 import cn.myst.web.pojo.Items;
 import cn.myst.web.pojo.ItemsImg;
 import cn.myst.web.pojo.ItemsParam;
@@ -43,6 +42,10 @@ public interface ItemService {
     /**
      * 根据商品id，商品评价等级查询商品的评价
      */
-    PagedGridResult queryPagedComments(String itemId, Integer level, BasePagingQuery query);
+    PagedGridResult queryPagedComments(String itemId, Integer level, Integer page, Integer pageSize);
 
+    /**
+     * 搜索商品列表
+     */
+    PagedGridResult searchItems(String keywords, String sort, Integer page, Integer pageSize);
 }

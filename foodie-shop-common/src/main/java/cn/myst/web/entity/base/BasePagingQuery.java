@@ -24,14 +24,14 @@ import java.util.stream.Collectors;
 @ApiModel("基础分页查询")
 public class BasePagingQuery implements Serializable {
     @ApiModelProperty(value = "第几页", dataType = "int", example = "1", required = true)
-    private transient Integer pageNum = 1;
+    private transient Integer page = 1;
 
     @ApiModelProperty(value = "每页显示条数", dataType = "int", example = "10", required = true)
     private transient Integer pageSize = 10;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ApiModelProperty(value = "关键字")
-    private transient String keyword;
+    private transient String keywords;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ApiModelProperty(value = "排序字段集")
@@ -51,7 +51,7 @@ public class BasePagingQuery implements Serializable {
      * @return MybatisPlus的分页参数
      */
     public <T> Page<T> toMybatisPlusPage() {
-        return new Page<>(pageNum, pageSize);
+        return new Page<>(page, pageSize);
     }
 
     /**
