@@ -53,7 +53,7 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 // .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
-                .paths(PathSelectors.any())
+                .paths(PathSelectors.regex("(?!/error.*).*"))
                 .build()
 
                 // 授权信息设置，必要的header token等认证信息
