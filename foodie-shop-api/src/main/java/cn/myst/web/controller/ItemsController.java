@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author ziming.xing
@@ -116,4 +117,29 @@ public class ItemsController extends BaseController {
         return IMOOCJSONResult.ok(grid);
     }
 
+    @ApiOperation(value = "根据分类id搜索商品列表", notes = "根据分类id搜索商品列表")
+    @GetMapping("/catItems")
+    public IMOOCJSONResult catItems(
+            @ApiParam(value = "三级分类id", required = true)
+            @RequestParam Integer catId,
+            @ApiParam(value = "排序")
+            @RequestParam(required = false) String sort,
+            @ApiParam(value = "查询下一页的第几页")
+            @RequestParam Integer page,
+            @ApiParam(value = "分页的每一页显示的条数")
+            @RequestParam Integer pageSize
+    ) {
+        if (Objects.isNull(catId)) {
+            return IMOOCJSONResult.errorMsg(null);
+        }
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = PAGE_SIZE;
+        }
+        PagedGridResult grid = itemService.searchItems(catId, sort, page, pageSize);
+        return IMOOCJSONResult.ok(grid);
+    }
 }
