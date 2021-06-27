@@ -6,6 +6,7 @@ import cn.myst.web.pojo.*;
 import cn.myst.web.pojo.vo.CommentLevelCountsVO;
 import cn.myst.web.pojo.vo.ItemCommentVO;
 import cn.myst.web.pojo.vo.SearchItemsVO;
+import cn.myst.web.pojo.vo.ShopcartVO;
 import cn.myst.web.service.ItemService;
 import cn.myst.web.utils.DesensitizationUtil;
 import cn.myst.web.utils.PagedGridResult;
@@ -161,5 +162,17 @@ public class ItemServiceImpl implements ItemService {
         PageHelper.startPage(page, pageSize);
         List<SearchItemsVO> list = itemsCustomMapper.searchItemsByThirdCat(map);
         return setterPagedGrid(page, list);
+    }
+
+    @Override
+    public List<ShopcartVO> queryItemsBySpecIds(String specIds) {
+        if (StringUtils.isBlank(specIds)) {
+            return Collections.emptyList();
+        }
+        String[] ids = specIds.split(",");
+        ArrayList<String> specIdsList = new ArrayList<>();
+        // 性能最高的转换方式
+        Collections.addAll(specIdsList, ids);
+        return itemsCustomMapper.queryItemsBySpecIds(specIdsList);
     }
 }

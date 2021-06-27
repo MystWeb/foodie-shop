@@ -98,6 +98,8 @@ public class PassportController {
 
         CookieUtils.setCookie(request, response, USER_COOKIE_NAME, JsonUtils.objectToJson(user));
 
+        // TODO 生成用户token，存入redis会话
+        // TODO 同步购物车数据
         return IMOOCJSONResult.ok(user);
     }
 
@@ -131,6 +133,8 @@ public class PassportController {
 
         CookieUtils.setCookie(request, response, USER_COOKIE_NAME, JsonUtils.objectToJson(user));
 
+        // TODO 生成用户token，存入redis会话
+        // TODO 同步购物车数据
         return IMOOCJSONResult.ok(user);
     }
 
