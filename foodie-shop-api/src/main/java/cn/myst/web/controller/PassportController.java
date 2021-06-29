@@ -9,6 +9,7 @@ import cn.myst.web.utils.JsonUtils;
 import cn.myst.web.utils.MD5Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,9 @@ public class PassportController {
 
     @ApiOperation(value = "用户名是否存在")
     @GetMapping("/usernameIsExist")
-    public IMOOCJSONResult usernameIsExist(@RequestParam String username) {
+    public IMOOCJSONResult usernameIsExist(
+            @ApiParam(value = "用户名", required = true)
+            @RequestParam String username) {
         // 1、 判断用户名不能为空
         if (StringUtils.isBlank(username)) {
             return IMOOCJSONResult.errorMsg(USERNAME_IS_EMPTY);
@@ -122,7 +125,7 @@ public class PassportController {
         }
 
         // 2、 实现登录用户
-        Users user = userService.querUserForLogin(username, MD5Utils.getMD5Str(password));
+        Users user = userService.queryUserForLogin(username, MD5Utils.getMD5Str(password));
 
         if (Objects.isNull(user)) {
             return IMOOCJSONResult.errorMsg(INCORRECT_USERNAME_OR_PASSWORD);
@@ -152,9 +155,11 @@ public class PassportController {
 
     @ApiOperation("用户退出登录")
     @PostMapping("/logout")
-    public IMOOCJSONResult logout(@RequestParam String userId,
-                                  HttpServletRequest request,
-                                  HttpServletResponse response) {
+    public IMOOCJSONResult logout(
+            @ApiParam(value = "用户id", required = true)
+            @RequestParam String userId,
+            HttpServletRequest request,
+            HttpServletResponse response) {
         CookieUtils.deleteCookie(request, response, USER_COOKIE_NAME);
 
         // TODO 用户退出登录，需要清空购物车

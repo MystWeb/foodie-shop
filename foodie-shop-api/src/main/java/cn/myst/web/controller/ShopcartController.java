@@ -52,8 +52,7 @@ public class ShopcartController {
             @ApiParam(value = "商品规格id", required = true)
             @RequestParam String itemSpecId,
             HttpServletRequest request,
-            HttpServletResponse response
-    ) {
+            HttpServletResponse response) {
 
         if (StringUtils.isBlank(userId) || StringUtils.isBlank(itemSpecId)) {
             return IMOOCJSONResult.errorMsg(EnumBase.PARAMETER_CANNOT_BE_EMPTY.zh);

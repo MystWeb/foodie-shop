@@ -164,6 +164,7 @@ public class ItemServiceImpl implements ItemService {
         return setterPagedGrid(page, list);
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public List<ShopcartVO> queryItemsBySpecIds(String specIds) {
         if (StringUtils.isBlank(specIds)) {

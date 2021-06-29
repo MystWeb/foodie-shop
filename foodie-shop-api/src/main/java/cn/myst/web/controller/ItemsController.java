@@ -36,7 +36,7 @@ public class ItemsController extends BaseController {
     @ApiOperation(value = "查询商品详情", notes = "查询商品详情")
     @GetMapping("/info/{itemId}")
     public IMOOCJSONResult info(
-            @ApiParam(name = "itemId", value = "商品id", required = true)
+            @ApiParam(value = "商品id", required = true)
             @PathVariable String itemId) {
         if (StringUtils.isBlank(itemId)) {
             return IMOOCJSONResult.errorMsg(null);
@@ -57,7 +57,7 @@ public class ItemsController extends BaseController {
     @ApiOperation(value = "查询商品评价等级", notes = "查询商品评价等级")
     @GetMapping("/commentLevel")
     public IMOOCJSONResult getCommentLevel(
-            @ApiParam(name = "itemId", value = "商品id", required = true)
+            @ApiParam(value = "商品id", required = true)
             @RequestParam String itemId) {
         if (StringUtils.isBlank(itemId)) {
             return IMOOCJSONResult.errorMsg(null);
@@ -76,8 +76,7 @@ public class ItemsController extends BaseController {
             @ApiParam(value = "查询下一页的第几页")
             @RequestParam Integer page,
             @ApiParam(value = "分页的每一页显示的条数")
-            @RequestParam Integer pageSize
-    ) {
+            @RequestParam Integer pageSize) {
         if (StringUtils.isBlank(itemId)) {
             return IMOOCJSONResult.errorMsg(null);
         }
@@ -102,8 +101,7 @@ public class ItemsController extends BaseController {
             @ApiParam(value = "查询下一页的第几页")
             @RequestParam Integer page,
             @ApiParam(value = "分页的每一页显示的条数")
-            @RequestParam Integer pageSize
-    ) {
+            @RequestParam Integer pageSize) {
         if (StringUtils.isBlank(keywords)) {
             return IMOOCJSONResult.errorMsg(null);
         }
@@ -128,8 +126,7 @@ public class ItemsController extends BaseController {
             @ApiParam(value = "查询下一页的第几页")
             @RequestParam Integer page,
             @ApiParam(value = "分页的每一页显示的条数")
-            @RequestParam Integer pageSize
-    ) {
+            @RequestParam Integer pageSize) {
         if (Objects.isNull(catId)) {
             return IMOOCJSONResult.errorMsg(null);
         }
@@ -148,8 +145,7 @@ public class ItemsController extends BaseController {
     @GetMapping("/refresh")
     public IMOOCJSONResult refresh(
             @ApiParam(value = "拼接的规格ids", example = "1001,1003,1005", required = true)
-            @RequestParam String itemSpecIds
-    ) {
+            @RequestParam String itemSpecIds) {
         if (StringUtils.isBlank(itemSpecIds)) {
             return IMOOCJSONResult.ok();
         }

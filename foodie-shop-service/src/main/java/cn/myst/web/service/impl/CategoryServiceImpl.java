@@ -37,7 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public List<CategoryVO> getSubCatList(Integer rootCatId) {
+    public List<CategoryVO> querySubCatByRootCatId(Integer rootCatId) {
         if (Objects.isNull(rootCatId)) {
             return Collections.emptyList();
         }
@@ -46,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public List<NewItemsVO> getSixNewItemLazy(Integer rootCatId) {
+    public List<NewItemsVO> querySixNewItemLazyByRootCatId(Integer rootCatId) {
         if (Objects.isNull(rootCatId)) {
             return Collections.emptyList();
         }

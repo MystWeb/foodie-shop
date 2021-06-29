@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public Users querUserForLogin(String username, String password) {
+    public Users queryUserForLogin(String username, String password) {
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             return null;
         }
