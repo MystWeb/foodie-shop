@@ -1,5 +1,6 @@
 package cn.myst.web.controller;
 
+import cn.myst.web.enums.EnumBase;
 import cn.myst.web.pojo.Items;
 import cn.myst.web.pojo.ItemsImg;
 import cn.myst.web.pojo.ItemsParam;
@@ -39,7 +40,7 @@ public class ItemsController extends BaseController {
             @ApiParam(value = "商品id", required = true)
             @PathVariable String itemId) {
         if (StringUtils.isBlank(itemId)) {
-            return IMOOCJSONResult.errorMsg(null);
+            return IMOOCJSONResult.errorMsg(EnumBase.PARAMETER_CANNOT_BE_EMPTY.zh);
         }
         Items item = itemService.queryItemByItemId(itemId);
         List<ItemsImg> itemImgList = itemService.queryItemImgListByItemId(itemId);
@@ -60,7 +61,7 @@ public class ItemsController extends BaseController {
             @ApiParam(value = "商品id", required = true)
             @RequestParam String itemId) {
         if (StringUtils.isBlank(itemId)) {
-            return IMOOCJSONResult.errorMsg(null);
+            return IMOOCJSONResult.errorMsg(EnumBase.PARAMETER_CANNOT_BE_EMPTY.zh);
         }
         CommentLevelCountsVO countsVO = itemService.queryCommentCountsByItemId(itemId);
         return IMOOCJSONResult.ok(countsVO);
@@ -78,7 +79,7 @@ public class ItemsController extends BaseController {
             @ApiParam(value = "分页的每一页显示的条数")
             @RequestParam Integer pageSize) {
         if (StringUtils.isBlank(itemId)) {
-            return IMOOCJSONResult.errorMsg(null);
+            return IMOOCJSONResult.errorMsg(EnumBase.PARAMETER_CANNOT_BE_EMPTY.zh);
         }
         if (page == null) {
             page = PAGE;
@@ -103,7 +104,7 @@ public class ItemsController extends BaseController {
             @ApiParam(value = "分页的每一页显示的条数")
             @RequestParam Integer pageSize) {
         if (StringUtils.isBlank(keywords)) {
-            return IMOOCJSONResult.errorMsg(null);
+            return IMOOCJSONResult.errorMsg(EnumBase.PARAMETER_CANNOT_BE_EMPTY.zh);
         }
         if (page == null) {
             page = 1;
@@ -128,7 +129,7 @@ public class ItemsController extends BaseController {
             @ApiParam(value = "分页的每一页显示的条数")
             @RequestParam Integer pageSize) {
         if (Objects.isNull(catId)) {
-            return IMOOCJSONResult.errorMsg(null);
+            return IMOOCJSONResult.errorMsg(EnumBase.PARAMETER_CANNOT_BE_EMPTY.zh);
         }
         if (page == null) {
             page = 1;

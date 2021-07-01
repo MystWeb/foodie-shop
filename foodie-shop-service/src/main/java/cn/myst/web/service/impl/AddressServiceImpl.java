@@ -107,4 +107,16 @@ public class AddressServiceImpl implements AddressService {
         defaultUserAddress.setIsDefault(EnumYesOrNo.YES.type);
         userAddressMapper.updateById(defaultUserAddress);
     }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public UserAddress queryUserAddress(String userId, String addressId) {
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(addressId)) {
+            return null;
+        }
+        LambdaQueryWrapper<UserAddress> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserAddress::getUserId, userId);
+        queryWrapper.eq(UserAddress::getId, addressId);
+        return userAddressMapper.selectOne(queryWrapper);
+    }
 }

@@ -36,7 +36,7 @@ public class ShopcartController {
             HttpServletRequest request,
             HttpServletResponse response) {
         if (StringUtils.isBlank(userId)) {
-            return IMOOCJSONResult.errorMsg(null);
+            return IMOOCJSONResult.errorMsg(EnumBase.PARAMETER_CANNOT_BE_EMPTY.zh);
         }
         log.info(String.valueOf(shopcartBO));
         // TODO 前端用户在登录的情况下，添加商品到购物车，会同时在后端同步购物车到redis缓存

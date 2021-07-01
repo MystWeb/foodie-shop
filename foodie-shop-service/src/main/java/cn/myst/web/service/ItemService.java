@@ -41,7 +41,17 @@ public interface ItemService {
     CommentLevelCountsVO queryCommentCountsByItemId(String itemId);
 
     /**
-     * 根据商品id，商品评价等级查询商品的评价
+     * 根据商品id，商品评价等级查询商品评价数量
+     */
+    Integer getCommentCounts(String itemId, Integer level);
+
+    /**
+     * 设置分页表格结果对象
+     */
+    PagedGridResult setterPagedGrid(Integer page, List<?> list);
+
+    /**
+     * 根据商品id商品评价等级查询商品的评价
      */
     PagedGridResult queryPagedComments(String itemId, Integer level, Integer page, Integer pageSize);
 
@@ -59,4 +69,19 @@ public interface ItemService {
      * 根据规格id查询最新的购物车中商品数据（用户刷新渲染购物车中的商品数据）
      */
     List<ShopcartVO> queryItemsBySpecIds(String specIds);
+
+    /**
+     * 根据商品规格id查询规格的具体信息
+     */
+    ItemsSpec queryItemSpecBySpecId(String specId);
+
+    /**
+     * 根据商品id查询商品图片主图url
+     */
+    String queryItemMainImgByItemId(String itemId);
+
+    /**
+     * 减少库存
+     */
+    void decreaseItemSpecStock(String specId, int buyCounts);
 }
