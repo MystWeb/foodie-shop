@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -72,7 +73,9 @@ public class AddressServiceImpl implements AddressService {
         UserAddress pendingAddress = new UserAddress();
         BeanUtils.copyProperties(addressBO, pendingAddress);
         pendingAddress.setId(addressBO.getAddressId());
-        pendingAddress.setUpdatedTime(new Date());
+        // 获取当前时间
+        Date nowDate = Date.from(Instant.now());
+        pendingAddress.setUpdatedTime(nowDate);
         userAddressMapper.updateById(pendingAddress);
     }
 

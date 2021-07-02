@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
 
@@ -74,8 +75,10 @@ public class UserServiceImpl implements UserService {
         users.setBirthday(DateUtil.stringToDate(USER_BIRTHDAY));
         // 默认性别
         users.setSex(EnumSex.SECRET.type);
-        users.setCreatedTime(new Date());
-        users.setUpdatedTime(new Date());
+        // 获取当前时间
+        Date nowDate = Date.from(Instant.now());
+        users.setCreatedTime(nowDate);
+        users.setUpdatedTime(nowDate);
         usersMapper.insert(users);
         return users;
     }

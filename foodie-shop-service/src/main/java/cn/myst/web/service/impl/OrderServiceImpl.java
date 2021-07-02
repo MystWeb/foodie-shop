@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -64,8 +65,10 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setLeftMsg(leftMsg);
         newOrder.setIsComment(EnumYesOrNo.NO.type);
         newOrder.setIsDelete(EnumYesOrNo.NO.type);
-        newOrder.setCreatedTime(new Date());
-        newOrder.setUpdatedTime(new Date());
+        // 获取当前时间
+        Date nowDate = Date.from(Instant.now());
+        newOrder.setCreatedTime(nowDate);
+        newOrder.setUpdatedTime(nowDate);
 
         // 2. 循环根据itemSpecIds保存订单商品信息表
         String[] itemSpecIdArr = itemSpecIds.split(",");
@@ -112,7 +115,7 @@ public class OrderServiceImpl implements OrderService {
         OrderStatus waitPayOrderStatus = new OrderStatus();
         waitPayOrderStatus.setOrderId(orderId);
         waitPayOrderStatus.setOrderStatus(EnumOrderStatus.WAIT_PAY.type);
-        waitPayOrderStatus.setCreatedTime(new Date());
+        waitPayOrderStatus.setCreatedTime(nowDate);
         orderStatusMapper.insert(waitPayOrderStatus);
 
         return orderId;
