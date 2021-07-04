@@ -14,4 +14,8 @@ public class BaseController {
     public static final Integer PAGE_SIZE = 20;
 
     public static final String FOODIE_SHOPCART = "shopcart";
+
+    // 微信支付成功 -> 支付中心 -> 天天吃货平台
+    //                       |-> 回调通知的url
+    public static final String PAY_RETURN_URL = "http://localhost:8088/orders/notifyMerchantOrderPaid";
 }

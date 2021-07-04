@@ -1,9 +1,12 @@
 package cn.myst.web.controller;
 
-import cn.myst.web.enums.EnumBase;
+import cn.myst.web.enums.EnumException;
 import cn.myst.web.enums.EnumOrder;
+import cn.myst.web.enums.EnumOrderStatus;
 import cn.myst.web.enums.EnumPayMethod;
 import cn.myst.web.pojo.bo.SubmitOrderBO;
+import cn.myst.web.pojo.vo.MerchantOrdersVO;
+import cn.myst.web.pojo.vo.OrderVO;
 import cn.myst.web.service.OrderService;
 import cn.myst.web.utils.IMOOCJSONResult;
 import io.swagger.annotations.Api;
@@ -11,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +42,7 @@ public class OrdersController extends BaseController {
                                   HttpServletRequest request,
                                   HttpServletResponse response) {
         if (Objects.isNull(submitOrderBO)) {
-            return IMOOCJSONResult.errorMsg(EnumBase.PARAMETER_CANNOT_BE_EMPTY.zh);
+            return IMOOCJSONResult.errorMsg(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
         }
         // 判断支付方式
         if (Objects.equals(submitOrderBO.getPayMethod(), EnumPayMethod.WE_CHAT.type) &&
@@ -46,7 +50,10 @@ public class OrdersController extends BaseController {
             return IMOOCJSONResult.errorMsg(EnumOrder.PAYMENT_METHOD_IS_NOT_SUPPORTED.zh);
         }
         // 1. 创建订单
-        String orderId = orderService.createOrder(submitOrderBO);
+        OrderVO orderVO = orderService.createOrder(submitOrderBO);
+        String orderId = orderVO.getOrderId();
+        MerchantOrdersVO merchantOrdersVO = orderVO.getMerchantOrdersVO();
+        merchantOrdersVO.setReturnUrl(PAY_RETURN_URL);
         // 2. 创建订单以后，移除购物车中已结算（已提交）的商品
 
          /*
@@ -59,7 +66,15 @@ public class OrdersController extends BaseController {
 //        CookieUtils.setCookie(request, response, FOODIE_SHOPCART, "", true);
         // 3. 向支付中心发送当前订单，用于保存支付中心的订单数据
 
+
         return IMOOCJSONResult.ok(orderId);
+    }
+
+    @ApiOperation(value = "用户支付通知", notes = "通知商户已支付订单")
+    @PostMapping("/notifyMerchantOrderPaid")
+    public Integer notifyMerchantOrderPaid(@RequestBody String merchantOrderId) {
+        orderService.updateOrderStatus(merchantOrderId, EnumOrderStatus.WAIT_DELIVER.type);
+        return HttpStatus.OK.value();
     }
 
 }

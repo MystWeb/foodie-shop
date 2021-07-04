@@ -1,6 +1,8 @@
 package cn.myst.web.service.impl;
 
+import cn.myst.web.enums.EnumException;
 import cn.myst.web.enums.EnumYesOrNo;
+import cn.myst.web.exception.BusinessException;
 import cn.myst.web.mapper.UserAddressMapper;
 import cn.myst.web.pojo.UserAddress;
 import cn.myst.web.pojo.bo.AddressBO;
@@ -47,7 +49,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public void addNewUserAddress(AddressBO addressBO) {
         if (Objects.isNull(addressBO)) {
-            return;
+            throw new BusinessException(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
         }
         // 1. 判断当前用户是否存在地址，如果没有，则新增为"默认地址"
         int isDefault = 0;
@@ -68,7 +70,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public void updateUserAddress(AddressBO addressBO) {
         if (Objects.isNull(addressBO)) {
-            return;
+            throw new BusinessException(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
         }
         UserAddress pendingAddress = new UserAddress();
         BeanUtils.copyProperties(addressBO, pendingAddress);
@@ -83,7 +85,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public void deleteUserAddress(String userId, String addressId) {
         if (StringUtils.isBlank(userId) || StringUtils.isBlank(addressId)) {
-            return;
+            throw new BusinessException(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
         }
         LambdaQueryWrapper<UserAddress> queryWrapper = new LambdaQueryWrapper<>();
         userAddressMapper.delete(queryWrapper);

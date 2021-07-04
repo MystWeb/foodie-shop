@@ -1,16 +1,21 @@
 package cn.myst.web.service.impl;
 
+import cn.myst.web.enums.EnumException;
 import cn.myst.web.enums.EnumOrderStatus;
 import cn.myst.web.enums.EnumYesOrNo;
+import cn.myst.web.exception.BusinessException;
 import cn.myst.web.mapper.OrderItemsMapper;
 import cn.myst.web.mapper.OrderStatusMapper;
 import cn.myst.web.mapper.OrdersMapper;
 import cn.myst.web.pojo.*;
 import cn.myst.web.pojo.bo.SubmitOrderBO;
+import cn.myst.web.pojo.vo.MerchantOrdersVO;
+import cn.myst.web.pojo.vo.OrderVO;
 import cn.myst.web.service.AddressService;
 import cn.myst.web.service.ItemService;
 import cn.myst.web.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +26,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author ziming.xing
@@ -38,14 +44,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public String createOrder(SubmitOrderBO submitOrderBO) {
+    public OrderVO createOrder(SubmitOrderBO submitOrderBO) {
         String userId = submitOrderBO.getUserId();
         String addressId = submitOrderBO.getAddressId();
         String itemSpecIds = submitOrderBO.getItemSpecIds();
         Integer payMethod = submitOrderBO.getPayMethod();
         String leftMsg = submitOrderBO.getLeftMsg();
         // 包邮费用设置为0
-        Integer postAmount = 0;
+        int postAmount = 0;
         // 生成订单id
         String orderId = this.sid.nextShort();
         // 1. 新订单数据保存
@@ -118,6 +124,32 @@ public class OrderServiceImpl implements OrderService {
         waitPayOrderStatus.setCreatedTime(nowDate);
         orderStatusMapper.insert(waitPayOrderStatus);
 
-        return orderId;
+        // 4. 构建商户订单，用户传给用户中心
+        MerchantOrdersVO merchantOrdersVO = new MerchantOrdersVO();
+        merchantOrdersVO.setMerchantOrderId(orderId);
+        merchantOrdersVO.setMerchantUserId(userId);
+        merchantOrdersVO.setAmount(realPayAmount + postAmount);
+        merchantOrdersVO.setPayMethod(payMethod);
+
+        // 5. 构建自定义订单VO
+        OrderVO orderVO = new OrderVO();
+        orderVO.setOrderId(orderId);
+        orderVO.setMerchantOrdersVO(merchantOrdersVO);
+
+        return orderVO;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public void updateOrderStatus(String orderId, Integer orderStatus) {
+        if (StringUtils.isBlank(orderId) || Objects.isNull(orderStatus)) {
+            throw new BusinessException(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
+        }
+        OrderStatus paidStatus = new OrderStatus();
+        paidStatus.setOrderId(orderId);
+        paidStatus.setOrderStatus(orderStatus);
+        Date date = Date.from(Instant.now());
+        paidStatus.setPayTime(date);
+        orderStatusMapper.updateById(paidStatus);
     }
 }

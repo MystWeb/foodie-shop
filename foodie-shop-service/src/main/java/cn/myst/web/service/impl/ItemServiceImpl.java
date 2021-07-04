@@ -3,6 +3,7 @@ package cn.myst.web.service.impl;
 import cn.myst.web.enums.EnumCommentLevel;
 import cn.myst.web.enums.EnumOrder;
 import cn.myst.web.enums.EnumYesOrNo;
+import cn.myst.web.exception.BusinessException;
 import cn.myst.web.mapper.*;
 import cn.myst.web.pojo.*;
 import cn.myst.web.pojo.vo.CommentLevelCountsVO;
@@ -208,7 +209,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void decreaseItemSpecStock(String specId, int buyCounts) {
         if (StringUtils.isBlank(specId) || buyCounts == 0) {
-            throw new RuntimeException(EnumOrder.ORDER_CREATION_FAILED_BY_INSUFFICIENT_INVENTORY.zh);
+            throw new BusinessException(EnumOrder.ORDER_CREATION_FAILED_BY_INSUFFICIENT_INVENTORY.zh);
         }
         // synchronized：集群下无用，因为集群时还是会存在资源共享；性能低下；（不推荐）
         // 锁数据库：导致数据库性能低下（不推荐）
@@ -228,7 +229,7 @@ public class ItemServiceImpl implements ItemService {
 
         int result = itemsCustomMapper.decreaseItemSpecStock(specId, buyCounts);
         if (result != 1) {
-            throw new RuntimeException(EnumOrder.ORDER_CREATION_FAILED_BY_INSUFFICIENT_INVENTORY.zh);
+            throw new BusinessException(EnumOrder.ORDER_CREATION_FAILED_BY_INSUFFICIENT_INVENTORY.zh);
         }
     }
 }

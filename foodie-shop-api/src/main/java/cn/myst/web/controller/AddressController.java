@@ -1,7 +1,7 @@
 package cn.myst.web.controller;
 
 import cn.myst.web.enums.EnumAddressCheck;
-import cn.myst.web.enums.EnumBase;
+import cn.myst.web.enums.EnumException;
 import cn.myst.web.pojo.UserAddress;
 import cn.myst.web.pojo.bo.AddressBO;
 import cn.myst.web.service.AddressService;
@@ -59,7 +59,7 @@ public class AddressController {
 
     private IMOOCJSONResult checkAddress(AddressBO addressBO) {
         if (Objects.isNull(addressBO)) {
-            return IMOOCJSONResult.errorMsg(EnumBase.PARAMETER_CANNOT_BE_EMPTY.zh);
+            return IMOOCJSONResult.errorMsg(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
         }
         String userId = addressBO.getUserId();
         if (StringUtils.isBlank(userId)) {
