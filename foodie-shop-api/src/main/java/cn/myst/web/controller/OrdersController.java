@@ -11,14 +11,16 @@ import cn.myst.web.service.OrderService;
 import cn.myst.web.utils.IMOOCJSONResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,6 +37,7 @@ import java.util.Objects;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class OrdersController extends BaseController {
     private final OrderService orderService;
+    private final RestTemplate restTemplate;
 
     @ApiOperation(value = "用户下单", notes = "用户提交订单")
     @PostMapping("/create")
@@ -52,8 +55,6 @@ public class OrdersController extends BaseController {
         // 1. 创建订单
         OrderVO orderVO = orderService.createOrder(submitOrderBO);
         String orderId = orderVO.getOrderId();
-        MerchantOrdersVO merchantOrdersVO = orderVO.getMerchantOrdersVO();
-        merchantOrdersVO.setReturnUrl(PAY_RETURN_URL);
         // 2. 创建订单以后，移除购物车中已结算（已提交）的商品
 
          /*
@@ -65,16 +66,56 @@ public class OrdersController extends BaseController {
         // TODO 整合redis之后，完善购物车中已结算商品清除，并且同步到前端的cookie
 //        CookieUtils.setCookie(request, response, FOODIE_SHOPCART, "", true);
         // 3. 向支付中心发送当前订单，用于保存支付中心的订单数据
-
-
+        MerchantOrdersVO merchantOrdersVO = orderVO.getMerchantOrdersVO();
+        merchantOrdersVO.setReturnUrl(PAY_RETURN_URL);
+        // 为了方便测试购买，所以所有的支付金额都统一改为1分钱
+        merchantOrdersVO.setAmount(1);
+        // 设置请求头
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("imoocUserId", "imooc");
+        headers.add("password", "imooc");
+        // 发送POST请求
+        HttpEntity<MerchantOrdersVO> entity = new HttpEntity<>(merchantOrdersVO, headers);
+        ResponseEntity<IMOOCJSONResult> responseEntity = restTemplate.postForEntity(PAYMENT_URL, entity, IMOOCJSONResult.class);
+        IMOOCJSONResult paymentResult = responseEntity.getBody();
+        if (Objects.nonNull(paymentResult) && HttpStatus.OK.value() != paymentResult.getStatus()) {
+            return IMOOCJSONResult.errorMsg("支付中心订单创建失败，请联系管理员！");
+        }
         return IMOOCJSONResult.ok(orderId);
     }
 
     @ApiOperation(value = "用户支付通知", notes = "通知商户已支付订单")
     @PostMapping("/notifyMerchantOrderPaid")
-    public Integer notifyMerchantOrderPaid(@RequestBody String merchantOrderId) {
+    public Integer notifyMerchantOrderPaid(
+            @ApiParam(value = "商户订单ID")
+            @RequestBody String merchantOrderId) {
         orderService.updateOrderStatus(merchantOrderId, EnumOrderStatus.WAIT_DELIVER.type);
         return HttpStatus.OK.value();
+    }
+
+    @ApiOperation(value = "查询生产系统支付中心的订单信息", notes = "提供给大家查询的方法，查询生产系统支付中心的订单信息")
+    @PostMapping("/getPaymentCenterOrderInfo")
+    public IMOOCJSONResult getPaymentCenterOrderInfo(
+            @ApiParam(value = "商户订单ID", required = true)
+                    String merchantOrderId,
+            @ApiParam(value = "商户ID", required = true)
+            @RequestParam String merchantUserId) {
+        if (StringUtils.isBlank(merchantOrderId) || StringUtils.isBlank(merchantUserId)) {
+            return IMOOCJSONResult.errorMsg(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
+        }
+        // 设置请求头
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.add("imoocUserId", "imooc");
+        headers.add("password", "imooc");
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.add("merchantOrderId", merchantOrderId);
+        multiValueMap.add("merchantUserId", merchantUserId);
+        // 发送POST请求
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(multiValueMap, headers);
+        ResponseEntity<IMOOCJSONResult> responseEntity = restTemplate.postForEntity(PAYMENT_CENTER_ORDER_INFO_URL, entity, IMOOCJSONResult.class);
+        return IMOOCJSONResult.ok(responseEntity.getBody());
     }
 
 }
