@@ -1,8 +1,6 @@
 package cn.myst.web.service.impl;
 
-import cn.myst.web.enums.EnumException;
-import cn.myst.web.enums.EnumOrderStatus;
-import cn.myst.web.enums.EnumYesOrNo;
+import cn.myst.web.enums.*;
 import cn.myst.web.exception.BusinessException;
 import cn.myst.web.mapper.OrderItemsMapper;
 import cn.myst.web.mapper.OrderStatusMapper;
@@ -14,6 +12,9 @@ import cn.myst.web.pojo.vo.OrderVO;
 import cn.myst.web.service.AddressService;
 import cn.myst.web.service.ItemService;
 import cn.myst.web.service.OrderService;
+import cn.myst.web.utils.DateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -45,6 +47,14 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public OrderVO createOrder(SubmitOrderBO submitOrderBO) {
+        if (Objects.isNull(submitOrderBO)) {
+            return null;
+        }
+        // 判断支付方式
+        if (Objects.equals(submitOrderBO.getPayMethod(), EnumPayMethod.WE_CHAT.type) &&
+                Objects.equals(submitOrderBO.getPayMethod(), EnumPayMethod.ALI_PAY.type)) {
+            throw new BusinessException(EnumOrder.PAYMENT_METHOD_IS_NOT_SUPPORTED.zh);
+        }
         String userId = submitOrderBO.getUserId();
         String addressId = submitOrderBO.getAddressId();
         String itemSpecIds = submitOrderBO.getItemSpecIds();
@@ -82,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
         int totalAmount = 0;
         // 优惠后的实际支付价格累计
         int realPayAmount = 0;
-        List<OrderItems> orderItemList = new ArrayList<>();
+        List<OrderItems> list = new ArrayList<>();
         for (String itemSpecId : itemSpecIdArr) {
             int buyCounts = 1;
             // TODO 整合redis后，商品购买的数量重新从redis的购物车中获取
@@ -107,12 +117,16 @@ public class OrderServiceImpl implements OrderService {
             subOrderItem.setItemSpecName(itemsSpec.getName());
             subOrderItem.setPrice(itemsSpec.getPriceDiscount());
 //            orderItemsMapper.insert(subOrderItem);
-            orderItemList.add(subOrderItem);
+            list.add(subOrderItem);
             // 2.4 用户提交订单以后，规格表中需要扣除库存
             itemService.decreaseItemSpecStock(itemSpecId, buyCounts);
         }
         // 2.5 批量保存子订单数据
-        orderItemsMapper.batchInsert(orderItemList);
+        if (!CollectionUtils.isEmpty(list)) {
+            // 注意：Lists.partition返回的是原list的subview.视图,即原list改变后,partition之后的结果也会随着改变
+            // 详见：https://blog.csdn.net/PrimeYun/article/details/100714846、https://blog.csdn.net/diweikang/article/details/105382648
+            Lists.partition(list, EnumLists.LISTS_PARTITION_SIZE.pageSize).forEach(item -> orderItemsMapper.batchInsert(list));
+        }
         newOrder.setTotalAmount(totalAmount);
         newOrder.setRealPayAmount(realPayAmount);
         // 2.6 保存订单
@@ -162,8 +176,33 @@ public class OrderServiceImpl implements OrderService {
         return orderStatusMapper.selectById(orderId);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void closeOrder() {
-
+        // 查询所有未付款订单，判断时间是否超时（1天），超时则关闭交易
+        LambdaQueryWrapper<OrderStatus> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(OrderStatus::getOrderStatus, EnumOrderStatus.WAIT_PAY.type);
+        List<OrderStatus> orderStatusList = orderStatusMapper.selectList(queryWrapper);
+        List<OrderStatus> list = new ArrayList<>();
+        orderStatusList.forEach(item -> {
+            // 获得订单创建时间
+            Date createdTime = item.getCreatedTime();
+            // 获取当前时间
+            Date date = Date.from(Instant.now());
+            int days = DateUtil.daysBetween(createdTime, date);
+            if (days >= 1) {
+                // 超过1天，关闭订单
+                OrderStatus close = new OrderStatus();
+                close.setOrderId(item.getOrderId());
+                close.setOrderStatus(EnumOrderStatus.CLOSE.type);
+                close.setCloseTime(date);
+                list.add(close);
+            }
+        });
+        if (!CollectionUtils.isEmpty(list)) {
+            // 注意：Lists.partition返回的是原list的subview.视图,即原list改变后,partition之后的结果也会随着改变
+            // 详见：https://blog.csdn.net/PrimeYun/article/details/100714846、https://blog.csdn.net/diweikang/article/details/105382648
+            Lists.partition(list, EnumLists.LISTS_PARTITION_SIZE.pageSize).forEach(item -> orderStatusMapper.updateBatchSelective(list));
+        }
     }
 }

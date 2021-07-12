@@ -101,10 +101,9 @@ public class AddressServiceImpl implements AddressService {
         // 数据库中可能出现数据紊乱，可能一个用户的默认地址会有多个。
         List<UserAddress> list = userAddressMapper.selectList(queryWrapper);
         list.forEach(userAddress -> {
-            userAddress.setIsDefault(EnumYesOrNo.YES.type);
+            userAddress.setIsDefault(EnumYesOrNo.NO.type);
             userAddressMapper.updateById(userAddress);
         });
-//        userAddressMapper.updateBatchSelective(list);
         // 2. 根据地址id修改为默认的地址
         UserAddress defaultUserAddress = new UserAddress();
         defaultUserAddress.setId(addressId);
