@@ -1,6 +1,6 @@
 package cn.myst.web.controller;
 
-import cn.myst.web.enums.EnumAddressCheck;
+import cn.myst.web.enums.EnumAddressValidation;
 import cn.myst.web.enums.EnumException;
 import cn.myst.web.pojo.UserAddress;
 import cn.myst.web.pojo.bo.AddressBO;
@@ -63,26 +63,26 @@ public class AddressController {
         }
         String userId = addressBO.getUserId();
         if (StringUtils.isBlank(userId)) {
-            return IMOOCJSONResult.errorMsg(EnumAddressCheck.USER_ID_CANNOT_BE_EMPTY.zh);
+            return IMOOCJSONResult.errorMsg(EnumAddressValidation.USER_ID_CANNOT_BE_EMPTY.zh);
         }
         String receiver = addressBO.getReceiver();
         if (StringUtils.isBlank(receiver)) {
-            return IMOOCJSONResult.errorMsg(EnumAddressCheck.CONSIGNEE_CANNOT_BE_EMPTY.zh);
+            return IMOOCJSONResult.errorMsg(EnumAddressValidation.CONSIGNEE_CANNOT_BE_EMPTY.zh);
         }
         if (receiver.length() > 12) {
-            return IMOOCJSONResult.errorMsg(EnumAddressCheck.RECEIVER_NAME_IS_NOT_TOO_LONG.zh);
+            return IMOOCJSONResult.errorMsg(EnumAddressValidation.RECEIVER_NAME_IS_NOT_TOO_LONG.zh);
         }
 
         String mobile = addressBO.getMobile();
         if (StringUtils.isBlank(mobile)) {
-            return IMOOCJSONResult.errorMsg(EnumAddressCheck.CONSIGNEE_MOBILE_PHONE_NUMBER_CANNOT_BE_EMPTY.zh);
+            return IMOOCJSONResult.errorMsg(EnumAddressValidation.CONSIGNEE_MOBILE_PHONE_NUMBER_CANNOT_BE_EMPTY.zh);
         }
         if (mobile.length() != 11) {
-            return IMOOCJSONResult.errorMsg(EnumAddressCheck.CONSIGNEE_MOBILE_PHONE_NUMBER_LENGTH_IS_INCORRECT.zh);
+            return IMOOCJSONResult.errorMsg(EnumAddressValidation.CONSIGNEE_MOBILE_PHONE_NUMBER_LENGTH_IS_INCORRECT.zh);
         }
         boolean isMobileOk = MobileEmailUtils.checkMobileIsOk(mobile);
         if (!isMobileOk) {
-            return IMOOCJSONResult.errorMsg(EnumAddressCheck.CONSIGNEE_MOBILE_PHONE_NUMBER_IS_INCORRECT.zh);
+            return IMOOCJSONResult.errorMsg(EnumAddressValidation.CONSIGNEE_MOBILE_PHONE_NUMBER_IS_INCORRECT.zh);
         }
 
         String province = addressBO.getProvince();
@@ -93,7 +93,7 @@ public class AddressController {
                 StringUtils.isBlank(city) ||
                 StringUtils.isBlank(district) ||
                 StringUtils.isBlank(detail)) {
-            return IMOOCJSONResult.errorMsg(EnumAddressCheck.RECEIPT_ADDRESS_INFORMATION_CANNOT_BE_EMPTY.zh);
+            return IMOOCJSONResult.errorMsg(EnumAddressValidation.RECEIPT_ADDRESS_INFORMATION_CANNOT_BE_EMPTY.zh);
         }
 
         return IMOOCJSONResult.ok();
@@ -103,7 +103,7 @@ public class AddressController {
     @PostMapping("/update")
     public IMOOCJSONResult update(@RequestBody AddressBO addressBO) {
         if (Objects.isNull(addressBO) || StringUtils.isBlank(addressBO.getAddressId())) {
-            return IMOOCJSONResult.errorMsg(EnumAddressCheck.ADDRESS_ID_CANNOT_BE_EMPTY.zh);
+            return IMOOCJSONResult.errorMsg(EnumAddressValidation.ADDRESS_ID_CANNOT_BE_EMPTY.zh);
         }
         IMOOCJSONResult checkRes = checkAddress(addressBO);
         if (checkRes.getStatus() != 200) {
@@ -121,10 +121,10 @@ public class AddressController {
             @ApiParam(value = "地址id", required = true)
             @RequestParam String addressId) {
         if (StringUtils.isBlank(userId)) {
-            return IMOOCJSONResult.errorMsg(EnumAddressCheck.USER_ID_CANNOT_BE_EMPTY.zh);
+            return IMOOCJSONResult.errorMsg(EnumAddressValidation.USER_ID_CANNOT_BE_EMPTY.zh);
         }
         if (StringUtils.isBlank(addressId)) {
-            return IMOOCJSONResult.errorMsg(EnumAddressCheck.ADDRESS_ID_CANNOT_BE_EMPTY.zh);
+            return IMOOCJSONResult.errorMsg(EnumAddressValidation.ADDRESS_ID_CANNOT_BE_EMPTY.zh);
         }
         addressService.deleteUserAddress(userId, addressId);
         return IMOOCJSONResult.ok();
@@ -138,10 +138,10 @@ public class AddressController {
             @ApiParam(value = "地址id", required = true)
             @RequestParam String addressId) {
         if (StringUtils.isBlank(userId)) {
-            return IMOOCJSONResult.errorMsg(EnumAddressCheck.USER_ID_CANNOT_BE_EMPTY.zh);
+            return IMOOCJSONResult.errorMsg(EnumAddressValidation.USER_ID_CANNOT_BE_EMPTY.zh);
         }
         if (StringUtils.isBlank(addressId)) {
-            return IMOOCJSONResult.errorMsg(EnumAddressCheck.ADDRESS_ID_CANNOT_BE_EMPTY.zh);
+            return IMOOCJSONResult.errorMsg(EnumAddressValidation.ADDRESS_ID_CANNOT_BE_EMPTY.zh);
         }
         addressService.updateUserAddressToBeDefault(userId, addressId);
         return IMOOCJSONResult.ok();

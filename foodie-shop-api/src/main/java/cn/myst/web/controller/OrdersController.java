@@ -1,9 +1,8 @@
 package cn.myst.web.controller;
 
-import cn.myst.web.enums.EnumException;
-import cn.myst.web.enums.EnumOrder;
-import cn.myst.web.enums.EnumOrderStatus;
-import cn.myst.web.enums.EnumPayMethod;
+import cn.myst.web.enums.*;
+import cn.myst.web.exception.BusinessException;
+import cn.myst.web.pojo.OrderStatus;
 import cn.myst.web.pojo.bo.SubmitOrderBO;
 import cn.myst.web.pojo.vo.MerchantOrdersVO;
 import cn.myst.web.pojo.vo.OrderVO;
@@ -73,8 +72,8 @@ public class OrdersController extends BaseController {
         // 设置请求头
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add("imoocUserId", "imooc");
-        headers.add("password", "imooc");
+        headers.add(EnumPayCenter.USERNAME.headerName, EnumPayCenter.USERNAME.headerValue);
+        headers.add(EnumPayCenter.PASSWORD.headerName, EnumPayCenter.PASSWORD.headerName);
         // 发送POST请求
         HttpEntity<MerchantOrdersVO> entity = new HttpEntity<>(merchantOrdersVO, headers);
         ResponseEntity<IMOOCJSONResult> responseEntity = restTemplate.postForEntity(PAYMENT_URL, entity, IMOOCJSONResult.class);
@@ -90,6 +89,9 @@ public class OrdersController extends BaseController {
     public Integer notifyMerchantOrderPaid(
             @ApiParam(value = "商户订单ID")
             @RequestBody String merchantOrderId) {
+        if (StringUtils.isBlank(merchantOrderId)) {
+            throw new BusinessException(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
+        }
         orderService.updateOrderStatus(merchantOrderId, EnumOrderStatus.WAIT_DELIVER.type);
         return HttpStatus.OK.value();
     }
@@ -107,8 +109,8 @@ public class OrdersController extends BaseController {
         // 设置请求头
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.add("imoocUserId", "imooc");
-        headers.add("password", "imooc");
+        headers.add(EnumPayCenter.USERNAME.headerName, EnumPayCenter.USERNAME.headerValue);
+        headers.add(EnumPayCenter.PASSWORD.headerName, EnumPayCenter.PASSWORD.headerName);
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         multiValueMap.add("merchantOrderId", merchantOrderId);
         multiValueMap.add("merchantUserId", merchantUserId);
@@ -116,6 +118,18 @@ public class OrdersController extends BaseController {
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(multiValueMap, headers);
         ResponseEntity<IMOOCJSONResult> responseEntity = restTemplate.postForEntity(PAYMENT_CENTER_ORDER_INFO_URL, entity, IMOOCJSONResult.class);
         return IMOOCJSONResult.ok(responseEntity.getBody());
+    }
+
+    @ApiOperation(value = "查询用户支付订单信息", notes = "查询用户支付订单信息")
+    @PostMapping("/getPaidOrderInfo")
+    public IMOOCJSONResult getPaidOrderInfo(
+            @ApiParam(value = "订单ID")
+            @RequestBody String orderId) {
+        if (StringUtils.isBlank(orderId)) {
+            throw new BusinessException(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
+        }
+        OrderStatus orderStatus = orderService.queryOrderStatusInfo(orderId);
+        return IMOOCJSONResult.ok(orderStatus);
     }
 
 }

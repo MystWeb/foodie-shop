@@ -1,5 +1,6 @@
 package cn.myst.web.service;
 
+import cn.myst.web.pojo.OrderStatus;
 import cn.myst.web.pojo.bo.SubmitOrderBO;
 import cn.myst.web.pojo.vo.OrderVO;
 
@@ -17,4 +18,14 @@ public interface OrderService {
      * 修改订单状态
      */
     void updateOrderStatus(String orderId, Integer orderStatus);
+
+    /**
+     * 查询订单状态
+     */
+    OrderStatus queryOrderStatusInfo(String orderId);
+
+    /**
+     * 关闭超时未支付订单
+     */
+    void closeOrder();
 }

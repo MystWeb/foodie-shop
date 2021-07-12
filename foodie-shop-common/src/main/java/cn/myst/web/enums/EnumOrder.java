@@ -3,6 +3,7 @@ package cn.myst.web.enums;
 /**
  * @author ziming.xing
  * Create Date：2021/6/30
+ * 订单 枚举
  */
 public enum EnumOrder {
     PAYMENT_METHOD_IS_NOT_SUPPORTED("支付方式不支持！", "PAYMENT_METHOD_IS_NOT_SUPPORTED"),

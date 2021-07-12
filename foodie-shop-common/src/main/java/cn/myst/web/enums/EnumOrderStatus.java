@@ -3,6 +3,7 @@ package cn.myst.web.enums;
 /**
  * @author ziming.xing
  * Create Date：2021/7/1
+ * 订单状态 枚举
  */
 public enum EnumOrderStatus {
     WAIT_PAY(10, "待付款"),

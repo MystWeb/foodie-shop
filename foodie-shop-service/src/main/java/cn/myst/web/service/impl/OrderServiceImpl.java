@@ -139,7 +139,7 @@ public class OrderServiceImpl implements OrderService {
         return orderVO;
     }
 
-    @Transactional(propagation = Propagation.SUPPORTS)
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void updateOrderStatus(String orderId, Integer orderStatus) {
         if (StringUtils.isBlank(orderId) || Objects.isNull(orderStatus)) {
@@ -151,5 +151,19 @@ public class OrderServiceImpl implements OrderService {
         Date date = Date.from(Instant.now());
         paidStatus.setPayTime(date);
         orderStatusMapper.updateById(paidStatus);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public OrderStatus queryOrderStatusInfo(String orderId) {
+        if (StringUtils.isBlank(orderId)) {
+            return null;
+        }
+        return orderStatusMapper.selectById(orderId);
+    }
+
+    @Override
+    public void closeOrder() {
+
     }
 }

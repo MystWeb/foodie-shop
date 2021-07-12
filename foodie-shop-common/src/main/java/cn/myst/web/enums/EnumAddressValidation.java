@@ -3,8 +3,9 @@ package cn.myst.web.enums;
 /**
  * @author ziming.xing
  * Create Date：2021/6/29
+ * 地址校验 枚举
  */
-public enum EnumAddressCheck {
+public enum EnumAddressValidation {
     CONSIGNEE_CANNOT_BE_EMPTY("收货人不能为空", "CONSIGNEE_CANNOT_BE_EMPTY"),
     RECEIVER_NAME_IS_NOT_TOO_LONG("收货人姓名不能太长", "RECEIVER_NAME_IS_NOT_TOO_LONG"),
     CONSIGNEE_MOBILE_PHONE_NUMBER_CANNOT_BE_EMPTY("收货人手机号不能为空", "CONSIGNEE_MOBILE_PHONE_NUMBER_CANNOT_BE_EMPTY"),
@@ -19,7 +20,7 @@ public enum EnumAddressCheck {
     public final String zh;
     public final String en;
 
-    EnumAddressCheck(String zh, String en) {
+    EnumAddressValidation(String zh, String en) {
         this.zh = zh;
         this.en = en;
     }
