@@ -28,14 +28,14 @@ import java.util.Objects;
  */
 @Api(value = "商品", tags = "商品信息展示的相关接口")
 @RestController
-@RequestMapping("/items")
+@RequestMapping("items")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class ItemsController extends BaseController {
 
     private final ItemService itemService;
 
     @ApiOperation(value = "查询商品详情", notes = "查询商品详情")
-    @GetMapping("/info/{itemId}")
+    @GetMapping("info/{itemId}")
     public IMOOCJSONResult info(
             @ApiParam(value = "商品id", required = true)
             @PathVariable String itemId) {
@@ -56,7 +56,7 @@ public class ItemsController extends BaseController {
     }
 
     @ApiOperation(value = "查询商品评价等级", notes = "查询商品评价等级")
-    @GetMapping("/commentLevel")
+    @GetMapping("commentLevel")
     public IMOOCJSONResult getCommentLevel(
             @ApiParam(value = "商品id", required = true)
             @RequestParam String itemId) {
@@ -68,7 +68,7 @@ public class ItemsController extends BaseController {
     }
 
     @ApiOperation(value = "查询商品评论", notes = "查询商品评论")
-    @GetMapping("/comments")
+    @GetMapping("comments")
     public IMOOCJSONResult getComments(
             @ApiParam(value = "商品id", required = true)
             @RequestParam String itemId,
@@ -93,7 +93,7 @@ public class ItemsController extends BaseController {
     }
 
     @ApiOperation(value = "搜索商品列表", notes = "搜索商品列表")
-    @GetMapping("/search")
+    @GetMapping("search")
     public IMOOCJSONResult getComments(
             @ApiParam(value = "关键字", required = true)
             @RequestParam String keywords,
@@ -118,7 +118,7 @@ public class ItemsController extends BaseController {
     }
 
     @ApiOperation(value = "根据分类id搜索商品列表", notes = "根据分类id搜索商品列表")
-    @GetMapping("/catItems")
+    @GetMapping("catItems")
     public IMOOCJSONResult catItems(
             @ApiParam(value = "三级分类id", required = true)
             @RequestParam Integer catId,
@@ -143,7 +143,7 @@ public class ItemsController extends BaseController {
     }
 
     @ApiOperation(value = "根据商品规格ids查找最新的商品数据", notes = "用于用户长时间未登录网站，刷新购物车中的数据（主要是商品价格）类似京东淘宝")
-    @GetMapping("/refresh")
+    @GetMapping("refresh")
     public IMOOCJSONResult refresh(
             @ApiParam(value = "拼接的规格ids", example = "1001,1003,1005", required = true)
             @RequestParam String itemSpecIds) {

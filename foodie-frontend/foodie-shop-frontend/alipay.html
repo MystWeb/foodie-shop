@@ -120,7 +120,7 @@
                     // 发起请求获得微信支付扫描二维码
                     var serverUrl = app.serverUrl;
 					axios.defaults.withCredentials = true;
-					axios.post(
+					axios.get(
                             serverUrl + '/orders/getPaidOrderInfo?orderId=' + orderId, 
 							{},
 							{

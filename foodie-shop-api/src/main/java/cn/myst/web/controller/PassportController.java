@@ -25,7 +25,7 @@ import java.util.Objects;
  */
 @Api(value = "注册登录", tags = "用户注册登录的相关接口")
 @RestController
-@RequestMapping("/passport")
+@RequestMapping("passport")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class PassportController {
     public static final String USER_REGISTER_INFO_EMPTY = "用户注册信息不能为空";
@@ -40,7 +40,7 @@ public class PassportController {
     private final UserService userService;
 
     @ApiOperation(value = "用户名是否存在")
-    @GetMapping("/usernameIsExist")
+    @GetMapping("usernameIsExist")
     public IMOOCJSONResult usernameIsExist(
             @ApiParam(value = "用户名", required = true)
             @RequestParam String username) {
@@ -58,7 +58,7 @@ public class PassportController {
     }
 
     @ApiOperation("用户注册")
-    @PostMapping("/regist")
+    @PostMapping("register")
     public IMOOCJSONResult register(@RequestBody UserBO userBO,
                                     HttpServletRequest request,
                                     HttpServletResponse response) {
@@ -107,7 +107,7 @@ public class PassportController {
     }
 
     @ApiOperation("用户登录")
-    @PostMapping("/login")
+    @PostMapping("login")
     public IMOOCJSONResult login(@RequestBody UserBO userBO,
                                  HttpServletRequest request,
                                  HttpServletResponse response) {
@@ -154,7 +154,7 @@ public class PassportController {
     }
 
     @ApiOperation("用户退出登录")
-    @PostMapping("/logout")
+    @PostMapping("logout")
     public IMOOCJSONResult logout(
             @ApiParam(value = "用户id", required = true)
             @RequestParam String userId,

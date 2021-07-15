@@ -27,7 +27,7 @@ import java.util.Objects;
  */
 @Api(value = "首页", tags = "首页展示的相关接口")
 @RestController
-@RequestMapping("/index")
+@RequestMapping("index")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class IndexController {
     public static final String CLASSIFICATION_NOT_EXIST = "分类不存在";
@@ -36,7 +36,7 @@ public class IndexController {
     private final CategoryService categoryService;
 
     @ApiOperation(value = "获取首页轮播图", notes = "获取首页轮播图列表")
-    @GetMapping("/carousel")
+    @GetMapping("carousel")
     public IMOOCJSONResult carousel() {
         List<Carousel> list = carouselService.queryAll(EnumYesOrNo.YES.type);
         return IMOOCJSONResult.ok(list);
@@ -48,14 +48,14 @@ public class IndexController {
      * 2、如果鼠标移动到大分类，则加载子分类的内容，如果已经存在子分类，则不需要加载（懒加载）
      */
     @ApiOperation(value = "获取商品分类（一级）", notes = "获取商品分类（一级）")
-    @GetMapping("/cats")
+    @GetMapping("cats")
     public IMOOCJSONResult cats() {
         List<Category> list = categoryService.queryAllRootLevelCat();
         return IMOOCJSONResult.ok(list);
     }
 
     @ApiOperation(value = "获取商品子分类", notes = "获取商品子分类")
-    @GetMapping("/subCat/{rootCatId}")
+    @GetMapping("subCat/{rootCatId}")
     public IMOOCJSONResult subCat(
             @ApiParam(value = "一级分类id", required = true)
             @PathVariable Integer rootCatId) {
@@ -67,7 +67,7 @@ public class IndexController {
     }
 
     @ApiOperation(value = "查询每个一级分类下的最新6条商品数据", notes = "查询每个一级分类下的最新6条商品数据")
-    @GetMapping("/sixNewItems/{rootCatId}")
+    @GetMapping("sixNewItems/{rootCatId}")
     public IMOOCJSONResult sixNewItems(
             @ApiParam(value = "一级分类id", required = true)
             @PathVariable Integer rootCatId) {

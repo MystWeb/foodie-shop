@@ -16,33 +16,33 @@ import springfox.documentation.annotations.ApiIgnore;
 @ApiIgnore
 @Slf4j
 @RestController
-@RequestMapping("/students")
+@RequestMapping("students")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class StuFooController {
     private final StuService stuService;
 
     @ApiOperation(value = "获取学生信息")
-    @GetMapping("/getStu")
+    @GetMapping("getStu")
     public Stu getStuInfo(@RequestParam int id) {
         return stuService.getStuInfo(id);
     }
 
     @ApiOperation("保存学生")
-    @PostMapping("/saveStu")
+    @PostMapping("saveStu")
     public Object saveStu() {
         stuService.saveStu();
         return "OK";
     }
 
     @ApiOperation("更新学生")
-    @PutMapping("/updateStu")
+    @PutMapping("updateStu")
     public Object updateStu(@RequestParam int id) {
         stuService.updateStu(id);
         return "OK";
     }
 
     @ApiOperation("删除学生")
-    @DeleteMapping("/deleteStu")
+    @DeleteMapping("deleteStu")
     public Object deleteStu(@RequestParam int id) {
         stuService.deleteStu(id);
         return "OK";

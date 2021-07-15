@@ -325,7 +325,7 @@
 							var userInfo = this.userInfo;
 							var serverUrl = app.serverUrl;
 							axios.defaults.withCredentials = true;
-							axios.post(
+							axios.delete(
 									serverUrl + '/shopcart/del?userId=' + userInfo.id + '&itemSpecId=' + specId, 
 									{}, 
 									{

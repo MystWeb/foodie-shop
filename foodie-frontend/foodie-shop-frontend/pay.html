@@ -638,7 +638,7 @@
 					var userInfo = this.userInfo;
 					var serverUrl = app.serverUrl;
 					axios.defaults.withCredentials = true;
-					axios.post(
+					axios.delete(
 							serverUrl + '/address/delete?userId=' + userInfo.id + "&addressId=" + addressId, 
 							{},
 							{
@@ -660,7 +660,7 @@
 					var userInfo = this.userInfo;
 					var serverUrl = app.serverUrl;
 					axios.defaults.withCredentials = true;
-					axios.post(
+					axios.put(
 							serverUrl + '/address/setDefault?userId=' + userInfo.id + "&addressId=" + addressId,
 							{},
 							{
@@ -800,7 +800,7 @@
 								}
 							});
 					} else {
-						axios.post(
+						axios.put(
 							serverUrl + '/address/update', 
 							{
 								"addressId": addressId,
@@ -845,7 +845,7 @@
 					// 请求后端获得最新数据
 					var serverUrl = app.serverUrl;
 					axios.defaults.withCredentials = true;
-					axios.post(
+					axios.get(
 							serverUrl + '/address/list?userId=' + userInfo.id, {}, 
 							{
 								headers: {

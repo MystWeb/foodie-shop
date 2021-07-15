@@ -28,7 +28,7 @@
 			<div class="res-main">
 				<div class="login-banner-bg">
 					<span></span>
-					<img src="img/registpage.png"/>
+					<img src="img/registerpage.png"/>
 				</div>
 				<div class="login-box">
 
@@ -176,7 +176,7 @@
 						// form提交
 						axios.defaults.withCredentials = true;
 						// console.log(axios.defaults);
-						axios.post(serverUrl + '/passport/regist', userBO)
+						axios.post(serverUrl + '/passport/register', userBO)
 							.then(res => {
 								if (res.data.status == 200) {
 									var user = res.data;

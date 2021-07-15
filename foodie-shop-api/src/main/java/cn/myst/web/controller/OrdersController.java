@@ -32,14 +32,14 @@ import java.util.Objects;
 @Slf4j
 @Api(value = "订单", tags = "订单的相关接口")
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("orders")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class OrdersController extends BaseController {
     private final OrderService orderService;
     private final RestTemplate restTemplate;
 
     @ApiOperation(value = "用户下单", notes = "用户提交订单")
-    @PostMapping("/create")
+    @PostMapping("create")
     public IMOOCJSONResult create(@RequestBody SubmitOrderBO submitOrderBO,
                                   HttpServletRequest request,
                                   HttpServletResponse response) {
@@ -85,7 +85,7 @@ public class OrdersController extends BaseController {
     }
 
     @ApiOperation(value = "用户支付通知", notes = "通知商户已支付订单")
-    @PostMapping("/notifyMerchantOrderPaid")
+    @PostMapping("notifyMerchantOrderPaid")
     public Integer notifyMerchantOrderPaid(
             @ApiParam(value = "商户订单ID")
             @RequestBody String merchantOrderId) {
@@ -97,10 +97,10 @@ public class OrdersController extends BaseController {
     }
 
     @ApiOperation(value = "查询生产系统支付中心的订单信息", notes = "提供给大家查询的方法，查询生产系统支付中心的订单信息")
-    @PostMapping("/getPaymentCenterOrderInfo")
+    @GetMapping("getPaymentCenterOrderInfo")
     public IMOOCJSONResult getPaymentCenterOrderInfo(
             @ApiParam(value = "商户订单ID", required = true)
-                    String merchantOrderId,
+            @RequestParam String merchantOrderId,
             @ApiParam(value = "商户ID", required = true)
             @RequestParam String merchantUserId) {
         if (StringUtils.isBlank(merchantOrderId) || StringUtils.isBlank(merchantUserId)) {
@@ -121,10 +121,10 @@ public class OrdersController extends BaseController {
     }
 
     @ApiOperation(value = "查询用户支付订单信息", notes = "查询用户支付订单信息")
-    @PostMapping("/getPaidOrderInfo")
+    @GetMapping("getPaidOrderInfo")
     public IMOOCJSONResult getPaidOrderInfo(
             @ApiParam(value = "订单ID")
-            @RequestBody String orderId) {
+            @RequestParam String orderId) {
         if (StringUtils.isBlank(orderId)) {
             throw new BusinessException(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
         }

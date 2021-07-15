@@ -22,12 +22,12 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 @Api(value = "购物车", tags = "购物车的相关接口")
 @RestController
-@RequestMapping("/shopcart")
+@RequestMapping("shopcart")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class ShopcartController {
 
     @ApiOperation(value = "添加购物车", notes = "添加购物车")
-    @PostMapping("/add")
+    @PostMapping("add")
     public IMOOCJSONResult add(
             @ApiParam(value = "用户id", required = true)
             @RequestParam String userId,
@@ -45,7 +45,7 @@ public class ShopcartController {
     }
 
     @ApiOperation(value = "从购物车中删除商品", notes = "从购物车中删除商品")
-    @PostMapping("/del")
+    @DeleteMapping("del")
     public IMOOCJSONResult del(
             @ApiParam(value = "用户id", required = true)
             @RequestParam String userId,

@@ -2,8 +2,10 @@ window.app = {
     /* 开发环境 */
     serverUrl: "http://localhost:8088",                                   // 接口服务接口地址
     paymentServerUrl: "http://192.168.1.3:8089",                            // 支付中心服务地址
-    shopServerUrl: "http://localhost:8080/foodie-shop/",                  // 门户网站地址
-    centerServerUrl: "http://localhost:8080/foodie-center/",              // 用户中心地址
+    // shopServerUrl: "http://localhost:8080/foodie-shop/",                  // 门户网站地址
+    // centerServerUrl: "http://localhost:8080/foodie-center/",              // 用户中心地址
+    shopServerUrl: "http://localhost:8080/foodie-shop-frontend/",                  // 门户网站地址
+    centerServerUrl: "http://localhost:8080/foodie-center-frontend/",              // 用户中心地址
     cookieDomain: "",                                                       // cookie 域
 
     /* 生产环境 */

@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 @Api(value = "地址", tags = "地址的相关接口")
 @RestController
-@RequestMapping("/address")
+@RequestMapping("address")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class AddressController {
     private final AddressService addressService;
@@ -38,7 +38,7 @@ public class AddressController {
      * 5. 设置默认地址
      */
     @ApiOperation(value = "根据用户id查询用户的收货地址列表", notes = "根据用户id查询用户的收货地址列表")
-    @PostMapping("/list")
+    @GetMapping("list")
     public IMOOCJSONResult list(
             @ApiParam(value = "用户id", required = true)
             @RequestParam String userId) {
@@ -47,7 +47,7 @@ public class AddressController {
     }
 
     @ApiOperation(value = "用户新增地址", notes = "用户新增地址")
-    @PostMapping("/add")
+    @PostMapping("add")
     public IMOOCJSONResult add(@RequestBody AddressBO addressBO) {
         IMOOCJSONResult checkRes = checkAddress(addressBO);
         if (checkRes.getStatus() != 200) {
@@ -100,7 +100,7 @@ public class AddressController {
     }
 
     @ApiOperation(value = "用户修改地址", notes = "用户修改地址")
-    @PostMapping("/update")
+    @PutMapping("update")
     public IMOOCJSONResult update(@RequestBody AddressBO addressBO) {
         if (Objects.isNull(addressBO) || StringUtils.isBlank(addressBO.getAddressId())) {
             return IMOOCJSONResult.errorMsg(EnumAddressValidation.ADDRESS_ID_CANNOT_BE_EMPTY.zh);
@@ -114,7 +114,7 @@ public class AddressController {
     }
 
     @ApiOperation(value = "根据用户id、地址id删除对应的用户地址信息", notes = "根据用户id、地址id删除对应的用户地址信息")
-    @PostMapping("/delete")
+    @DeleteMapping("delete")
     public IMOOCJSONResult delete(
             @ApiParam(value = "用户id", required = true)
             @RequestParam String userId,
@@ -131,7 +131,7 @@ public class AddressController {
     }
 
     @ApiOperation(value = "根据用户id、地址id删除对应的用户地址信息", notes = "根据用户id、地址id删除对应的用户地址信息")
-    @PostMapping("/setDefault")
+    @PutMapping("setDefault")
     public IMOOCJSONResult setDefault(
             @ApiParam(value = "用户id", required = true)
             @RequestParam String userId,
