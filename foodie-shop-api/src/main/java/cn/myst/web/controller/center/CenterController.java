@@ -1,6 +1,6 @@
 package cn.myst.web.controller.center;
 
-import cn.myst.web.enums.EnumException;
+import cn.myst.web.enums.EnumBaseException;
 import cn.myst.web.pojo.Users;
 import cn.myst.web.service.center.CenterUserService;
 import cn.myst.web.utils.IMOOCJSONResult;
@@ -31,7 +31,7 @@ public class CenterController {
             @ApiParam(value = "用户id", required = true)
                     String userId) {
         if (StringUtils.isBlank(userId)) {
-            return IMOOCJSONResult.errorMsg(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
+            return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
         }
         Users users = centerUserService.queryUserInfo(userId);
         return IMOOCJSONResult.ok(users);

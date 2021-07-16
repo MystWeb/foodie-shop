@@ -157,7 +157,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateOrderStatus(String orderId, Integer orderStatus) {
         if (StringUtils.isBlank(orderId) || Objects.isNull(orderStatus)) {
-            throw new BusinessException(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
+            throw new BusinessException(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
         }
         OrderStatus paidStatus = new OrderStatus();
         paidStatus.setOrderId(orderId);

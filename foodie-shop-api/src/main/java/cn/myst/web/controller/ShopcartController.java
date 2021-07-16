@@ -1,6 +1,6 @@
 package cn.myst.web.controller;
 
-import cn.myst.web.enums.EnumException;
+import cn.myst.web.enums.EnumBaseException;
 import cn.myst.web.pojo.bo.ShopcartBO;
 import cn.myst.web.utils.IMOOCJSONResult;
 import io.swagger.annotations.Api;
@@ -36,7 +36,7 @@ public class ShopcartController {
             HttpServletRequest request,
             HttpServletResponse response) {
         if (StringUtils.isBlank(userId)) {
-            return IMOOCJSONResult.errorMsg(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
+            return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
         }
         log.info(String.valueOf(shopcartBO));
         // TODO 前端用户在登录的情况下，添加商品到购物车，会同时在后端同步购物车到redis缓存
@@ -55,7 +55,7 @@ public class ShopcartController {
             HttpServletResponse response) {
 
         if (StringUtils.isBlank(userId) || StringUtils.isBlank(itemSpecId)) {
-            return IMOOCJSONResult.errorMsg(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
+            return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
         }
 
         // TODO 用户在页面删除购物车中的商品数据，如果此时用户已经登录，则需要同步删除后端购物车中的商品

@@ -2,6 +2,8 @@ package cn.myst.web.controller;
 
 import org.springframework.stereotype.Controller;
 
+import java.io.File;
+
 /**
  * @author ziming.xing
  * Create Date：2021/6/20
@@ -26,4 +28,10 @@ public class BaseController {
     // 方式1：通过内网穿透工具（例）：https://natapp.cn/，将你本地电脑发布到互联网，可以在互联网任何服务器、第三方系统都可以访问你本地电脑的某一个接口
     // 方式2：部署项目至外网服务器
 //    public static final String PAY_RETURN_URL = "http://localhost:8088/orders/notifyMerchantOrderPaid";
+
+    // 用户头像上传的位置
+    public static final String IMAGE_USER_FACE_LOCATION = File.separator + "workspaces" +
+            File.separator + "images" +
+            File.separator + "foodie" +
+            File.separator + "faces";
 }

@@ -44,7 +44,7 @@ public class OrdersController extends BaseController {
                                   HttpServletRequest request,
                                   HttpServletResponse response) {
         if (Objects.isNull(submitOrderBO)) {
-            return IMOOCJSONResult.errorMsg(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
+            return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
         }
         // 判断支付方式
         if (Objects.equals(submitOrderBO.getPayMethod(), EnumPayMethod.WE_CHAT.type) &&
@@ -90,7 +90,7 @@ public class OrdersController extends BaseController {
             @ApiParam(value = "商户订单ID")
             @RequestBody String merchantOrderId) {
         if (StringUtils.isBlank(merchantOrderId)) {
-            throw new BusinessException(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
+            throw new BusinessException(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
         }
         orderService.updateOrderStatus(merchantOrderId, EnumOrderStatus.WAIT_DELIVER.type);
         return HttpStatus.OK.value();
@@ -104,7 +104,7 @@ public class OrdersController extends BaseController {
             @ApiParam(value = "商户ID", required = true)
             @RequestParam String merchantUserId) {
         if (StringUtils.isBlank(merchantOrderId) || StringUtils.isBlank(merchantUserId)) {
-            return IMOOCJSONResult.errorMsg(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
+            return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
         }
         // 设置请求头
         HttpHeaders headers = new HttpHeaders();
@@ -126,7 +126,7 @@ public class OrdersController extends BaseController {
             @ApiParam(value = "订单ID")
             @RequestParam String orderId) {
         if (StringUtils.isBlank(orderId)) {
-            throw new BusinessException(EnumException.INCORRECT_REQUEST_PARAMETER.zh);
+            throw new BusinessException(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
         }
         OrderStatus orderStatus = orderService.queryOrderStatusInfo(orderId);
         return IMOOCJSONResult.ok(orderStatus);

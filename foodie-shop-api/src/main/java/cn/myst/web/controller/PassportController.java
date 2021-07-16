@@ -1,5 +1,7 @@
 package cn.myst.web.controller;
 
+import cn.myst.web.enums.EnumCookie;
+import cn.myst.web.enums.EnumUserValidation;
 import cn.myst.web.pojo.Users;
 import cn.myst.web.pojo.bo.UserBO;
 import cn.myst.web.service.UserService;
@@ -28,15 +30,6 @@ import java.util.Objects;
 @RequestMapping("passport")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class PassportController {
-    public static final String USER_REGISTER_INFO_EMPTY = "用户注册信息不能为空";
-    public static final String USERNAME_IS_EMPTY = "用户名不能为空";
-    public static final String USERNAME_PASSWORD_IS_EMPTY = "用户名或密码不能为空";
-    public static final String USERNAME_ALREADY_EXISTS = "用户名已经存在";
-    public static final String PASSWORD_LENGTH_ERROR = "密码长度不能少于6位数或大于20位数";
-    public static final String INCONSISTENT_PASSWORDS = "两次密码输入不一致";
-    public static final String INCORRECT_USERNAME_OR_PASSWORD = "用户名或密码错误";
-    public static final String USER_COOKIE_NAME = "user";
-
     private final UserService userService;
 
     @ApiOperation(value = "用户名是否存在")
@@ -46,12 +39,12 @@ public class PassportController {
             @RequestParam String username) {
         // 1、 判断用户名不能为空
         if (StringUtils.isBlank(username)) {
-            return IMOOCJSONResult.errorMsg(USERNAME_IS_EMPTY);
+            return IMOOCJSONResult.errorMsg(EnumUserValidation.USERNAME_IS_EMPTY.zh);
         }
         // 2、 查找注册的用户名是否存在
         boolean isExist = userService.queryUsernameIsExist(username);
         if (isExist) {
-            return IMOOCJSONResult.errorMsg(USERNAME_ALREADY_EXISTS);
+            return IMOOCJSONResult.errorMsg(EnumUserValidation.USERNAME_ALREADY_EXISTS.zh);
         }
         // 3、 请求成功，用户名没有重复
         return IMOOCJSONResult.ok();
@@ -64,7 +57,7 @@ public class PassportController {
                                     HttpServletResponse response) {
         // 0、判断用户注册信息必须不为空
         if (Objects.isNull(userBO)) {
-            return IMOOCJSONResult.errorMsg(USER_REGISTER_INFO_EMPTY);
+            return IMOOCJSONResult.errorMsg(EnumUserValidation.USER_REGISTER_INFO_EMPTY.zh);
         }
 
         String username = userBO.getUsername();
@@ -75,31 +68,31 @@ public class PassportController {
         if (StringUtils.isBlank(username)
                 || StringUtils.isBlank(password)
                 || StringUtils.isBlank(confirmPassword)) {
-            return IMOOCJSONResult.errorMsg(USERNAME_PASSWORD_IS_EMPTY);
+            return IMOOCJSONResult.errorMsg(EnumUserValidation.USERNAME_PASSWORD_IS_EMPTY.zh);
         }
 
         // 2、 查询用户名是否存在
         boolean isExist = userService.queryUsernameIsExist(username);
         if (isExist) {
-            return IMOOCJSONResult.errorMsg(USERNAME_ALREADY_EXISTS);
+            return IMOOCJSONResult.errorMsg(EnumUserValidation.USERNAME_ALREADY_EXISTS.zh);
         }
 
         // 3、 密码长度不能少于6位数或大于20位数
         if (password.length() < 6 || password.length() > 20) {
-            return IMOOCJSONResult.errorMsg(PASSWORD_LENGTH_ERROR);
+            return IMOOCJSONResult.errorMsg(EnumUserValidation.PASSWORD_LENGTH_ERROR.zh);
         }
 
         // 4、 判断两次密码是否一致
         if (!Objects.equals(password, confirmPassword)) {
-            return IMOOCJSONResult.errorMsg(INCONSISTENT_PASSWORDS);
+            return IMOOCJSONResult.errorMsg(EnumUserValidation.INCONSISTENT_PASSWORDS.zh);
         }
         // 5、 实现注册用户
         Users user = userService.createUser(userBO);
 
         // 设置用户隐私信息为空
-        setNullProperty(user);
+        this.setNullProperty(user);
 
-        CookieUtils.setCookie(request, response, USER_COOKIE_NAME, JsonUtils.objectToJson(user));
+        CookieUtils.setCookie(request, response, EnumCookie.USER.cookieName, JsonUtils.objectToJson(user), true);
 
         // TODO 生成用户token，存入redis会话
         // TODO 同步购物车数据
@@ -113,7 +106,7 @@ public class PassportController {
                                  HttpServletResponse response) {
         // 0、判断用户注册信息必须不为空
         if (Objects.isNull(userBO)) {
-            return IMOOCJSONResult.errorMsg(USER_REGISTER_INFO_EMPTY);
+            return IMOOCJSONResult.errorMsg(EnumUserValidation.USER_REGISTER_INFO_EMPTY.zh);
         }
 
         String username = userBO.getUsername();
@@ -121,20 +114,20 @@ public class PassportController {
 
         // 1、 判断用户名和密码必须不为空
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
-            return IMOOCJSONResult.errorMsg(USERNAME_PASSWORD_IS_EMPTY);
+            return IMOOCJSONResult.errorMsg(EnumUserValidation.USERNAME_PASSWORD_IS_EMPTY.zh);
         }
 
         // 2、 实现登录用户
         Users user = userService.queryUserForLogin(username, MD5Utils.getMD5Str(password));
 
         if (Objects.isNull(user)) {
-            return IMOOCJSONResult.errorMsg(INCORRECT_USERNAME_OR_PASSWORD);
+            return IMOOCJSONResult.errorMsg(EnumUserValidation.INCORRECT_USERNAME_OR_PASSWORD.zh);
         }
 
         // 设置用户隐私信息为空
-        setNullProperty(user);
+        this.setNullProperty(user);
 
-        CookieUtils.setCookie(request, response, USER_COOKIE_NAME, JsonUtils.objectToJson(user));
+        CookieUtils.setCookie(request, response, EnumCookie.USER.cookieName, JsonUtils.objectToJson(user), true);
 
         // TODO 生成用户token，存入redis会话
         // TODO 同步购物车数据
@@ -160,7 +153,7 @@ public class PassportController {
             @RequestParam String userId,
             HttpServletRequest request,
             HttpServletResponse response) {
-        CookieUtils.deleteCookie(request, response, USER_COOKIE_NAME);
+        CookieUtils.deleteCookie(request, response, EnumCookie.USER.cookieName);
 
         // TODO 用户退出登录，需要清空购物车
         // TODO 分布式会话中需要清除用户数据
