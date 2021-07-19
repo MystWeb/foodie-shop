@@ -5,11 +5,9 @@ import cn.myst.web.enums.EnumBaseException;
 import cn.myst.web.enums.EnumCookie;
 import cn.myst.web.pojo.Users;
 import cn.myst.web.pojo.bo.center.CenterUserBO;
+import cn.myst.web.resource.FileUploadResource;
 import cn.myst.web.service.center.CenterUserService;
-import cn.myst.web.utils.CookieUtils;
-import cn.myst.web.utils.IMOOCJSONResult;
-import cn.myst.web.utils.JsonUtils;
-import cn.myst.web.utils.ValidationUtils;
+import cn.myst.web.utils.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -29,6 +27,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 
@@ -43,6 +42,7 @@ import java.util.Objects;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class CenterUserController extends BaseController {
     private final CenterUserService centerUserService;
+    private final FileUploadResource fileUploadResource;
 
     @ApiOperation(value = "更新用户信息", notes = "更新用户信息")
     @PostMapping("update")
@@ -91,13 +91,18 @@ public class CenterUserController extends BaseController {
         if (Objects.isNull(file)) {
             return IMOOCJSONResult.errorMsg(EnumBaseException.FILE_CANNOT_BE_EMPTY.zh);
         }
+        // 校验文件类型
+        if (!FileUtils.isImage(file)) {
+            return IMOOCJSONResult.errorMsg(EnumBaseException.PICTURE_FORMAT_ERROR.zh);
+        }
         // 获得文件上传的文件名称
         String filename = file.getOriginalFilename();
         if (StringUtils.isBlank(filename)) {
             return IMOOCJSONResult.errorMsg(EnumBaseException.FILE_CANNOT_BE_EMPTY.zh);
         }
         // 定义头像保存的地址
-        String fileSpace = IMAGE_USER_FACE_LOCATION;
+//        String fileSpace = IMAGE_USER_FACE_LOCATION;
+        String fileSpace = fileUploadResource.getImageUserFaceLocation();
         // 在路径上为每个用户增加一个userId，用于区分不同用户上传
         String uploadPathPrefix = File.separator + userId;
         // 开始文件上传
@@ -109,11 +114,14 @@ public class CenterUserController extends BaseController {
         String newFileName = "face-" + userId + "." + suffix;
         // 上传的头像最终保存的位置
         String finalFacePath = fileSpace + uploadPathPrefix + File.separator + newFileName;
+
+        uploadPathPrefix += (File.separator + newFileName);
+
         File outFile = new File(finalFacePath);
         if (Objects.nonNull(outFile.getParentFile())) {
             // 创建文件夹
             boolean mkdir = outFile.getParentFile().mkdirs();
-            log.debug(String.valueOf(mkdir));
+            log.debug("文件夹创建结果：" + mkdir);
         }
         try (InputStream inputStream = file.getInputStream();
              FileOutputStream fileOutputStream = new FileOutputStream(outFile)
@@ -123,6 +131,19 @@ public class CenterUserController extends BaseController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return IMOOCJSONResult.ok();
+        // 获取图片服务地址
+        String imageServerUrl = fileUploadResource.getImageServerUrl();
+
+        // 由于浏览器可能存在缓存的情况，所以我们需要加上时间戳来保证更新后的图片可以及时刷新
+        String finalUserFacePathUrl = imageServerUrl + uploadPathPrefix
+                + "?t=" + DateUtil.formattedDate(LocalDateTime.now(), DateUtil.DATETIME_PATTERN);
+
+        // 更新用户头像到数据库
+        Users user = centerUserService.updateUserFace(userId, finalUserFacePathUrl);
+
+        this.setNullProperty(user);
+        CookieUtils.setCookie(request, response, EnumCookie.USER.cookieName, JsonUtils.objectToJson(user), true);
+        //  TODO 后续要改，增加令牌token，会整合进redis，分布式回话
+        return IMOOCJSONResult.ok(user);
     }
 }

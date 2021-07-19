@@ -8,7 +8,6 @@ import cn.myst.web.pojo.bo.center.CenterUserBO;
 import cn.myst.web.service.center.CenterUserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.n3r.idworker.Sid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,8 +26,6 @@ import java.util.Objects;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class CenterUserServiceImpl implements CenterUserService {
     private final UsersMapper usersMapper;
-
-    private final Sid sid;
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
@@ -51,6 +48,21 @@ public class CenterUserServiceImpl implements CenterUserService {
         Users updateUser = new Users();
         BeanUtils.copyProperties(centerUserBO, updateUser);
         updateUser.setId(userId);
+        updateUser.setUpdatedTime(Date.from(Instant.now()));
+        usersMapper.updateById(updateUser);
+        // 查询更新后的用户信息
+        return this.queryUserInfo(userId);
+    }
+
+    @Override
+    public Users updateUserFace(String userId, String faceUrl) {
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(faceUrl)) {
+            throw new BusinessException(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
+        }
+        // 更新用户信息
+        Users updateUser = new Users();
+        updateUser.setId(userId);
+        updateUser.setFace(faceUrl);
         updateUser.setUpdatedTime(Date.from(Instant.now()));
         usersMapper.updateById(updateUser);
         // 查询更新后的用户信息

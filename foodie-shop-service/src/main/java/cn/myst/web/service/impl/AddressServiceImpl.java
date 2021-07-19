@@ -63,6 +63,8 @@ public class AddressServiceImpl implements AddressService {
         // 生成 addressId（地址id）
         newUserAddress.setId(sid.nextShort());
         newUserAddress.setIsDefault(isDefault);
+        newUserAddress.setCreatedTime(Date.from(Instant.now()));
+        newUserAddress.setUpdatedTime(Date.from(Instant.now()));
         userAddressMapper.insert(newUserAddress);
     }
 
@@ -109,6 +111,7 @@ public class AddressServiceImpl implements AddressService {
         defaultUserAddress.setId(addressId);
         defaultUserAddress.setUserId(userId);
         defaultUserAddress.setIsDefault(EnumYesOrNo.YES.type);
+        defaultUserAddress.setUpdatedTime(Date.from(Instant.now()));
         userAddressMapper.updateById(defaultUserAddress);
     }
 

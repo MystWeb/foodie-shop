@@ -9,8 +9,9 @@ import org.springframework.http.HttpStatus;
  */
 public enum EnumBaseException {
     INCORRECT_REQUEST_PARAMETER("请求参数有误", "INCORRECT_REQUEST_PARAMETER", HttpStatus.BAD_REQUEST.value()),
-    FILE_CANNOT_BE_EMPTY("文件不能为空", "FILE_CANNOT_BE_EMPTY", HttpStatus.INTERNAL_SERVER_ERROR.value()),
-
+    FILE_CANNOT_BE_EMPTY("文件不能为空", "FILE_CANNOT_BE_EMPTY", HttpStatus.BAD_REQUEST.value()),
+    PICTURE_FORMAT_ERROR("图片格式错误", "PICTURE_FORMAT_ERROR", HttpStatus.BAD_REQUEST.value()),
+    FILE_UPLOAD_SIZE_ERROR("文件上传大小不能超过500KB", "FILE_UPLOAD_SIZE_ERROR", HttpStatus.BAD_REQUEST.value()),
     ;
 
     public final String zh;

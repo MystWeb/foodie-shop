@@ -18,5 +18,8 @@ public interface CenterUserService {
      */
     Users updateUserInfo(String userId, CenterUserBO centerUserBO);
 
-
+    /**
+     * 更新用户头像
+     */
+    Users updateUserFace(String userId, String faceUrl);
 }

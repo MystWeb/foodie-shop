@@ -15,8 +15,10 @@ server:
 #
 ############################################################
 spring:
+  profiles:
+    active: dev # 默认启动环境
   application:
-    name: foodie-shop
+    name: foodie-shop # 应用名称
   datasource:
     type: com.zaxxer.hikari.HikariDataSource      # 数据源类型：HikariCP
     driver-class-name: com.mysql.cj.jdbc.Driver   # mysql驱动
@@ -36,8 +38,8 @@ spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 10000MB          # 文件上传大小限制为1G
-      max-request-size: 10000MB       # 请求大小限制为1G
+      max-file-size: 512000          # 文件上传大小限制为500KB
+      max-request-size: 512000       # 请求大小限制为500KB
 
 ############################################################
 #
