@@ -107,7 +107,7 @@ public class ItemsController extends BaseController {
             return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
         }
         if (page == null) {
-            page = 1;
+            page = PAGE;
         }
 
         if (pageSize == null) {
@@ -132,7 +132,7 @@ public class ItemsController extends BaseController {
             return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
         }
         if (page == null) {
-            page = 1;
+            page = PAGE;
         }
 
         if (pageSize == null) {

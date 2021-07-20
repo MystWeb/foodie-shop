@@ -46,11 +46,6 @@ public interface ItemService {
     Integer getCommentCounts(String itemId, Integer level);
 
     /**
-     * 设置分页表格结果对象
-     */
-    PagedGridResult setterPagedGrid(Integer page, List<?> list);
-
-    /**
      * 根据商品id商品评价等级查询商品的评价
      */
     PagedGridResult queryPagedComments(String itemId, Integer level, Integer page, Integer pageSize);

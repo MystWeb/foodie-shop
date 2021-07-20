@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.myst.web.mapper.OrdersCustomMapper">
+    <!--
+     collection 标签：用于定义关联的list集合类型的封装规则
+     property：对应三级分类的list属性名
+     ofType：集合的类型，三级分类的VO
+     -->
+    <resultMap id="MyOrdersVO" type="cn.myst.web.pojo.vo.MyOrdersVO">
+        <id column="order_id" jdbcType="VARCHAR" property="orderId"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="pay_method" jdbcType="INTEGER" property="payMethod"/>
+        <result column="real_pay_amount" jdbcType="INTEGER" property="realPayAmount"/>
+        <result column="post_amount" jdbcType="INTEGER" property="postAmount"/>
+        <result column="is_comment" jdbcType="INTEGER" property="isComment"/>
+        <result column="order_status" jdbcType="INTEGER" property="orderStatus"/>
+        <collection property="subOrderItemList" ofType="cn.myst.web.pojo.vo.MySubOrderItemVO">
+            <id column="item_id" jdbcType="VARCHAR" property="itemId"/>
+            <result column="item_name" jdbcType="VARCHAR" property="itemName"/>
+            <result column="item_img" jdbcType="VARCHAR" property="itemImg"/>
+            <result column="item_spec_id" jdbcType="VARCHAR" property="itemSpecId"/>
+            <result column="item_spec_name" jdbcType="VARCHAR" property="itemSpecName"/>
+            <result column="buy_counts" jdbcType="INTEGER" property="buyCounts"/>
+            <result column="price" jdbcType="INTEGER" property="price"/>
+        </collection>
+    </resultMap>
+
+    <select id="queryMyOrders" resultMap="MyOrdersVO">
+        SELECT od.id AS order_id,
+               od.created_time,
+               od.pay_method,
+               od.real_pay_amount,
+               od.post_amount,
+               od.is_comment,
+               os.order_status,
+               oi.item_id,
+               oi.item_name,
+               oi.item_img,
+               oi.item_spec_id,
+               oi.item_spec_name,
+               oi.buy_counts,
+               oi.price
+        FROM orders AS od
+                     LEFT JOIN order_status AS os ON od.id = os.order_id
+                     LEFT JOIN order_items AS oi ON od.id = oi.order_id
+                WHERE od.user_id = #{paramsMap.userId}
+                  AND od.is_delete = '0'
+        <if test="paramsMap.orderStatus != null and paramsMap.orderStatus != ''">
+            AND os.order_status = #{paramsMap.orderStatus}
+        </if>
+        ORDER BY od.updated_time
+    </select>
+</mapper>

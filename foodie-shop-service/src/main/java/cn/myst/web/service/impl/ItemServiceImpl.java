@@ -10,12 +10,12 @@ import cn.myst.web.pojo.vo.CommentLevelCountsVO;
 import cn.myst.web.pojo.vo.ItemCommentVO;
 import cn.myst.web.pojo.vo.SearchItemsVO;
 import cn.myst.web.pojo.vo.ShopcartVO;
+import cn.myst.web.service.BaseService;
 import cn.myst.web.service.ItemService;
 import cn.myst.web.utils.DesensitizationUtil;
 import cn.myst.web.utils.PagedGridResult;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +38,8 @@ public class ItemServiceImpl implements ItemService {
     private final ItemsParamMapper itemsParamMapper;
     private final ItemsCommentsMapper itemsCommentsMapper;
     private final ItemsCustomMapper itemsCustomMapper;
+
+    private final BaseService baseService;
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
@@ -115,31 +117,21 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public PagedGridResult setterPagedGrid(Integer page, List<?> list) {
-        PageInfo<?> pageInfo = new PageInfo<>(list);
-        PagedGridResult pagedGridResult = new PagedGridResult();
-        pagedGridResult.setPage(page);
-        pagedGridResult.setRows(list);
-        pagedGridResult.setTotal(pageInfo.getPageSize());
-        pagedGridResult.setRecords(pageInfo.getTotal());
-        return pagedGridResult;
-    }
-
-    @Transactional(propagation = Propagation.SUPPORTS)
-    @Override
     public PagedGridResult queryPagedComments(String itemId, Integer level, Integer page, Integer pageSize) {
         if (StringUtils.isBlank(itemId)) {
             return null;
         }
         Map<String, Object> map = new HashMap<>();
         map.put("itemId", itemId);
-        map.put("level", level);
+        if (Objects.nonNull(level)) {
+            map.put("level", level);
+        }
 //        return PageHelper.startPage(page, pageSize)
 //                .doSelectPageInfo(() -> itemsCustomMapper.queryItemComments(map));
         PageHelper.startPage(page, pageSize);
         List<ItemCommentVO> list = itemsCustomMapper.queryItemComments(map);
         list.forEach(vo -> vo.setNickname(DesensitizationUtil.commonDisplay(vo.getNickname())));
-        return setterPagedGrid(page, list);
+        return baseService.setterPagedGrid(page, list);
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -153,7 +145,7 @@ public class ItemServiceImpl implements ItemService {
         map.put("sort", sort);
         PageHelper.startPage(page, pageSize);
         List<SearchItemsVO> list = itemsCustomMapper.searchItems(map);
-        return setterPagedGrid(page, list);
+        return baseService.setterPagedGrid(page, list);
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -167,7 +159,7 @@ public class ItemServiceImpl implements ItemService {
         map.put("sort", sort);
         PageHelper.startPage(page, pageSize);
         List<SearchItemsVO> list = itemsCustomMapper.searchItemsByThirdCat(map);
-        return setterPagedGrid(page, list);
+        return baseService.setterPagedGrid(page, list);
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
