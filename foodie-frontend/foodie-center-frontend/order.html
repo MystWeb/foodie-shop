@@ -277,7 +277,7 @@
 					// 请求后端获得最新数据
 					var serverUrl = app.serverUrl;
 					axios.defaults.withCredentials = true;
-					axios.post(
+					axios.delete(
 							serverUrl + '/myorders/delete?userId=' + userInfo.id + "&orderId=" + orderId, {}, 
 							{
 								headers: {

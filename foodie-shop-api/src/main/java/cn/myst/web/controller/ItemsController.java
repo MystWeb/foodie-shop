@@ -111,7 +111,7 @@ public class ItemsController extends BaseController {
         }
 
         if (pageSize == null) {
-            pageSize = PAGE_SIZE;
+            pageSize = ITEMS_PAGE_SIZE;
         }
         PagedGridResult grid = itemService.searchItems(keywords, sort, page, pageSize);
         return IMOOCJSONResult.ok(grid);
@@ -136,7 +136,7 @@ public class ItemsController extends BaseController {
         }
 
         if (pageSize == null) {
-            pageSize = PAGE_SIZE;
+            pageSize = ITEMS_PAGE_SIZE;
         }
         PagedGridResult grid = itemService.searchItems(catId, sort, page, pageSize);
         return IMOOCJSONResult.ok(grid);

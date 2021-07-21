@@ -14,7 +14,8 @@
         <result column="post_amount" jdbcType="INTEGER" property="postAmount"/>
         <result column="is_comment" jdbcType="INTEGER" property="isComment"/>
         <result column="order_status" jdbcType="INTEGER" property="orderStatus"/>
-        <collection property="subOrderItemList" ofType="cn.myst.web.pojo.vo.MySubOrderItemVO">
+        <collection property="subOrderItemList" select="getSubItems" column="order_id"/>
+        <!--<collection property="subOrderItemList" ofType="cn.myst.web.pojo.vo.MySubOrderItemVO">
             <id column="item_id" jdbcType="VARCHAR" property="itemId"/>
             <result column="item_name" jdbcType="VARCHAR" property="itemName"/>
             <result column="item_img" jdbcType="VARCHAR" property="itemImg"/>
@@ -22,10 +23,11 @@
             <result column="item_spec_name" jdbcType="VARCHAR" property="itemSpecName"/>
             <result column="buy_counts" jdbcType="INTEGER" property="buyCounts"/>
             <result column="price" jdbcType="INTEGER" property="price"/>
-        </collection>
+        </collection>-->
     </resultMap>
 
-    <select id="queryMyOrders" resultMap="MyOrdersVO">
+    <!--  分页插件不支持一对一和一对多结果映射的分页查询：https://pagehelper.github.io/faq/  -->
+    <!--<select id="queryMyOrders" resultMap="MyOrdersVO">
         SELECT od.id AS order_id,
                od.created_time,
                od.pay_method,
@@ -49,5 +51,34 @@
             AND os.order_status = #{paramsMap.orderStatus}
         </if>
         ORDER BY od.updated_time
+    </select>-->
+    <select id="queryMyOrders" resultMap="MyOrdersVO">
+        SELECT od.id AS order_id,
+               od.created_time,
+               od.pay_method,
+               od.real_pay_amount,
+               od.post_amount,
+               od.is_comment,
+               os.order_status
+        FROM orders AS od
+                     LEFT JOIN order_status AS os ON od.id = os.order_id
+                WHERE od.user_id = #{paramsMap.userId}
+                  AND od.is_delete = '0'
+        <if test="paramsMap.orderStatus != null and paramsMap.orderStatus != ''">
+            AND os.order_status = #{paramsMap.orderStatus}
+        </if>
+        ORDER BY od.updated_time
+    </select>
+
+    <select id="getSubItems" parameterType="java.lang.String" resultType="cn.myst.web.pojo.vo.MySubOrderItemVO">
+        SELECT oi.item_id,
+               oi.item_name,
+               oi.item_img,
+               oi.item_spec_id,
+               oi.item_spec_name,
+               oi.buy_counts,
+               oi.price
+        FROM order_items AS oi
+        where oi.order_id = #{orderId}
     </select>
 </mapper>
