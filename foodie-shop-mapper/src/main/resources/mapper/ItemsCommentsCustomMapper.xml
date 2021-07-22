@@ -3,13 +3,39 @@
 <mapper namespace="cn.myst.web.mapper.ItemsCommentsCustomMapper">
     <insert id="saveComments" parameterType="Map">
         insert into items_comments
-                (id, user_id, item_id, item_name, item_spec_id, sepc_name, comment_level, content,
-                 created_time, updated_time)
-                values
+        (id, user_id, item_id, item_name, item_spec_id, sepc_name, comment_level, content,
+        created_time, updated_time)
+        values
         <foreach collection="paramsMap.commentList" item="item" index="index" separator=",">
             (#{item.commentId}, #{paramsMap.userId}, #{item.itemId},
-             #{item.itemName}, #{item.itemSpecId}, #{item.itemSpecName},
-             #{item.commentLevel}, #{item.content}, now(), now())
+            #{item.itemName}, #{item.itemSpecId}, #{item.itemSpecName},
+            #{item.commentLevel}, #{item.content}, now(), now())
         </foreach>
     </insert>
+
+    <resultMap id="MyCommentVO" type="cn.myst.web.pojo.vo.MyCommentVO">
+        <id column="comment_id" jdbcType="VARCHAR" property="commentId"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="item_id" jdbcType="VARCHAR" property="itemId"/>
+        <result column="item_name" jdbcType="VARCHAR" property="itemName"/>
+        <result column="item_spec_id" jdbcType="VARCHAR" property="itemSpecId"/>
+        <result column="item_spec_name" jdbcType="VARCHAR" property="specName"/>
+        <result column="item_img" jdbcType="VARCHAR" property="itemImg"/>
+    </resultMap>
+    <select id="queryMyComments" resultMap="MyCommentVO">
+        SELECT ic.id        AS comment_id,
+               ic.content,
+               ic.created_time,
+               ic.item_id,
+               ic.item_name,
+               ic.item_spec_id,
+               ic.sepc_name AS item_spec_name,
+               ii.url       AS item_img
+        FROM items_comments AS ic
+                     LEFT JOIN items_img ii ON ic.item_id = ii.item_id
+        WHERE ic.user_id = #{paramsMap.userId}
+          AND ii.is_main = 1
+        ORDER BY ic.created_time DESC
+    </select>
 </mapper>

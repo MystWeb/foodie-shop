@@ -1,5 +1,6 @@
 package cn.myst.web.controller.center;
 
+import cn.myst.web.controller.BaseController;
 import cn.myst.web.enums.EnumBaseException;
 import cn.myst.web.enums.EnumOrder;
 import cn.myst.web.enums.EnumYesOrNo;
@@ -9,6 +10,7 @@ import cn.myst.web.pojo.bo.center.OrderItemsCommentBO;
 import cn.myst.web.service.center.MyCommentsService;
 import cn.myst.web.service.center.MyOrdersService;
 import cn.myst.web.utils.IMOOCJSONResult;
+import cn.myst.web.utils.PagedGridResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -32,7 +34,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("mycomments")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
-public class MyCommentsController {
+public class MyCommentsController extends BaseController {
     private final MyCommentsService myCommentsService;
     private final MyOrdersService myOrdersService;
 
@@ -87,4 +89,28 @@ public class MyCommentsController {
         myCommentsService.saveComments(userId, orderId, commentList);
         return IMOOCJSONResult.ok();
     }
+
+
+    @ApiOperation(value = "查询我的评价列表", notes = "由于是用户中心的API，为了安全起见，查询方法请求方式使用POST")
+    @PostMapping("query")
+    public IMOOCJSONResult query(
+            @ApiParam(value = "用户id", required = true)
+            @RequestParam String userId,
+            @ApiParam(value = "查询下一页的第几页")
+            @RequestParam(required = false) Integer page,
+            @ApiParam(value = "分页的每一页显示的条数")
+            @RequestParam(required = false) Integer pageSize) {
+        if (StringUtils.isBlank(userId)) {
+            return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
+        }
+        if (page == null) {
+            page = PAGE;
+        }
+        if (pageSize == null) {
+            pageSize = COMMON_PAGE_SIZE;
+        }
+        PagedGridResult grid = myCommentsService.queryMyComments(userId, page, pageSize);
+        return IMOOCJSONResult.ok(grid);
+    }
+
 }

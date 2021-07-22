@@ -8,8 +8,12 @@ import cn.myst.web.pojo.OrderItems;
 import cn.myst.web.pojo.OrderStatus;
 import cn.myst.web.pojo.Orders;
 import cn.myst.web.pojo.bo.center.OrderItemsCommentBO;
+import cn.myst.web.pojo.vo.MyCommentVO;
+import cn.myst.web.service.BaseService;
 import cn.myst.web.service.center.MyCommentsService;
+import cn.myst.web.utils.PagedGridResult;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
@@ -37,6 +41,7 @@ public class MyCommentsServiceImpl implements MyCommentsService {
     private final ItemsCommentsCustomMapper itemsCommentsCustomMapper;
     private final OrdersMapper ordersMapper;
     private final OrderStatusMapper orderStatusMapper;
+    private final BaseService baseService;
 
     private final Sid sid;
 
@@ -87,5 +92,18 @@ public class MyCommentsServiceImpl implements MyCommentsService {
         orderStatus.setOrderId(orderId);
         orderStatus.setCommentTime(date);
         orderStatusMapper.updateById(orderStatus);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedGridResult queryMyComments(String userId, Integer page, Integer pageSize) {
+        if (StringUtils.isBlank(userId)) {
+            throw new BusinessException(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", userId);
+        PageHelper.startPage(page, pageSize);
+        List<MyCommentVO> list = itemsCommentsCustomMapper.queryMyComments(map);
+        return baseService.setterPagedGrid(page, list);
     }
 }
