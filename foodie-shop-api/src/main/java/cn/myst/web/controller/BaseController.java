@@ -21,7 +21,7 @@ public class BaseController {
 
     // 微信支付成功 -> 支付中心 -> 天天吃货平台
     //                       |-> 回调通知的url
-    public static final String PAY_RETURN_URL = "http://api.z.mukewang.com/foodie-dev-api/orders/notifyMerchantOrderPaid";
+    public static final String PAY_RETURN_URL = "http://localhost/foodie-dev-api/orders/notifyMerchantOrderPaid";
     // 由于支付中心模块部署在外网服务器，此时本地启动项目处于内网状态，支付中心回调通知无法访问到你的内网IP地址
     // 方式1：通过内网穿透工具（例）：https://natapp.cn/，将你本地电脑发布到互联网，可以在互联网任何服务器、第三方系统都可以访问你本地电脑的某一个接口
     // 方式2：部署项目至外网服务器

@@ -16,10 +16,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan(basePackages = {"cn.myst.web", "org.n3r.idworker"})
 //@EnableTransactionManagement
 @EnableScheduling       // 开启定时任务
-public class FoodieShopApplication {
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(FoodieShopApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
 }

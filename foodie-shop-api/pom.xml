@@ -11,6 +11,9 @@
 
     <artifactId>foodie-shop-api</artifactId>
 
+    <!--  打包war [1]  -->
+    <!--<packaging>war</packaging>-->
+
     <!--
         api -> service -> mapper -> pojo -> common
         api可以使用service、pojo与common中相应的方法的
