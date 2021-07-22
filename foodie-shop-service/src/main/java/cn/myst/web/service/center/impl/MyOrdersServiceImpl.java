@@ -11,6 +11,7 @@ import cn.myst.web.mapper.OrdersMapper;
 import cn.myst.web.pojo.OrderStatus;
 import cn.myst.web.pojo.Orders;
 import cn.myst.web.pojo.vo.MyOrdersVO;
+import cn.myst.web.pojo.vo.OrderStatusCountsVO;
 import cn.myst.web.service.BaseService;
 import cn.myst.web.service.center.MyOrdersService;
 import cn.myst.web.utils.IMOOCJSONResult;
@@ -136,5 +137,51 @@ public class MyOrdersServiceImpl implements MyOrdersService {
         updateWrapper.eq(Orders::getUserId, userId);
         int result = ordersMapper.update(updateOrders, updateWrapper);
         return result == 1;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public OrderStatusCountsVO getOrderStatusCounts(String userId) {
+        if (StringUtils.isBlank(userId)) {
+            throw new BusinessException(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
+        }
+        // 待付款订单数量
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", userId);
+        map.put("orderStatus", EnumOrderStatus.WAIT_PAY.type);
+        int waitPayCounts = ordersCustomMapper.getMyOrderStatusCounts(map);
+
+        // 待发货订单数量
+        map.put("orderStatus", EnumOrderStatus.WAIT_DELIVER.type);
+        int waitDeliverCounts = ordersCustomMapper.getMyOrderStatusCounts(map);
+
+        // 待收货订单数量
+        map.put("orderStatus", EnumOrderStatus.WAIT_RECEIVE.type);
+        int waitReceiveCounts = ordersCustomMapper.getMyOrderStatusCounts(map);
+
+        // 待评价订单数量
+        map.put("orderStatus", EnumOrderStatus.SUCCESS.type);
+        map.put("isComment", EnumYesOrNo.NO.type);
+        int waitCommentCounts = ordersCustomMapper.getMyOrderStatusCounts(map);
+
+        return OrderStatusCountsVO.builder()
+                .waitPayCounts(waitPayCounts)
+                .waitDeliverCounts(waitDeliverCounts)
+                .waitReceiveCounts(waitReceiveCounts)
+                .waitCommentCounts(waitCommentCounts)
+                .build();
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedGridResult getMyOrderTrend(String userId, Integer page, Integer pageSize) {
+        if (StringUtils.isBlank(userId)) {
+            throw new BusinessException(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", userId);
+        PageHelper.startPage(page, pageSize);
+        List<OrderStatus> list = ordersCustomMapper.getMyOrderTrend(map);
+        return baseService.setterPagedGrid(page, list);
     }
 }

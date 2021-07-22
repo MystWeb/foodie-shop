@@ -1,6 +1,7 @@
 package cn.myst.web.service.center;
 
 import cn.myst.web.pojo.Orders;
+import cn.myst.web.pojo.vo.OrderStatusCountsVO;
 import cn.myst.web.utils.IMOOCJSONResult;
 import cn.myst.web.utils.PagedGridResult;
 
@@ -39,4 +40,14 @@ public interface MyOrdersService {
      * 删除订单（逻辑删除）
      */
     boolean deleteOrder(String userId, String orderId);
+
+    /**
+     * 查询用户订单数
+     */
+    OrderStatusCountsVO getOrderStatusCounts(String userId);
+
+    /**
+     * 获得订单动向-分页
+     */
+    PagedGridResult getMyOrderTrend(String userId, Integer page, Integer pageSize);
 }

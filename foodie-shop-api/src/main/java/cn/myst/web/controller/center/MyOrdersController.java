@@ -3,6 +3,7 @@ package cn.myst.web.controller.center;
 import cn.myst.web.controller.BaseController;
 import cn.myst.web.enums.EnumBaseException;
 import cn.myst.web.enums.EnumOrder;
+import cn.myst.web.pojo.vo.OrderStatusCountsVO;
 import cn.myst.web.service.center.MyOrdersService;
 import cn.myst.web.utils.IMOOCJSONResult;
 import cn.myst.web.utils.PagedGridResult;
@@ -104,5 +105,39 @@ public class MyOrdersController extends BaseController {
             return IMOOCJSONResult.errorMsg(EnumOrder.ORDER_DELETE_FAILED.zh);
         }
         return IMOOCJSONResult.ok();
+    }
+
+    @ApiOperation(value = "获得订单状态数概况", notes = "由于是用户中心的API，为了安全起见，查询方法请求方式使用POST")
+    @PostMapping("statusCounts")
+    public IMOOCJSONResult statusCounts(
+            @ApiParam(value = "用户id", required = true)
+            @RequestParam String userId) {
+        if (StringUtils.isBlank(userId)) {
+            return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
+        }
+        OrderStatusCountsVO orderStatusCounts = myOrdersService.getOrderStatusCounts(userId);
+        return IMOOCJSONResult.ok(orderStatusCounts);
+    }
+
+    @ApiOperation(value = "查询订单动向", notes = "由于是用户中心的API，为了安全起见，查询方法请求方式使用POST")
+    @PostMapping("trend")
+    public IMOOCJSONResult trend(
+            @ApiParam(value = "用户id", required = true)
+            @RequestParam String userId,
+            @ApiParam(value = "查询下一页的第几页")
+            @RequestParam(required = false) Integer page,
+            @ApiParam(value = "分页的每一页显示的条数")
+            @RequestParam(required = false) Integer pageSize) {
+        if (StringUtils.isBlank(userId)) {
+            return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
+        }
+        if (page == null) {
+            page = PAGE;
+        }
+        if (pageSize == null) {
+            pageSize = COMMON_PAGE_SIZE;
+        }
+        PagedGridResult grid = myOrdersService.getMyOrderTrend(userId, page, pageSize);
+        return IMOOCJSONResult.ok(grid);
     }
 }

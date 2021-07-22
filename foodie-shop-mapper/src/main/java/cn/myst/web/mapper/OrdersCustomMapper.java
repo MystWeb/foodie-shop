@@ -1,5 +1,6 @@
 package cn.myst.web.mapper;
 
+import cn.myst.web.pojo.OrderStatus;
 import cn.myst.web.pojo.vo.MyOrdersVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,5 +16,9 @@ import java.util.Map;
 public interface OrdersCustomMapper {
 
     List<MyOrdersVO> queryMyOrders(@Param("paramsMap") Map<String, Object> paramsMap);
+
+    int getMyOrderStatusCounts(@Param("paramsMap") Map<String, Object> paramsMap);
+
+    List<OrderStatus> getMyOrderTrend(@Param("paramsMap") Map<String, Object> paramsMap);
 
 }

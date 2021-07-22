@@ -81,4 +81,32 @@
         FROM order_items AS oi
         where oi.order_id = #{orderId}
     </select>
+
+    <select id="getMyOrderStatusCounts" resultType="int">
+        SELECT COUNT(0)
+        FROM orders AS o
+                     LEFT JOIN order_status AS os ON o.id = os.order_id
+                WHERE o.user_id = #{paramsMap.userId}
+                  AND os.order_status = #{paramsMap.orderStatus}
+        <if test="paramsMap.isComment != null">
+            AND o.is_comment = #{paramsMap.isComment}
+        </if>
+    </select>
+
+    <select id="getMyOrderTrend" resultType="cn.myst.web.pojo.OrderStatus">
+        SELECT os.order_id,
+               os.order_status,
+               os.created_time,
+               os.pay_time,
+               os.deliver_time,
+               os.success_time,
+               os.close_time,
+               os.comment_time
+        FROM orders AS o
+                     LEFT JOIN order_status AS os ON o.id = os.order_id
+        WHERE o.is_delete = 0
+          AND o.user_id = #{paramsMap.userId}
+          AND os.order_status IN (20, 30, 40)
+        ORDER BY os.order_id DESC
+    </select>
 </mapper>
