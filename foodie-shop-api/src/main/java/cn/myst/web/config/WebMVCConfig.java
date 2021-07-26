@@ -30,7 +30,9 @@ public class WebMVCConfig implements WebMvcConfigurer {
         // url映射路径
         registry.addMapping("/**")
                 // 设置允许跨域信息的内容  注：当allowCredentials为true时，allowedOrigins不能包含特殊值"*"
-                .allowedOrigins("http://localhost:8080")
+//                .allowedOrigins("http://localhost:8080")
+                // 设置允许跨域请求的域名
+                .allowedOriginPatterns("*")
                 // 设置允许请求的方式
                 .allowedMethods(ORIGINS)
                 // 设置是否发送cookie信息
