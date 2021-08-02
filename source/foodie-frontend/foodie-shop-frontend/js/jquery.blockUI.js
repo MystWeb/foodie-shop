@@ -612,7 +612,7 @@
 
 	/*global define:true */
 	if (typeof define === 'function' && define.amd && define.amd.jQuery) {
-		define(['foodie-frontend/foodie-shop-frontend/js/jquery'], setup);
+		define(['source/foodie-frontend/foodie-shop-frontend/js/jquery'], setup);
 	} else {
 		setup(jQuery);
 	}

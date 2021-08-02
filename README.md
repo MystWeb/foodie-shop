@@ -12,12 +12,14 @@ foodie-shop项目是一套前后端分离电商系统，包括前台购物系统
 ```
 foodie-shop
 ├── db -- 数据库文件与数据库pdman原型图
-├── foodie-frontend -- 购物系统与用户系统前端源码
 ├── foodie-shop-api -- 前天购物系统与用户中心Controller接口
 ├── foodie-shop-common -- 工具类及通用代码
 ├── foodie-shop-mapper -- 数据库交互层Mapper
 ├── foodie-shop-pojo -- entity、bo、vo实体类
 ├── foodie-shop-service -- Service接口与实现
+├── source -- 源码等文件
+├── source├── foodie-frontend -- 购物系统与用户系统前端源码
+├── source├── 支付中心源码 -- 需要商户资质才可有效使用
 ```
 
 ## 搭建步骤
