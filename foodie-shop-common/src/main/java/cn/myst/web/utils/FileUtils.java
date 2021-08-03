@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
 import org.apache.tika.metadata.HttpHeaders;
 import org.apache.tika.metadata.Metadata;
-import org.apache.tika.metadata.TikaMetadataKeys;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +25,8 @@ public class FileUtils {
     public static final String ALLOW_UPLOAD_FILE_MIME_TYPES = "image/jpg|image/jpeg|image/gif|image/png";
 
     public static final String ALLOW_UPLOAD_EXCEL_FILE_MIME_TYPES = "application/vnd.ms-excel|application/zip|application/x-tika-ooxml|application/x-tika-msoffice";
+
+    public static final String TIKA_METADATA_KEYS_RESOURCE_NAME_KEY = "resourceName";
 
     private FileUtils() {
     }
@@ -55,7 +56,7 @@ public class FileUtils {
         AutoDetectParser parser = new AutoDetectParser();
         parser.setParsers(new HashMap<>());
         Metadata metadata = new Metadata();
-        metadata.add(TikaMetadataKeys.RESOURCE_NAME_KEY, file.getName());
+        metadata.add(TIKA_METADATA_KEYS_RESOURCE_NAME_KEY, file.getName());
         try (InputStream stream = file.getInputStream()) {
             parser.parse(stream, new DefaultHandler(), metadata, new ParseContext());
         } catch (Exception e) {
