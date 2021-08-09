@@ -3,10 +3,6 @@
 
 天天吃货在线购物平台，采用现阶段流行技术实现。
 
-## 使用工具
-
-数据库建模工具：[PDMan](http://pdman.cn/)，参见db内foodie-dev.pdman.json文件
-
 ## 项目介绍
 
 foodie-shop项目是一套前后端分离电商系统，包括前台购物系统及用户中心后台系统，基于SpringBoot+MyBatis实现，采用Docker容器化部署。购物平台系统包含分类、推荐、搜索、评价、购物车、地址、订单、支付、定时任务、用户中心、订单管理模块。
@@ -40,6 +36,7 @@ foodie-shop
 | [Maven](http://maven.apache.org/download.cgi)                | Apache Maven是一个软件项目管理和理解工具。基于项目对象模型（POM）的概念，Maven可以从中央信息管理项目的构建，报告和文档。 |
 | [Git](https://git-scm.com/download/win)                      | 分布式版本控制系统                                           |
 | [Tomcat](https://tomcat.apache.org/)                         | Apache Tomcat是由Apache Software Foundation（ASF）开发的一个开源Java WEB应用服务器 |
+| [PDMan](http://pdman.cn/)                                    | 数据库建模工具，参见db内foodie-dev.pdman.json文件            |
 
 ### 环境变量
 
