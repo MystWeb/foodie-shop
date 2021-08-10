@@ -50,12 +50,12 @@ public class IndexController {
     @GetMapping("carousel")
     public IMOOCJSONResult carousel() {
         List<Carousel> list;
-        String carouselStr = redisOperator.get(EnumRedisKeys.CAROUSEL.key);
-        if (StringUtils.isBlank(carouselStr)) {
+        String json = redisOperator.get(EnumRedisKeys.CAROUSEL.key);
+        if (StringUtils.isBlank(json)) {
             list = carouselService.queryAll(EnumYesOrNo.YES.type);
             redisOperator.set(EnumRedisKeys.CAROUSEL.key, JsonUtils.objectToJson(list));
         } else {
-            list = JsonUtils.jsonToList(carouselStr, Carousel.class);
+            list = JsonUtils.jsonToList(json, Carousel.class);
         }
         return IMOOCJSONResult.ok(list);
     }
@@ -69,12 +69,12 @@ public class IndexController {
     @GetMapping("cats")
     public IMOOCJSONResult cats() {
         List<Category> list;
-        String catStr = redisOperator.get(EnumRedisKeys.CAT.key);
-        if (StringUtils.isBlank(catStr)) {
+        String json = redisOperator.get(EnumRedisKeys.CAT.key);
+        if (StringUtils.isBlank(json)) {
             list = categoryService.queryAllRootLevelCat();
             redisOperator.set(EnumRedisKeys.CAT.key, JsonUtils.objectToJson(list));
         } else {
-            list = JsonUtils.jsonToList(catStr, Category.class);
+            list = JsonUtils.jsonToList(json, Category.class);
         }
         return IMOOCJSONResult.ok(list);
     }
@@ -89,8 +89,8 @@ public class IndexController {
         }
         List<CategoryVO> list;
         String subCatKey = EnumRedisKeys.SUB_CAT.key + ":" + rootCatId;
-        String subCatStr = redisOperator.get(subCatKey);
-        if (StringUtils.isBlank(subCatStr)) {
+        String json = redisOperator.get(subCatKey);
+        if (StringUtils.isBlank(json)) {
             list = categoryService.querySubCatByRootCatId(rootCatId);
             /*
              * 查询的key在redis中不存在，
@@ -106,7 +106,7 @@ public class IndexController {
                 redisOperator.set(subCatKey, JsonUtils.objectToJson(list));
             }
         } else {
-            list = JsonUtils.jsonToList(subCatStr, CategoryVO.class);
+            list = JsonUtils.jsonToList(json, CategoryVO.class);
         }
         return IMOOCJSONResult.ok(list);
     }

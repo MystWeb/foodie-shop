@@ -13,8 +13,6 @@ public class BaseController {
     public static final Integer COMMON_PAGE_SIZE = 10;
     public static final Integer ITEMS_PAGE_SIZE = 20;
 
-    public static final String FOODIE_SHOPCART = "shopcart";
-
     // 支付中心的调用地址
     public static final String PAYMENT_URL = "http://payment.t.mukewang.com/foodie-payment/payment/createMerchantOrder";        // produce
     public static final String PAYMENT_CENTER_ORDER_INFO_URL = "http://payment.t.mukewang.com/foodie-payment/payment/getPaymentCenterOrderInfo";        // produce
