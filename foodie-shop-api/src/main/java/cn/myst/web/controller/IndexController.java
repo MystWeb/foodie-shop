@@ -1,5 +1,6 @@
 package cn.myst.web.controller;
 
+import cn.myst.web.enums.EnumRedisKeys;
 import cn.myst.web.enums.EnumYesOrNo;
 import cn.myst.web.pojo.Carousel;
 import cn.myst.web.pojo.Category;
@@ -8,11 +9,15 @@ import cn.myst.web.pojo.vo.NewItemsVO;
 import cn.myst.web.service.CarouselService;
 import cn.myst.web.service.CategoryService;
 import cn.myst.web.utils.IMOOCJSONResult;
+import cn.myst.web.utils.JsonUtils;
+import cn.myst.web.utils.RedisOperator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.apache.tika.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,11 +39,24 @@ public class IndexController {
 
     private final CarouselService carouselService;
     private final CategoryService categoryService;
+    private final RedisOperator redisOperator;
 
+    /**
+     * 1. 后台运营系统，一旦广告（轮播图）发生更改，就可以删除缓存，然后重置
+     * 2. 定时重置，比如每天凌晨三点重置
+     * 3. 每个轮播图都有可能是一个广告，每个广告都会有一个过期时间，过期了，再重置
+     */
     @ApiOperation(value = "获取首页轮播图", notes = "获取首页轮播图列表")
     @GetMapping("carousel")
     public IMOOCJSONResult carousel() {
-        List<Carousel> list = carouselService.queryAll(EnumYesOrNo.YES.type);
+        List<Carousel> list;
+        String carouselStr = redisOperator.get(EnumRedisKeys.CAROUSEL.key);
+        if (StringUtils.isBlank(carouselStr)) {
+            list = carouselService.queryAll(EnumYesOrNo.YES.type);
+            redisOperator.set(EnumRedisKeys.CAROUSEL.key, JsonUtils.objectToJson(list));
+        } else {
+            list = JsonUtils.jsonToList(carouselStr, Carousel.class);
+        }
         return IMOOCJSONResult.ok(list);
     }
 
@@ -50,7 +68,14 @@ public class IndexController {
     @ApiOperation(value = "获取商品分类（一级）", notes = "获取商品分类（一级）")
     @GetMapping("cats")
     public IMOOCJSONResult cats() {
-        List<Category> list = categoryService.queryAllRootLevelCat();
+        List<Category> list;
+        String catStr = redisOperator.get(EnumRedisKeys.CAT.key);
+        if (StringUtils.isBlank(catStr)) {
+            list = categoryService.queryAllRootLevelCat();
+            redisOperator.set(EnumRedisKeys.CAT.key, JsonUtils.objectToJson(list));
+        } else {
+            list = JsonUtils.jsonToList(catStr, Category.class);
+        }
         return IMOOCJSONResult.ok(list);
     }
 
@@ -62,7 +87,27 @@ public class IndexController {
         if (Objects.isNull(rootCatId)) {
             return IMOOCJSONResult.errorMsg(CLASSIFICATION_NOT_EXIST);
         }
-        List<CategoryVO> list = categoryService.querySubCatByRootCatId(rootCatId);
+        List<CategoryVO> list;
+        String subCatKey = EnumRedisKeys.SUB_CAT.key + ":" + rootCatId;
+        String subCatStr = redisOperator.get(subCatKey);
+        if (StringUtils.isBlank(subCatStr)) {
+            list = categoryService.querySubCatByRootCatId(rootCatId);
+            /*
+             * 查询的key在redis中不存在，
+             * 对应的id在数据库也不存在，
+             * 此时被非法用户进行攻击，大量的请求会直接打在db上，
+             * 造成宕机，从而影响整个系统，
+             * 这种现象称之为缓存穿透。
+             * 解决方案：把空的数据也缓存起来，比如空字符串，空对象，空数组或list
+             */
+            if (CollectionUtils.isEmpty(list)) {
+                redisOperator.set(subCatKey, JsonUtils.objectToJson(list), EnumRedisKeys.SUB_CAT.cacheTime);
+            } else {
+                redisOperator.set(subCatKey, JsonUtils.objectToJson(list));
+            }
+        } else {
+            list = JsonUtils.jsonToList(subCatStr, CategoryVO.class);
+        }
         return IMOOCJSONResult.ok(list);
     }
 

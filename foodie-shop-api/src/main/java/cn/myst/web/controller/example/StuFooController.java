@@ -1,4 +1,4 @@
-package cn.myst.web.controller;
+package cn.myst.web.controller.example;
 
 import cn.myst.web.pojo.Stu;
 import cn.myst.web.service.StuService;

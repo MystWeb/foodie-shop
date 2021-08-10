@@ -54,6 +54,7 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.any())
                 // .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.regex("(?!/error.*).*"))
+                .paths(PathSelectors.regex("(?!/actuator.*).*"))
                 .build()
 
                 // 授权信息设置，必要的header token等认证信息
