@@ -1,10 +1,15 @@
 package cn.myst.web.enums;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * @author ziming.xing
  * Create Date：2021/6/29
  * 地址校验 枚举
  */
+@AllArgsConstructor
+@Getter
 public enum EnumAddressValidation {
     CONSIGNEE_CANNOT_BE_EMPTY("收货人不能为空", "CONSIGNEE_CANNOT_BE_EMPTY"),
     RECEIVER_NAME_IS_NOT_TOO_LONG("收货人姓名不能太长", "RECEIVER_NAME_IS_NOT_TOO_LONG"),
@@ -20,8 +25,4 @@ public enum EnumAddressValidation {
     public final String zh;
     public final String en;
 
-    EnumAddressValidation(String zh, String en) {
-        this.zh = zh;
-        this.en = en;
-    }
 }

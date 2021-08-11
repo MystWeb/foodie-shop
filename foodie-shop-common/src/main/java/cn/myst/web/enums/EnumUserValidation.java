@@ -1,10 +1,15 @@
 package cn.myst.web.enums;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * @author ziming.xing
  * Create Date：2021/6/29
  * 地址校验 枚举
  */
+@AllArgsConstructor
+@Getter
 public enum EnumUserValidation {
     USER_REGISTER_INFO_EMPTY("用户注册信息不能为空", "USER_REGISTER_INFO_EMPTY"),
     USERNAME_IS_EMPTY("用户名不能为空", "USERNAME_IS_EMPTY"),
@@ -19,8 +24,4 @@ public enum EnumUserValidation {
     public final String zh;
     public final String en;
 
-    EnumUserValidation(String zh, String en) {
-        this.zh = zh;
-        this.en = en;
-    }
 }

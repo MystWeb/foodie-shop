@@ -1,10 +1,15 @@
 package cn.myst.web.enums;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * @author ziming.xing
  * Create Date：2021/7/1
  * 订单状态 枚举
  */
+@AllArgsConstructor
+@Getter
 public enum EnumOrderStatus {
     WAIT_PAY(10, "待付款"),
     WAIT_DELIVER(20, "已付款，待发货"),
@@ -17,8 +22,4 @@ public enum EnumOrderStatus {
     public final Integer type;
     public final String value;
 
-    EnumOrderStatus(Integer type, String value) {
-        this.type = type;
-        this.value = value;
-    }
 }

@@ -1,5 +1,7 @@
 package cn.myst.web.enums;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -7,6 +9,8 @@ import org.springframework.http.HttpStatus;
  * Create Date：2021/6/27
  * 异常 枚举
  */
+@AllArgsConstructor
+@Getter
 public enum EnumBaseException {
     INCORRECT_REQUEST_PARAMETER("请求参数有误", "INCORRECT_REQUEST_PARAMETER", HttpStatus.BAD_REQUEST.value()),
     FILE_CANNOT_BE_EMPTY("文件不能为空", "FILE_CANNOT_BE_EMPTY", HttpStatus.BAD_REQUEST.value()),
@@ -18,9 +22,4 @@ public enum EnumBaseException {
     public final String en;
     public final Integer code;
 
-    EnumBaseException(String zh, String en, Integer code) {
-        this.zh = zh;
-        this.en = en;
-        this.code = code;
-    }
 }

@@ -1,17 +1,20 @@
 package cn.myst.web.enums;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * @author ziming.xing
  * Create Date：2021/7/16
  * Cookie 枚举
  */
+@AllArgsConstructor
+@Getter
 public enum EnumCookie {
     USER("user"),
+    SHOP_CART("shopcart"),
 
     ;
     public final String cookieName;
 
-    EnumCookie(String cookieName) {
-        this.cookieName = cookieName;
-    }
 }

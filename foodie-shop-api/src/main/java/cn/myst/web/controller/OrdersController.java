@@ -83,7 +83,7 @@ public class OrdersController extends BaseController {
             redisOperator.set(shopCartKey, JsonUtils.objectToJson(shopCartList));
         }
         // 整合redis之后，完善购物车中已结算商品清除，并且同步到前端的cookie
-        CookieUtils.setCookie(request, response, EnumRedisKeys.SHOP_CART.key, JsonUtils.objectToJson(shopCartList), true);
+        CookieUtils.setCookie(request, response, EnumCookie.SHOP_CART.cookieName, JsonUtils.objectToJson(shopCartList), true);
         // 3. 向支付中心发送当前订单，用于保存支付中心的订单数据
         MerchantOrdersVO merchantOrdersVO = orderVO.getMerchantOrdersVO();
         merchantOrdersVO.setReturnUrl(PAY_RETURN_URL);
