@@ -3,11 +3,15 @@ package cn.myst.web.controller;
 import cn.myst.web.enums.*;
 import cn.myst.web.exception.BusinessException;
 import cn.myst.web.pojo.OrderStatus;
+import cn.myst.web.pojo.bo.ShopcartBO;
 import cn.myst.web.pojo.bo.SubmitOrderBO;
 import cn.myst.web.pojo.vo.MerchantOrdersVO;
 import cn.myst.web.pojo.vo.OrderVO;
 import cn.myst.web.service.OrderService;
+import cn.myst.web.utils.CookieUtils;
 import cn.myst.web.utils.IMOOCJSONResult;
+import cn.myst.web.utils.JsonUtils;
+import cn.myst.web.utils.RedisOperator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -16,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -37,6 +43,7 @@ import java.util.Objects;
 public class OrdersController extends BaseController {
     private final OrderService orderService;
     private final RestTemplate restTemplate;
+    private final RedisOperator redisOperator;
 
     @ApiOperation(value = "用户下单", notes = "用户提交订单")
     @PostMapping("create")
@@ -51,8 +58,16 @@ public class OrdersController extends BaseController {
                 Objects.equals(submitOrderBO.getPayMethod(), EnumPayMethod.ALI_PAY.type)) {
             return IMOOCJSONResult.errorMsg(EnumOrder.PAYMENT_METHOD_IS_NOT_SUPPORTED.zh);
         }
+        // 0. 判断购物车数据是否正常
+        String shopCartKey = EnumRedisKeys.SHOP_CART.key + ":" + submitOrderBO.getUserId();
+        String json = redisOperator.get(shopCartKey);
+        if (StringUtils.isBlank(json)) {
+            return IMOOCJSONResult.errorMsg(EnumOrder.SHOPPING_CART_DATA_ERROR.zh);
+        }
+        // redis中已经有购物车了
+        List<ShopcartBO> shopCartList = JsonUtils.jsonToList(json, ShopcartBO.class);
         // 1. 创建订单
-        OrderVO orderVO = orderService.createOrder(submitOrderBO);
+        OrderVO orderVO = orderService.createOrder(shopCartList, submitOrderBO);
         String orderId = orderVO.getOrderId();
         // 2. 创建订单以后，移除购物车中已结算（已提交）的商品
 
@@ -62,8 +77,13 @@ public class OrdersController extends BaseController {
          3003 -> 用户购买
          4004
          */
-        // TODO 整合redis之后，完善购物车中已结算商品清除，并且同步到前端的cookie
-//        CookieUtils.setCookie(request, response, FOODIE_SHOPCART, "", true);
+        // 清理覆盖现有的redis汇总的购物数据
+        if (!CollectionUtils.isEmpty(shopCartList)) {
+            shopCartList.removeAll(orderVO.getToBeRemovedShopCartList());
+            redisOperator.set(shopCartKey, JsonUtils.objectToJson(shopCartList));
+        }
+        // 整合redis之后，完善购物车中已结算商品清除，并且同步到前端的cookie
+        CookieUtils.setCookie(request, response, EnumRedisKeys.SHOP_CART.key, JsonUtils.objectToJson(shopCartList), true);
         // 3. 向支付中心发送当前订单，用于保存支付中心的订单数据
         MerchantOrdersVO merchantOrdersVO = orderVO.getMerchantOrdersVO();
         merchantOrdersVO.setReturnUrl(PAY_RETURN_URL);

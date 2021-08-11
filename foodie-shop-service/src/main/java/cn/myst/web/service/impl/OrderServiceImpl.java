@@ -6,6 +6,7 @@ import cn.myst.web.mapper.OrderItemsMapper;
 import cn.myst.web.mapper.OrderStatusMapper;
 import cn.myst.web.mapper.OrdersMapper;
 import cn.myst.web.pojo.*;
+import cn.myst.web.pojo.bo.ShopcartBO;
 import cn.myst.web.pojo.bo.SubmitOrderBO;
 import cn.myst.web.pojo.vo.MerchantOrdersVO;
 import cn.myst.web.pojo.vo.OrderVO;
@@ -46,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public OrderVO createOrder(SubmitOrderBO submitOrderBO) {
+    public OrderVO createOrder(List<ShopcartBO> shopCartList, SubmitOrderBO submitOrderBO) {
         if (Objects.isNull(submitOrderBO)) {
             return null;
         }
@@ -92,10 +93,18 @@ public class OrderServiceImpl implements OrderService {
         int totalAmount = 0;
         // 优惠后的实际支付价格累计
         int realPayAmount = 0;
+        // 待删除的购物车列表
+        List<ShopcartBO> toBeRemovedShopCartList = new ArrayList<>();
         List<OrderItems> list = new ArrayList<>();
         for (String itemSpecId : itemSpecIdArr) {
+            ShopcartBO cartItem = this.getBuyCountsFromShopCartList(shopCartList, itemSpecId);
             int buyCounts = 1;
-            // TODO 整合redis后，商品购买的数量重新从redis的购物车中获取
+            // 整合redis后，商品购买的数量重新从redis的购物车中获取
+            if (Objects.nonNull(cartItem)) {
+                buyCounts = cartItem.getBuyCounts();
+                // 待删除的购物车列表添加待删除的购物车商品
+                toBeRemovedShopCartList.add(cartItem);
+            }
             // 2.1 根据规格id，查询规格的具体信息，主要获取价格
             ItemsSpec itemsSpec = itemService.queryItemSpecBySpecId(itemSpecId);
             totalAmount += itemsSpec.getPriceNormal() * buyCounts;
@@ -149,8 +158,23 @@ public class OrderServiceImpl implements OrderService {
         OrderVO orderVO = new OrderVO();
         orderVO.setOrderId(orderId);
         orderVO.setMerchantOrdersVO(merchantOrdersVO);
+        orderVO.setToBeRemovedShopCartList(toBeRemovedShopCartList);
 
         return orderVO;
+    }
+
+    /**
+     * 从redis中的购物车里获取商品，目的：counts
+     */
+    private ShopcartBO getBuyCountsFromShopCartList(List<ShopcartBO> shopCartList, String specId) {
+        if (CollectionUtils.isEmpty(shopCartList) || StringUtils.isBlank(specId)) {
+            return null;
+        }
+        //如果对象不存在则返回特定对象
+        return shopCartList.stream()
+                .filter(sc -> Objects.equals(sc.getSpecId(), specId))
+                .findAny()
+                .orElse(null);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

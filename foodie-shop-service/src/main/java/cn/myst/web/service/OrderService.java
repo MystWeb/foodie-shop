@@ -1,8 +1,11 @@
 package cn.myst.web.service;
 
 import cn.myst.web.pojo.OrderStatus;
+import cn.myst.web.pojo.bo.ShopcartBO;
 import cn.myst.web.pojo.bo.SubmitOrderBO;
 import cn.myst.web.pojo.vo.OrderVO;
+
+import java.util.List;
 
 /**
  * @author ziming.xing
@@ -12,7 +15,7 @@ public interface OrderService {
     /**
      * 创建订单相关信息
      */
-    OrderVO createOrder(SubmitOrderBO submitOrderBO);
+    OrderVO createOrder(List<ShopcartBO> shopCartList, SubmitOrderBO submitOrderBO);
 
     /**
      * 修改订单状态
