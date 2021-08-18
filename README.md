@@ -151,77 +151,13 @@ mkdir -p /etc/docker/
 
 cat <<EOF>> /etc/docker/daemon.json
 {
-	"registry-mirrors": ["https://hub-mirror.c.163.com"],
-	"iptables": false
+    "registry-mirrors": ["https://hub-mirror.c.163.com"],
+	# 如果启用firewalld，需增加该配置
+    "iptables": false
 }
 EOF
 
 systemctl restart docker
-```
-
-#### 安装Redis
-
-[Redis configuration](https://redis.io/topics/config)
-
-[Redis 6.2 configuration](https://raw.githubusercontent.com/redis/redis/6.2/redis.conf)
-
-- 创建`redis.conf`配置文件
-
-```sh
-mkdir -p /home/foodie-shop/redis-master01/conf
-vim /home/foodie-shop/redis-master01/conf/redis.conf
-
-mkdir -p /home/foodie-shop/redis-slave01/conf
-vim /home/foodie-shop/redis-slave01/conf/redis.conf
-
-mkdir -p /home/foodie-shop/redis-slave02/conf
-cp /home/foodie-shop/redis-slave01/conf/redis.conf /home/foodie-shop/redis-slave02/conf/
-```
-
-```sh
-# RDB保存机制
-save 900 1          #如果1个缓存更新，则15分钟后备份
-save 300 10         #如果10个缓存更新，则5分钟后备份
-save 60 10000       #如果10000个缓存更新，则1分钟后备份
-#save 10 3           # 如果更新3个缓存更新，则10秒后备份
-
-# 设置所有主机都可以连接到redis
-bind 0.0.0.0
-
-# 开启AOF
-appendonly yes
-
-# redis slave节点配置redis master连接信息
-replicaof <masterip> <masterport>
-masterauth <master-password>
-```
-
-> 不使用自定义配置文件的默认启动方式（无配置文件）：redis-server *:6379
-
-```sh
-# redis-master01
-docker run -dit -p 6379:6379 --name redis-master01 \
---restart=always --privileged=true \
--v /home/foodie-shop/redis-master01/data:/data \
--v /home/foodie-shop/redis-master01/conf:/usr/local/etc/redis \
-redis:6.2 \
-redis-server /usr/local/etc/redis/redis.conf --requirepass "proaim@2013"
-
-# redis-slave01
-docker run -dit -p 6380:6379 --name redis-slave01 \
---restart=always --privileged=true \
--v /home/foodie-shop/redis-slave01/data:/data \
--v /home/foodie-shop/redis-slave01/conf:/usr/local/etc/redis \
-redis:6.2 \
-redis-server /usr/local/etc/redis/redis.conf  --requirepass "proaim@2013"
-
-# redis-slave02
-docker run -dit -p 6381:6379 --name redis-slave02 \
---restart=always --privileged=true \
--v /home/foodie-shop/redis-slave02/data:/data \
--v /home/foodie-shop/redis-slave02/conf:/usr/local/etc/redis \
-redis:6.2 \
-redis-server /usr/local/etc/redis/redis.conf  --requirepass "proaim@2013"
 ```
 
 ## 技术选型
