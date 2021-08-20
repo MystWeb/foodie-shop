@@ -5,7 +5,9 @@ import cn.myst.web.enums.EnumBaseException;
 import cn.myst.web.enums.EnumCookie;
 import cn.myst.web.pojo.Users;
 import cn.myst.web.pojo.bo.center.CenterUserBO;
+import cn.myst.web.pojo.vo.UsersVO;
 import cn.myst.web.resource.FileUploadResource;
+import cn.myst.web.service.UserService;
 import cn.myst.web.service.center.CenterUserService;
 import cn.myst.web.utils.*;
 import io.swagger.annotations.Api;
@@ -43,6 +45,7 @@ import java.util.Objects;
 public class CenterUserController extends BaseController {
     private final CenterUserService centerUserService;
     private final FileUploadResource fileUploadResource;
+    private final UserService userService;
 
     @ApiOperation(value = "更新用户信息", notes = "更新用户信息")
     @PostMapping("update")
@@ -60,24 +63,14 @@ public class CenterUserController extends BaseController {
             return IMOOCJSONResult.errorMap(errorMap);
         }
 
-        Users user = centerUserService.updateUserInfo(userId, centerUserBO);
-        this.setNullProperty(user);
-        CookieUtils.setCookie(request, response, EnumCookie.USER.cookieName, JsonUtils.objectToJson(user), true);
-        //  TODO 后续要改，增加令牌token，会整合进redis，分布式回话
+        Users users = centerUserService.updateUserInfo(userId, centerUserBO);
+        userService.setNullProperty(users);
+        // 增加令牌token，会整合进redis，分布式回话
+        UsersVO usersVO = userService.convertUsersVO(users);
 
-        return IMOOCJSONResult.ok(user);
-    }
+        CookieUtils.setCookie(request, response, EnumCookie.USER.cookieName, JsonUtils.objectToJson(usersVO), true);
 
-    /**
-     * 设置用户隐私信息为空
-     */
-    private void setNullProperty(Users user) {
-        user.setPassword(null);
-        user.setMobile(null);
-        user.setEmail(null);
-        user.setCreatedTime(null);
-        user.setUpdatedTime(null);
-        user.setBirthday(null);
+        return IMOOCJSONResult.ok(users);
     }
 
     @ApiOperation(value = "用户更换头像", notes = "用户更换头像")
@@ -139,11 +132,14 @@ public class CenterUserController extends BaseController {
                 + "?t=" + DateUtil.formattedDate(LocalDateTime.now(), DateUtil.DATETIME_PATTERN);
 
         // 更新用户头像到数据库
-        Users user = centerUserService.updateUserFace(userId, finalUserFacePathUrl);
+        Users users = centerUserService.updateUserFace(userId, finalUserFacePathUrl);
 
-        this.setNullProperty(user);
-        CookieUtils.setCookie(request, response, EnumCookie.USER.cookieName, JsonUtils.objectToJson(user), true);
-        //  TODO 后续要改，增加令牌token，会整合进redis，分布式回话
-        return IMOOCJSONResult.ok(user);
+        userService.setNullProperty(users);
+        // 增加令牌token，会整合进redis，分布式回话
+        UsersVO usersVO = userService.convertUsersVO(users);
+
+        CookieUtils.setCookie(request, response, EnumCookie.USER.cookieName, JsonUtils.objectToJson(usersVO), true);
+
+        return IMOOCJSONResult.ok(users);
     }
 }
