@@ -153,7 +153,7 @@ public class PassportController {
         CookieUtils.deleteCookie(request, response, EnumCookie.USER.cookieName);
 
         // 分布式会话中需要清除用户数据—清除redis中user的会话信息
-        redisOperator.del(EnumRedisKeys.USER_TOKEN.getKey() + ":" + userId);
+        redisOperator.del(EnumRedisKeys.USER_TOKEN.key + ":" + userId);
 
         // 用户退出登录，需要清空购物车
         CookieUtils.deleteCookie(request, response, EnumCookie.SHOP_CART.cookieName);

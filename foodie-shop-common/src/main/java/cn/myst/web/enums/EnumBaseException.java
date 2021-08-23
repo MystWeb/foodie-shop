@@ -16,6 +16,8 @@ public enum EnumBaseException {
     FILE_CANNOT_BE_EMPTY("文件不能为空", "FILE_CANNOT_BE_EMPTY", HttpStatus.BAD_REQUEST.value()),
     PICTURE_FORMAT_ERROR("图片格式错误", "PICTURE_FORMAT_ERROR", HttpStatus.BAD_REQUEST.value()),
     FILE_UPLOAD_SIZE_ERROR("文件上传大小不能超过500KB", "FILE_UPLOAD_SIZE_ERROR", HttpStatus.BAD_REQUEST.value()),
+    PLEASE_LOGIN("请登录", "PLEASE_LOGIN", HttpStatus.BAD_REQUEST.value()),
+    REMOTE_LOGIN("账号在异地登录", "REMOTE_LOGIN", HttpStatus.BAD_REQUEST.value()),
     ;
 
     public final String zh;

@@ -173,7 +173,7 @@ public class UserServiceImpl implements UserService {
     public UsersVO convertUsersVO(Users users) {
         String userUniqueToken = UUID.randomUUID().toString().trim();
         String md5UserUniqueToken = MD5Utils.getMD5Str(userUniqueToken);
-        redisOperator.set(EnumRedisKeys.USER_TOKEN.getKey() + ":" + users.getId(), md5UserUniqueToken);
+        redisOperator.set(EnumRedisKeys.USER_TOKEN.key + ":" + users.getId(), md5UserUniqueToken);
 
         UsersVO usersVO = new UsersVO();
         BeanUtils.copyProperties(users, usersVO);

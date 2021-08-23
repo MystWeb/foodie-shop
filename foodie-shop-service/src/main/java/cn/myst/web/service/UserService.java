@@ -15,6 +15,9 @@ public interface UserService {
 
     /**
      * 判断用户名是否存在
+     * 优化方案：SQL不再使用count，而是改用LIMIT 1，让数据库查询时遇到一条就返回，不再继续查找还有多少条了
+     * SQL写法：SELECT 0 FROM TableName WHERE a = 1 AND b = 2 LIMIT 1
+     * JAVA写法：Integer exist = xxxMapper.existXxxByXxx(params);
      */
     boolean queryUsernameIsExist(String username);
 

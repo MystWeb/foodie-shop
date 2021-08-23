@@ -1,8 +1,6 @@
 package cn.myst.web.controller.example;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,8 +15,8 @@ import javax.servlet.http.HttpSession;
 //@ApiIgnore
 @Slf4j
 @RestController
-@RequestMapping("example")
-@RequiredArgsConstructor(onConstructor_ = {@Autowired})
+@RequestMapping("/examples")
+//@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class ExampleController {
 
     @GetMapping("/setSession")
@@ -29,6 +27,12 @@ public class ExampleController {
         session.getAttribute("userInfo");
 //        session.removeAttribute("userInfo");
         return "ok";
+    }
+
+    @GetMapping("/hello")
+    public Object hello() {
+        log.info("Hello");
+        return "Hello World";
     }
 
 }
