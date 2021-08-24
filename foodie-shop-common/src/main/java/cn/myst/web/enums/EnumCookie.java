@@ -13,6 +13,7 @@ import lombok.Getter;
 public enum EnumCookie {
     USER("user"),
     SHOP_CART("shopcart"),
+    USER_TICKET("userTicket"),
 
     ;
     public final String cookieName;

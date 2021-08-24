@@ -180,4 +180,30 @@ public class UserServiceImpl implements UserService {
         usersVO.setUserUniqueToken(userUniqueToken);
         return usersVO;
     }
+
+    @Override
+    public String createTmpTicket() {
+        String tmpTicket = UUID.randomUUID().toString().trim();
+        redisOperator.set(EnumRedisKeys.TMP_TICKET.key + ":" + tmpTicket,
+                MD5Utils.getMD5Str(tmpTicket), EnumRedisKeys.TMP_TICKET.cacheTime);
+        return tmpTicket;
+    }
+
+    @Override
+    public boolean verifyUserTicket(String userTicket) {
+        // 1. 验证CAS门票不能为空
+        if (StringUtils.isBlank(userTicket)) {
+            return false;
+        }
+
+        // 2. 验证CAS门票是否有效
+        String userId = redisOperator.get(EnumRedisKeys.USER_TICKET.key + ":" + userTicket);
+        if (StringUtils.isEmpty(userId)) {
+            return false;
+        }
+
+        // 3. 验证门票对应的user会话是否存在
+        String userToken = redisOperator.get(EnumRedisKeys.USER_TOKEN.key + ":" + userId);
+        return !StringUtils.isBlank(userToken);
+    }
 }

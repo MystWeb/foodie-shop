@@ -56,4 +56,14 @@ public interface UserService {
      * 3、Users转换UsersVO
      */
     UsersVO convertUsersVO(Users users);
+
+    /**
+     * 创建临时票据
+     */
+    String createTmpTicket();
+
+    /**
+     * 验证用户门票
+     */
+    boolean verifyUserTicket(String userTicket);
 }

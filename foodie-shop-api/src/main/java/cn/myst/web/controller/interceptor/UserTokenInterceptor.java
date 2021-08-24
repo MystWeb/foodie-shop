@@ -37,16 +37,16 @@ public class UserTokenInterceptor implements HandlerInterceptor {
      * 返回异常信息Response
      */
     public void returnErrorResponse(HttpServletResponse response, IMOOCJSONResult result) {
-        /*try (OutputStream outputStream = response.getOutputStream()) {
+        try (OutputStream outputStream = response.getOutputStream()) {
             response.setCharacterEncoding(CHARACTER_ENCODING);
             response.setContentType(CONTENTTYPE_JSON);
             outputStream.write(StringUtils.getBytes(JsonUtils.objectToJson(result), StandardCharsets.UTF_8));
             outputStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
 
-        OutputStream out = null;
+        /*OutputStream out = null;
         try {
             response.setCharacterEncoding("utf-8");
             response.setContentType("text/json");
@@ -65,7 +65,7 @@ public class UserTokenInterceptor implements HandlerInterceptor {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     /**

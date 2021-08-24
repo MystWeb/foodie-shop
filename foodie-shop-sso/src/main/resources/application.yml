@@ -1,10 +1,10 @@
 ############################################################
 #
-# web访问端口号  约定：8088
+# web访问端口号  约定：8090
 #
 ############################################################
 server:
-  port: 8088
+  port: 8090
   tomcat:
     uri-encoding: UTF-8
   max-http-header-size: 80KB
@@ -18,7 +18,7 @@ spring:
   profiles:
     active: dev # 默认启动环境
   application:
-    name: foodie-shop # 应用名称
+    name: foodie-shop-sso # 应用名称
   datasource:
     type: com.zaxxer.hikari.HikariDataSource      # 数据源类型：HikariCP
     driver-class-name: com.mysql.cj.jdbc.Driver   # mysql驱动
@@ -59,9 +59,12 @@ spring:
         max-active: 100
         max-idle: 10
         max-wait: -1
-#  session:
-#    store-type: redis
-
+  ## thymeleaf
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    suffix: .html
 ############################################################
 #
 # mybatis 配置

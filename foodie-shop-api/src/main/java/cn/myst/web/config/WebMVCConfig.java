@@ -29,7 +29,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
     static final String[] ORIGINS = new String[]{"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"};
     // 拦截的URL模式
     static final String[] PATH_PATTERNS = new String[]{
-            "/examples/*",
+            "/api/example/*",
             "/shopcart/*",
             "/address/*",
             "/orders/*",
@@ -42,6 +42,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
     static final String[] EXCLUDE_PATH_PATTERNS = new String[]{
             "/myorders/deliver",
             "/orders/notifyMerchantOrderPaid",
+            "/sso/example/*",
     };
 
     /**

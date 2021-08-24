@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:mysql://192.168.100.123:3306/foodie-shop-dev?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    password: proaim@2020
+  # redis
+  redis:
+  # Redis 单机模式
+    host: 192.168.20.11
+    port: 6379
+    password: proaim@2013
+    database: 0
+    # Redis 哨兵模式
+#    database: 0
+#    password: proaim@2013
+#    sentinel:
+#      master: mymaster
+#      nodes: 192.168.20.11:26379,192.168.20.12:26379,192.168.20.13:26379
+  # Redis 集群模式
+#    password: proaim@2013
+#    cluster:
+#      nodes: 192.168.20.14:6371,192.168.20.14:6372,192.168.20.14:6373,192.168.20.14:6374,192.168.20.14:6375,192.168.20.14:6376

@@ -15,6 +15,8 @@ public enum EnumRedisKeys {
     SUB_CAT("subCat", 5 * 60L, "商品子分类"),
     SHOP_CART("shopcart", 5 * 60L, "购物车"),
     USER_TOKEN("userToken", 5 * 60L, "用户令牌"),
+    USER_TICKET("userTicket", 5 * 60L, "用户全局门票"),
+    TMP_TICKET("tmpTicket", 10 * 60L, "临时门票"),
 
     ;
 
