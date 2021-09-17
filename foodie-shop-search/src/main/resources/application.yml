@@ -1,0 +1,82 @@
+############################################################
+#
+# web访问端口号  约定：8091
+#
+############################################################
+server:
+  port: 8091
+  tomcat:
+    uri-encoding: UTF-8
+  max-http-header-size: 80KB
+
+############################################################
+#
+# 配置数据源信息
+#
+############################################################
+spring:
+  profiles:
+    active: dev # 默认启动环境
+  application:
+    name: foodie-shop-search # 应用名称
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource      # 数据源类型：HikariCP
+    driver-class-name: com.mysql.cj.jdbc.Driver   # mysql驱动
+    #    url: jdbc:mysql://192.168.0.2:3306/foodie-shop-dev?serverTimezone=GMT%2b8
+    username: root
+    #    password: proaim@2020
+    hikari:
+      connection-timeout: 30000       # 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 默认:30秒
+      minimum-idle: 5                 # 最小连接数
+      maximum-pool-size: 20           # 最大连接数
+      auto-commit: true               # 自动提交
+      idle-timeout: 600000            # 连接超时的最大时长（毫秒），超时则被释放（retired），默认:10分钟
+      pool-name: DateSourceHikariCP   # 连接池名字
+      max-lifetime: 1800000           # 连接的生命时长（毫秒），超时而且没被使用则被释放（retired），默认:30分钟 1800000ms
+      connection-test-query: SELECT 1
+  ## 文件上传 配置
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 512000          # 文件上传大小限制为500KB
+      max-request-size: 512000       # 请求大小限制为500KB
+  ## redis
+  redis:
+    # 连接超时时间（毫秒）
+    timeout: 5000
+    #默认是索引为0的数据库
+    database: 0
+    jedis:
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制）
+        max-active: 100
+        # 连接池中的最小空闲连接
+        max-idle: 10
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1
+    lettuce:
+      pool:
+        max-active: 100
+        max-idle: 10
+        max-wait: -1
+  ## thymeleaf
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    suffix: .html
+############################################################
+#
+# mybatis 配置
+#
+############################################################
+#mybatis:
+#  type-aliases-package: cn.myst.web.**.pojo     # 所有POJO类所在包路径
+#  mapper-locations: classpath*:mapper/*.xml      # mapper映射文件
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+## 分页插件配置
+pagehelper:
+  helperDialect: mysql
+  supportMethodsArguments: true

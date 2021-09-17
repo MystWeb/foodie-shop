@@ -10,6 +10,7 @@
         <module>foodie-shop-service</module>
         <module>foodie-shop-api</module>
         <module>foodie-shop-sso</module>
+        <module>foodie-shop-search</module>
     </modules>
 
     <!--
