@@ -1,10 +1,12 @@
 package cn.myst.web.es.pojo;
 
 import lombok.Builder;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.Setting;
 
 import java.io.Serializable;
 
@@ -17,12 +19,18 @@ import java.io.Serializable;
  * shards    主分区数量，默认5
  * replicas  副本分区数量，默认1
  * createIndex 索引不存在时，是否自动创建索引，默认true
+ * <p>
+ * 参考：https://blog.csdn.net/wo18237095579/article/details/117996071
  *
  * @author ziming.xing
  * Create Date：2021/9/17
  */
 @Builder
-@Document(indexName = "stu")
+@ToString
+// 创建索引使用，默认项目启动时自动创建索引
+@Document(indexName = "stu", createIndex = false)
+// 设置分片和副本
+@Setting(shards = 3, replicas = 1)
 public class Stu implements Serializable {
 
     @Id
