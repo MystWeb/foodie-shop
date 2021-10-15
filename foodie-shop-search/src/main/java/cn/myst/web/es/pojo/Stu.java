@@ -1,7 +1,6 @@
 package cn.myst.web.es.pojo;
 
-import lombok.Builder;
-import lombok.ToString;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -25,8 +24,7 @@ import java.io.Serializable;
  * @author ziming.xing
  * Create Date：2021/9/17
  */
-@Builder
-@ToString
+@Data
 // 创建索引使用，默认项目启动时自动创建索引
 @Document(indexName = "stu", createIndex = false)
 // 设置分片和副本
