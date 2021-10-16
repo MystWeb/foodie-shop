@@ -18,12 +18,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+        <!--<dependency>
+            <groupId>cn.myst.web</groupId>
+            <artifactId>foodie-shop-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>-->
 
     </dependencies>
     <properties>

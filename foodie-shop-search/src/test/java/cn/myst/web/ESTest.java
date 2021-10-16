@@ -1,7 +1,6 @@
 package cn.myst.web;
 
 import cn.myst.web.es.pojo.Stu;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +10,7 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author ziming.xing
  * Create Date：2021/9/16
  */
-@Ignore
+@Disabled
 @Slf4j
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = SearchApplication.class)
