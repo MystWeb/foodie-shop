@@ -94,7 +94,7 @@ public class ItemsController extends BaseController {
 
     @ApiOperation(value = "搜索商品列表", notes = "搜索商品列表")
     @GetMapping("search")
-    public IMOOCJSONResult getComments(
+    public IMOOCJSONResult search(
             @ApiParam(value = "关键字", required = true)
             @RequestParam String keywords,
             @ApiParam(value = "排序")
