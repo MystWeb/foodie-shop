@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>cn.myst.web</groupId>
-            <artifactId>foodie-shop-common</artifactId>
+            <artifactId>foodie-shop-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
