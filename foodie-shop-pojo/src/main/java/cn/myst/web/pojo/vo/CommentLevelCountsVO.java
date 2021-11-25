@@ -16,16 +16,16 @@ import java.io.Serializable;
 public class CommentLevelCountsVO implements Serializable {
 
     @ApiModelProperty(value = "所有评价的数量")
-    private Integer totalCounts;
+    private Long totalCounts;
 
     @ApiModelProperty(value = "好评的数量")
-    private Integer goodCounts;
+    private Long goodCounts;
 
     @ApiModelProperty(value = "中评的数量")
-    private Integer normalCounts;
+    private Long normalCounts;
 
     @ApiModelProperty(value = "差评的数量")
-    private Integer badCounts;
+    private Long badCounts;
 
     private static final long serialVersionUID = -3616983867576705847L;
 }

@@ -43,7 +43,7 @@ public interface ItemService {
     /**
      * 根据商品id，商品评价等级查询商品评价数量
      */
-    Integer getCommentCounts(String itemId, Integer level);
+    Long getCommentCounts(String itemId, Integer level);
 
     /**
      * 根据商品id商品评价等级查询商品的评价

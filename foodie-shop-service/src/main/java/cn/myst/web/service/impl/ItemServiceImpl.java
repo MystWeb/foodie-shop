@@ -86,10 +86,10 @@ public class ItemServiceImpl implements ItemService {
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public CommentLevelCountsVO queryCommentCountsByItemId(String itemId) {
-        Integer goodCounts = getCommentCounts(itemId, EnumCommentLevel.GOOD.type);
-        Integer normalCounts = getCommentCounts(itemId, EnumCommentLevel.NORMAL.type);
-        Integer badCounts = getCommentCounts(itemId, EnumCommentLevel.BAD.type);
-        Integer totalCounts = goodCounts + normalCounts + badCounts;
+        Long goodCounts = getCommentCounts(itemId, EnumCommentLevel.GOOD.type);
+        Long normalCounts = getCommentCounts(itemId, EnumCommentLevel.NORMAL.type);
+        Long badCounts = getCommentCounts(itemId, EnumCommentLevel.BAD.type);
+        Long totalCounts = goodCounts + normalCounts + badCounts;
         CommentLevelCountsVO commentLevelCountsVO = new CommentLevelCountsVO();
         commentLevelCountsVO.setTotalCounts(totalCounts);
         commentLevelCountsVO.setGoodCounts(goodCounts);
@@ -103,7 +103,7 @@ public class ItemServiceImpl implements ItemService {
      */
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public Integer getCommentCounts(String itemId, Integer level) {
+    public Long getCommentCounts(String itemId, Integer level) {
         if (StringUtils.isBlank(itemId)) {
             return null;
         }
