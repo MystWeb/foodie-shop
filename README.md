@@ -5,7 +5,7 @@
 
 ## 项目介绍
 
-foodie-shop项目是一套前后端分离电商系统，包括前台购物系统及用户中心后台系统，基于SpringBoot+MyBatis实现，采用Docker容器化部署。购物平台系统包含分类、推荐、搜索、评价、购物车、地址、订单、支付、定时任务、用户中心、订单管理模块。
+foodie-shop项目是一套前后端分离电商系统，包括前台购物系统及用户中心后台系统，基于SpringBoot+MyBatis实现，采用云原生方式部署。购物平台系统包含分类、推荐、搜索、评价、购物车、地址、订单、支付、定时任务、用户中心、订单管理模块。
 
 后端实现springboot+mybatis 结合了elascticsearch+logstash实现与数据库中商品表的实现同步。 采用了redisson（redis客户端）或curator（zookeeper客户端）实现的分布式锁
 
@@ -16,14 +16,18 @@ foodie-shop项目是一套前后端分离电商系统，包括前台购物系统
 ```
 foodie-shop
 ├── db -- 数据库文件与数据库pdman原型图
-├── foodie-shop-api -- 前天购物系统与用户中心Controller接口
+├── foodie-shop-api -- 前台购物系统与用户中心Controller接口
 ├── foodie-shop-common -- 工具类及通用代码
 ├── foodie-shop-mapper -- 数据库交互层Mapper
 ├── foodie-shop-pojo -- entity、bo、vo实体类
+├── foodie-shop-search -- 前台商品信息展示的相关接口
 ├── foodie-shop-service -- Service接口与实现
+├── foodie-shop-sso -- 前台用户中心-CAS单点登录Controller接口
 ├── source -- 源码等文件
 ├── source├── foodie-frontend -- 购物系统与用户系统前端源码
 ├── source├── 支付中心源码 -- 需要商户资质才可有效使用
+├── Dockerfile -- 容器镜像构建
+├── Jenkinsfile -- Jenkins流水线
 ```
 
 ## 必备工具
@@ -46,21 +50,21 @@ foodie-shop
 一、 配置JDK环境变量
 	1. 系统变量新建：
 	变量名：JAVA_HOME
-	变量值：D:\Program Files (x86)\Java\jdk1.8.0_301
+	变量值：D:\Program Files (x86)\Java\jdk
 	2. 编辑系统变量 Path
 	新建：%JAVA_HOME%\bin
 	3. 测试是否配置正确，打开CMD命令行窗口，依次输入：java、javac、Java -version 执行成功并版本号一致即可
 二、 配置MAVEN环境变量
 	1. 系统变量新建：
 	变量名：M2_HOME
-	变量值：D:\Program Files\apache-maven-3.8.1
+	变量值：D:\Program Files\apache-maven
 	2. 编辑系统变量 Path
 	新建：%M2_HOME%\bin
 	3. 测试是否配置正确，打开CMD命令行窗口，输入：mvn -v 执行成功并版本号一致即可
 三、 配置TOMCAT环境变量
 	1. 系统变量新建：
 	变量名：CATALINA_HOME
-	变量值：D:\Program Files\apache-tomcat-9.0.50
+	变量值：D:\Program Files\apache-tomcat
 	2. 编辑系统变量 Path
 	新建：%CATALINA_HOME%\bin
 	3. 测试是否配置正确，打开CMD命令行窗口
@@ -71,9 +75,13 @@ foodie-shop
 > Windows环境启动项目
 
 - 注意：只启动FoodieShopApplication，仅需安装mysql、redis即可
-- 前端源码foodie-shop\foodie-shop-frontend\放入apache-tomcat-9.0.50\webapps\
+- 前端源码foodie-shop\foodie-shop-frontend\放入apache-tomcat\webapps\
 - 前端访问入口：http://localhost:8080/foodie-shop-frontend/
-- 后端Swagger UI：http://localhost:8088/swagger-ui/
+- 后端Swagger UI
+  - 商品购物系统：http://localhost:8088/swagger-ui/
+  - 用户登录系统：http://localhost:8090/swagger-ui/
+  - 商品搜索系统：http://localhost:8091/swagger-ui/
+
 
 ### Linux CentOS 7
 
@@ -118,9 +126,6 @@ sed -i "s/\/dev\/mapper\/cl-swap/\#\/dev\/mapper\/cl-swap/g" /etc/fstab
 vi /etc/fstab
 # 注释swap
 #/dev/mapper/cl-swap     swap                    swap    defaults        0 0
-
-# 关闭NetworkManager
-systemctl disable NetworkManager && systemctl stop NetworkManager
 ```
 
 #### 安装docker
@@ -152,12 +157,38 @@ mkdir -p /etc/docker/
 cat <<EOF>> /etc/docker/daemon.json
 {
     "registry-mirrors": ["https://hub-mirror.c.163.com"],
-	# 如果启用firewalld，需增加该配置
+    "log-driver": "json-file",
+    "log-opts": {
+        "max-size": "500m",
+        "max-file": "3"
+    },
+    # 如果启用firewalld，需增加该配置
     "iptables": false
 }
 EOF
 
-systemctl restart docker
+systemctl daemon-reload && systemctl restart docker && systemctl enable docker
+```
+
+### Kubernetes
+
+```bash
+# 设置node01节点作为构建节点
+kubectl label node k8s-node01 build=true
+# 设置node01节点宿主机工作目录文件夹权限
+[root@k8s-node01 ~]# mkdir -p /opt/workspace/ && chmod -R 777 /opt/workspace/
+# 创建部署应用的命名空间
+kubectl create ns foodie-shop
+# 创建CRI（容器运行时）连接Harbor的Secret
+kubectl create secret docker-registry harborkey \
+  --docker-server=CHANGE_HERE_FOR_YOUR_HARBOR_URL \
+  --docker-username=admin --docker-password=Harbor12345 \
+  --docker-email=your@email.com \
+  -n foodie-shop
+# 创建Maven配置文件的ConfigMap
+kubectl create configmap maven-settings.xml \
+--from-file=settings.xml \
+-n default
 ```
 
 ## 技术选型

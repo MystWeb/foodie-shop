@@ -73,7 +73,7 @@ public class SwaggerConfig {
     Contact contact = new Contact(
             "Myst",
             "https://mystweb.cn",
-            "ziming.xing@proaimltd.com");
+            "your@email.com");
 
     /**
      * API 页面上半部分展示信息
