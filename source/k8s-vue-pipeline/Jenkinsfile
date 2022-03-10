@@ -26,16 +26,13 @@ spec:
           value: "en_US.UTF-8"
         - name: "LANG"
           value: "en_US.UTF-8"
-      image: "maven:3.8.4-jdk-8"
+      image: "node:lts-alpine3.15"
       imagePullPolicy: "IfNotPresent"
       name: "build"
       tty: true
       volumeMounts:
         - mountPath: "/etc/localtime"
           name: "localtime"
-        - mountPath: "/root/.m2/"
-          name: "cachedir"
-          readOnly: false
     - command:
         - "cat"
       env:
@@ -84,9 +81,6 @@ spec:
     - hostPath:
         path: "/usr/share/zoneinfo/Asia/Shanghai"
       name: "localtime"
-    - name: "cachedir"
-      hostPath:
-        path: "/opt/m2"
 '''
         }
     }
@@ -137,7 +131,10 @@ spec:
             steps {
                 container(name: 'build') {
                     sh """
-                        mvn clean install -DskipTests
+                        npm cache verify
+                        npm install --registry=https://registry.npm.taobao.org
+                        npm install --chromedriver_cdnurl=http://cdn.npm.taobao.org/dist/chromedriver
+                        npm run build
                     """
                 }
             }
@@ -174,11 +171,11 @@ spec:
 
     }
     environment {
-        REPOSITORY_URL = "git@192.168.20.12:kubernetes/foodie-shop.git"
+        REPOSITORY_URL = "git@192.168.20.12:kubernetes/foodie-shop-frontend.git"
         COMMIT_ID = ""
         HARBOR_ADDRESS = "192.168.20.11"
         REGISTRY_DIR = "kubernetes"
-        IMAGE_NAME = "foodie-shop"
+        IMAGE_NAME = "foodie-shop-frontend"
         NAMESPACE = "kubernetes"
         TAG = ""
     }

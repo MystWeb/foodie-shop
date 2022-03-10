@@ -9,7 +9,7 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
-    - args: [\'$(JENKINS_SECRET)\', \'$(JENKINS_NAME)\']
+    - args: [ \'$(JENKINS_SECRET)\', \'$(JENKINS_NAME)\' ]
       image: 'jenkins/inbound-agent:alpine'
       name: jnlp
       imagePullPolicy: IfNotPresent
@@ -76,7 +76,7 @@ spec:
   restartPolicy: "Never"
   nodeSelector:
     build: "true"
-  securityContext: {}
+  securityContext: { }
   volumes:
     - hostPath:
         path: "/var/run/docker.sock"
@@ -124,7 +124,7 @@ spec:
                         script {
                             COMMIT_ID = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
                             TAG = BUILD_TAG + '-' + COMMIT_ID
-                            println "Current branch is ${BRANCH}, Commit ID is ${COMMIT_ID}, Image TAG is ${TAG}"
+                            println "Current branch is ${env.gitlabBranch}, Commit ID is ${COMMIT_ID}, Image TAG is ${TAG}"
                         }
 
                     }

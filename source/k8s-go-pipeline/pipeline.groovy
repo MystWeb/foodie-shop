@@ -26,14 +26,14 @@ spec:
           value: "en_US.UTF-8"
         - name: "LANG"
           value: "en_US.UTF-8"
-      image: "maven:3.8.4-jdk-8"
+      image: "golang:1.17-alpine3.15"
       imagePullPolicy: "IfNotPresent"
       name: "build"
       tty: true
       volumeMounts:
         - mountPath: "/etc/localtime"
           name: "localtime"
-        - mountPath: "/root/.m2/"
+        - mountPath: "/go/pkg/"
           name: "cachedir"
           readOnly: false
     - command:
@@ -84,9 +84,9 @@ spec:
     - hostPath:
         path: "/usr/share/zoneinfo/Asia/Shanghai"
       name: "localtime"
-    - name: "cachedir"
-      hostPath:
-        path: "/opt/m2"
+    - hostPath:
+        path: "/opt/gopkg"
+      name: "cachedir"
 '''
         }
     }
@@ -137,7 +137,10 @@ spec:
             steps {
                 container(name: 'build') {
                     sh """
-                        mvn clean install -DskipTests
+                        export GO111MODULE=on
+                        go env -w GOPROXY=https://goproxy.cn,direct
+                        go mod tidy
+                        go build
                     """
                 }
             }
@@ -174,11 +177,11 @@ spec:
 
     }
     environment {
-        REPOSITORY_URL = "git@192.168.20.12:kubernetes/foodie-shop.git"
+        REPOSITORY_URL = "git@192.168.20.12:kubernetes/go-project.git"
         COMMIT_ID = ""
         HARBOR_ADDRESS = "192.168.20.11"
         REGISTRY_DIR = "kubernetes"
-        IMAGE_NAME = "foodie-shop"
+        IMAGE_NAME = "go-project"
         NAMESPACE = "kubernetes"
         TAG = ""
     }

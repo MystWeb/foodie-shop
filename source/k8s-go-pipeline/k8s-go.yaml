@@ -1,0 +1,116 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: go-project
+  name: go-project
+  namespace: kubernetes
+spec:
+  ports:
+    - name: web
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: go-project
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: go-project
+  namespace: kubernetes
+#  annotations:
+#    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: go-project.test.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: go-project
+                port:
+                  number: 8080
+            path: /
+            pathType: ImplementationSpecific
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-project
+  namespace: kubernetes
+  labels:
+    app: go-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-project
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: go-project
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - go-project
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+      containers:
+        - env:
+            - name: TZ
+              value: Asia/Shanghai
+            - name: LANG
+              value: C.UTF-8
+          image: nginx:1.21
+          imagePullPolicy: IfNotPresent
+          lifecycle: { }
+          livenessProbe:
+            failureThreshold: 2
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 2
+          name: go-project
+          ports:
+            - containerPort: 8080
+              name: web
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 2
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 2
+          resources:
+            limits:
+              cpu: 994m
+              memory: 1170Mi
+            requests:
+              cpu: 10m
+              memory: 55Mi
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: harborkey
+      restartPolicy: Always
+      securityContext: { }
+      serviceAccountName: default
