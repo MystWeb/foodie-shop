@@ -193,3 +193,41 @@ kubectl create configmap maven-settings.xml \
 
 ## 技术选型
 
+
+
+## 概念补充
+
+### [Kubernetes是什么](http://docs.kubernetes.org.cn/227.html)
+
+Kubernetes是容器集群管理系统，是一个开源的平台，可以实现容器集群的自动化部署、自动扩缩容、维护等功能。
+
+通过Kubernetes你可以：
+
+- 快速部署应用
+- 快速扩展应用
+- 无缝对接新的应用功能
+- 节省资源，优化硬件资源的使用
+
+我们的目标是促进完善组件和工具的生态系统，以减轻应用程序在公有云或私有云中运行的负担。
+
+**Kubernetes 特点**
+
+- **可移植**：支持公有云，私有云，混合云，多重云（multi-cloud）
+- **可扩展**：模块化, 插件化, 可挂载, 可组合
+- **自动化**：自动部署，自动重启，自动复制，自动伸缩/扩展
+
+Kubernetes是Google 2014年创建管理的，是Google 10多年大规模容器管理技术Borg的开源版本。
+
+### Service Mesh（服务网格）是什么
+
+Service Mesh（服务网格）是由Buoyant公司的CEO William Morgan发起，目标为解决微服务之间复杂的链路关系。
+
+Service Mesh将程序开发的网络功能和程序本身解耦，网络功能下沉到基础架构，由服务网格实现服务之间的负载均衡等功能，并且除网络功能：**负载均衡、服务发现、熔断降级、动态路由、故障注入、错误重试、安全通信、语言无关** 外，也提供了其它更高级的功能，比如全链路加密、监控、链路追踪等
+
+**Service Mesh 产品**
+
+- Linkerd：Buoyant公司在2016年率先开源的高性能网络代理程序，它的出现标志着ServiceMesh时代的开始
+- **Envoy**：同Linkerd一样，Envoy也是一款高性能的网络代理程序，为云原生应用而设计
+- **Istio**：受Google、IBM、Lyft及RedHat等公司的大力支持和推广，于2017年5月发布，底层为Envoy
+- Conduit：2017年12月发布，是Buoyant公司的第二款Service Mesh产品根据Linkerd在生产线上的实际使用经验而设计，并以最小复杂性作为设计基础
+- **Kuma**：由Kong开发并提供支持，一个通用的现代服务网格控制平面，基于Envoy构建。Kuma高效的数据平面和先进的控制平面，极大地降低了各团队使用的难度
