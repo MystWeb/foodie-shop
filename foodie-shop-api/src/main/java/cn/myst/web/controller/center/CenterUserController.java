@@ -10,9 +10,9 @@ import cn.myst.web.resource.FileUploadResource;
 import cn.myst.web.service.UserService;
 import cn.myst.web.service.center.CenterUserService;
 import cn.myst.web.utils.*;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -38,7 +38,7 @@ import java.util.Objects;
  * Create Date：2021/7/16
  */
 @Slf4j
-@Api(value = "用户信息", tags = "用户信息的相关接口")
+@Tag(name = "用户信息", description = "用户信息的相关接口")
 @RestController
 @RequestMapping("userInfo")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -47,12 +47,12 @@ public class CenterUserController extends BaseController {
     private final FileUploadResource fileUploadResource;
     private final UserService userService;
 
-    @ApiOperation(value = "更新用户信息", notes = "更新用户信息")
+    @Operation(summary = "更新用户信息", description = "更新用户信息")
     @PostMapping("update")
     public IMOOCJSONResult update(
-            @ApiParam(value = "用户id", required = true)
+            @Parameter(description = "用户id", required = true)
             @RequestParam String userId,
-            @ApiParam(value = "用户中心-用户BO")
+            @Parameter(description = "用户中心-用户BO")
             @RequestBody @Validated CenterUserBO centerUserBO,
             BindingResult bindingResult,
             HttpServletRequest request,
@@ -73,12 +73,12 @@ public class CenterUserController extends BaseController {
         return IMOOCJSONResult.ok(users);
     }
 
-    @ApiOperation(value = "用户更换头像", notes = "用户更换头像")
+    @Operation(summary = "用户更换头像", description = "用户更换头像")
     @PostMapping("uploadFace")
     public IMOOCJSONResult uploadFace(
-            @ApiParam(value = "用户id", required = true)
+            @Parameter(description = "用户id", required = true)
             @RequestParam String userId,
-            @ApiParam(value = "文件")
+            @Parameter(description = "文件")
             @RequestPart MultipartFile file,
             HttpServletRequest request, HttpServletResponse response) {
         if (Objects.isNull(file)) {

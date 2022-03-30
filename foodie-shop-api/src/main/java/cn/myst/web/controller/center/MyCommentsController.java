@@ -11,9 +11,9 @@ import cn.myst.web.service.center.MyCommentsService;
 import cn.myst.web.service.center.MyOrdersService;
 import cn.myst.web.utils.IMOOCJSONResult;
 import cn.myst.web.utils.PagedGridResult;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +30,7 @@ import java.util.Objects;
  * Create Date：2021/7/21
  */
 @Slf4j
-@Api(value = "用户中心-评价模块", tags = "用户中心-评价模块的相关接口")
+@Tag(name = "用户中心-评价模块", description = "用户中心-评价模块的相关接口")
 @RestController
 @RequestMapping("mycomments")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -38,12 +38,12 @@ public class MyCommentsController extends BaseController {
     private final MyCommentsService myCommentsService;
     private final MyOrdersService myOrdersService;
 
-    @ApiOperation(value = "查询评论列表")
+    @Operation(summary = "查询评论列表")
     @PostMapping("pending")
     public IMOOCJSONResult pending(
-            @ApiParam(value = "用户id", required = true)
+            @Parameter(description = "用户id", required = true)
             @RequestParam String userId,
-            @ApiParam(value = "订单id", required = true)
+            @Parameter(description = "订单id", required = true)
             @RequestParam String orderId) {
         if (StringUtils.isBlank(orderId) || StringUtils.isBlank(userId)) {
             return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
@@ -68,14 +68,14 @@ public class MyCommentsController extends BaseController {
         return IMOOCJSONResult.ok(list);
     }
 
-    @ApiOperation(value = "保存评论列表")
+    @Operation(summary = "保存评论列表")
     @PostMapping("saveList")
     public IMOOCJSONResult saveList(
-            @ApiParam(value = "用户id", required = true)
+            @Parameter(description = "用户id", required = true)
             @RequestParam String userId,
-            @ApiParam(value = "订单id", required = true)
+            @Parameter(description = "订单id", required = true)
             @RequestParam String orderId,
-            @ApiParam(value = "用户中心-评论BO")
+            @Parameter(description = "用户中心-评论BO")
             @RequestBody List<OrderItemsCommentBO> commentList) {
         if (StringUtils.isBlank(orderId) || StringUtils.isBlank(userId) || CollectionUtils.isEmpty(commentList)) {
             return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
@@ -90,15 +90,14 @@ public class MyCommentsController extends BaseController {
         return IMOOCJSONResult.ok();
     }
 
-
-    @ApiOperation(value = "查询我的评价列表", notes = "由于是用户中心的API，为了安全起见，查询方法请求方式使用POST")
+    @Operation(summary = "查询我的评价列表", description = "由于是用户中心的API，为了安全起见，查询方法请求方式使用POST")
     @PostMapping("query")
     public IMOOCJSONResult query(
-            @ApiParam(value = "用户id", required = true)
+            @Parameter(description = "用户id", required = true)
             @RequestParam String userId,
-            @ApiParam(value = "查询下一页的第几页")
+            @Parameter(description = "查询下一页的第几页")
             @RequestParam(required = false) Integer page,
-            @ApiParam(value = "分页的每一页显示的条数")
+            @Parameter(description = "分页的每一页显示的条数")
             @RequestParam(required = false) Integer pageSize) {
         if (StringUtils.isBlank(userId)) {
             return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);

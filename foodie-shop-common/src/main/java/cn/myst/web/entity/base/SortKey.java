@@ -2,8 +2,7 @@ package cn.myst.web.entity.base;
 
 import cn.myst.web.constant.StringPool;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,19 +14,19 @@ import java.util.Objects;
  * Create Date：2021/6/20
  */
 @Data
-@ApiModel("排序字段")
+@Schema(title = "排序字段")
 public class SortKey implements Serializable {
     /**
      * The ID of the attribute to sort by.
      */
-    @ApiModelProperty(value = "排序字段", notes = "要排序的属性的名称")
+    @Schema(name = "排序字段", description = "要排序的属性的名称")
     private String field;
 
 
     /**
      * The sort order. Ascending order, by default.
      */
-    @ApiModelProperty(value = "排序顺序", notes = "排序顺序，默认为升序")
+    @Schema(name = "排序顺序", description = "排序顺序，默认为升序")
     private String sort;
 
     /**
@@ -48,7 +47,7 @@ public class SortKey implements Serializable {
      * Access.READ_WRITE：逻辑属性的可见性在序列化和反序列化时都可用。
      * Access.AUTO：将自动确定逻辑属性的可见性，这是access元素的默认值。
      */
-    @ApiModelProperty(hidden = true)
+    @Schema(hidden = true)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public boolean getSortBoolean() {
         return Objects.equals(this.getSort(), "ASC");

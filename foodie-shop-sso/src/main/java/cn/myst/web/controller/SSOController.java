@@ -8,6 +8,8 @@ import cn.myst.web.pojo.Users;
 import cn.myst.web.pojo.vo.UsersVO;
 import cn.myst.web.service.UserService;
 import cn.myst.web.utils.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import java.util.UUID;
  * @author ziming.xing
  * Create Date：2021/8/24
  */
+@Tag(name = "CAS", description = "CAS登录注销的相关接口")
 @Controller
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class SSOController {
@@ -36,6 +39,7 @@ public class SSOController {
     // 登录页面
     public static final String LOGIN_PAGE = "login";
 
+    @Operation(summary = "用户登录重定向")
     @GetMapping("/login")
     public String login(String returnUrl,
                         Model model,
@@ -60,6 +64,7 @@ public class SSOController {
      * 2. 创建用户全局门票，用以表示在CAS端是否登录  ->  userTicket
      * 3. 创建用户的临时票据，用于回跳回传          ->  tmpTicket
      */
+    @Operation(summary = "CAS的统一登录")
     @PostMapping("/doLogin")
     public String doLogin(String username,
                           String password,
@@ -109,6 +114,7 @@ public class SSOController {
         return "redirect:" + returnUrl + "?tmpTicket=" + tmpTicket;
     }
 
+    @Operation(summary = "校验临时票据")
     @PostMapping("/verifyTmpTicket")
     @ResponseBody
     public IMOOCJSONResult verifyTmpTicket(String tmpTicket,
@@ -146,6 +152,7 @@ public class SSOController {
         return IMOOCJSONResult.ok(JsonUtils.jsonToPojo(userToken, UsersVO.class));
     }
 
+    @Operation(summary = "用户注销")
     @PostMapping("/logout")
     @ResponseBody
     public IMOOCJSONResult logout(String userId,

@@ -1,7 +1,6 @@
 package cn.myst.web.pojo.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,26 +12,25 @@ import java.util.Date;
  * 商品评价VO
  */
 @Data
-@ApiModel(value = "商品评价VO")
+@Schema(title = "商品评价VO")
 public class ItemCommentVO implements Serializable {
-    @ApiModelProperty(value = "评价等级 1：好评 2：中评 3：差评")
+    @Schema(name = "评价等级 1：好评 2：中评 3：差评")
     private Integer commentLevel;
 
-    @ApiModelProperty(value = "商品内容")
+    @Schema(name = "商品内容")
     private String content;
 
-    @ApiModelProperty(value = "规格名称 可为空")
+    @Schema(name = "规格名称 可为空")
     private String sepcName;
 
-    @ApiModelProperty(value = "创建时间")
+    @Schema(name = "创建时间")
     private Date createdTime;
 
-    @ApiModelProperty(value = "用户头像")
+    @Schema(name = "用户头像")
     private String userFace;
 
-    @ApiModelProperty(value = "昵称")
+    @Schema(name = "昵称")
     private String nickname;
-
 
     private static final long serialVersionUID = -6867727097351956826L;
 }

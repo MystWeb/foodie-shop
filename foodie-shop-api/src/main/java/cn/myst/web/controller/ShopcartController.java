@@ -6,9 +6,9 @@ import cn.myst.web.pojo.bo.ShopcartBO;
 import cn.myst.web.utils.IMOOCJSONResult;
 import cn.myst.web.utils.JsonUtils;
 import cn.myst.web.utils.RedisOperator;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -29,19 +29,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Create Date：2021/6/27
  */
 @Slf4j
-@Api(value = "购物车", tags = "购物车的相关接口")
+@Tag(name = "购物车", description = "购物车的相关接口")
 @RestController
 @RequestMapping("shopcart")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class ShopcartController {
     private final RedisOperator redisOperator;
 
-    @ApiOperation(value = "添加购物车", notes = "添加购物车")
+    @Operation(summary = "添加购物车", description = "添加购物车")
     @PostMapping("add")
     public IMOOCJSONResult add(
-            @ApiParam(value = "用户id", required = true)
+            @Parameter(description = "用户id", required = true)
             @RequestParam String userId,
-            @ApiParam(value = "购物车BO", required = true)
+            @Parameter(description = "购物车BO", required = true)
             @RequestBody ShopcartBO shopcartBO,
             HttpServletRequest request,
             HttpServletResponse response) {
@@ -81,12 +81,12 @@ public class ShopcartController {
         return IMOOCJSONResult.ok();
     }
 
-    @ApiOperation(value = "从购物车中删除商品", notes = "从购物车中删除商品")
+    @Operation(summary = "从购物车中删除商品", description = "从购物车中删除商品")
     @DeleteMapping("del")
     public IMOOCJSONResult del(
-            @ApiParam(value = "用户id", required = true)
+            @Parameter(description = "用户id", required = true)
             @RequestParam String userId,
-            @ApiParam(value = "商品规格id", required = true)
+            @Parameter(description = "商品规格id", required = true)
             @RequestParam String itemSpecId,
             HttpServletRequest request,
             HttpServletResponse response) {

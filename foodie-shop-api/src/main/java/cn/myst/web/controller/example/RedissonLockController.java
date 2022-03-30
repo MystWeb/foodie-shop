@@ -1,12 +1,12 @@
 package cn.myst.web.controller.example;
 
 import cn.myst.web.utils.RedisLockUtils;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import java.util.concurrent.CountDownLatch;
@@ -17,7 +17,7 @@ import java.util.concurrent.CountDownLatch;
  * @author ziming.xing
  * Create Time：2020/5/25
  */
-@ApiIgnore
+@Hidden
 @Slf4j
 @RequestMapping("/redisson")
 @RestController

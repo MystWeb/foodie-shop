@@ -12,9 +12,9 @@ import cn.myst.web.utils.CookieUtils;
 import cn.myst.web.utils.IMOOCJSONResult;
 import cn.myst.web.utils.JsonUtils;
 import cn.myst.web.utils.RedisOperator;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -36,7 +36,7 @@ import java.util.Objects;
  * Create Date：2021/6/30
  */
 @Slf4j
-@Api(value = "订单", tags = "订单的相关接口")
+@Tag(name = "订单", description = "订单的相关接口")
 @RestController
 @RequestMapping("orders")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -45,7 +45,7 @@ public class OrdersController extends BaseController {
     private final RestTemplate restTemplate;
     private final RedisOperator redisOperator;
 
-    @ApiOperation(value = "用户下单", notes = "用户提交订单")
+    @Operation(summary = "用户下单", description = "用户提交订单")
     @PostMapping("create")
     public IMOOCJSONResult create(@RequestBody SubmitOrderBO submitOrderBO,
                                   HttpServletRequest request,
@@ -104,10 +104,10 @@ public class OrdersController extends BaseController {
         return IMOOCJSONResult.ok(orderId);
     }
 
-    @ApiOperation(value = "用户支付通知", notes = "通知商户已支付订单")
+    @Operation(summary = "用户支付通知", description = "通知商户已支付订单")
     @PostMapping("notifyMerchantOrderPaid")
     public Integer notifyMerchantOrderPaid(
-            @ApiParam(value = "商户订单ID")
+            @Parameter(description = "商户订单ID")
             @RequestBody String merchantOrderId) {
         if (StringUtils.isBlank(merchantOrderId)) {
             throw new BusinessException(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
@@ -116,12 +116,12 @@ public class OrdersController extends BaseController {
         return HttpStatus.OK.value();
     }
 
-    @ApiOperation(value = "查询生产系统支付中心的订单信息", notes = "提供给大家查询的方法，查询生产系统支付中心的订单信息")
+    @Operation(summary = "查询生产系统支付中心的订单信息", description = "提供给大家查询的方法，查询生产系统支付中心的订单信息")
     @GetMapping("getPaymentCenterOrderInfo")
     public IMOOCJSONResult getPaymentCenterOrderInfo(
-            @ApiParam(value = "商户订单ID", required = true)
+            @Parameter(description = "商户订单ID", required = true)
             @RequestParam String merchantOrderId,
-            @ApiParam(value = "商户ID", required = true)
+            @Parameter(description = "商户ID", required = true)
             @RequestParam String merchantUserId) {
         if (StringUtils.isBlank(merchantOrderId) || StringUtils.isBlank(merchantUserId)) {
             return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
@@ -140,10 +140,10 @@ public class OrdersController extends BaseController {
         return IMOOCJSONResult.ok(responseEntity.getBody());
     }
 
-    @ApiOperation(value = "查询用户支付订单信息", notes = "查询用户支付订单信息")
+    @Operation(summary = "查询用户支付订单信息", description = "查询用户支付订单信息")
     @GetMapping("getPaidOrderInfo")
     public IMOOCJSONResult getPaidOrderInfo(
-            @ApiParam(value = "订单ID")
+            @Parameter(description = "订单ID")
             @RequestParam String orderId) {
         if (StringUtils.isBlank(orderId)) {
             throw new BusinessException(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);

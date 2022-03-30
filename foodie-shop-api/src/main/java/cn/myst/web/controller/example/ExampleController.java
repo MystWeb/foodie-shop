@@ -1,10 +1,10 @@
 package cn.myst.web.controller.example;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
  * @author ziming.xing
  * Create Date：2021/8/20
  */
-@ApiIgnore
+@Hidden
 @Slf4j
 @RestController
 @RequestMapping("/api/examples")

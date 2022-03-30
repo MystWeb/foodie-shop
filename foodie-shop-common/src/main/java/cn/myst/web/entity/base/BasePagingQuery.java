@@ -6,8 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Lists;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.util.CollectionUtils;
 
@@ -21,27 +20,27 @@ import java.util.stream.Collectors;
  * Create Date：2021/6/19
  */
 @Data
-@ApiModel("基础分页查询")
+@Schema(title = "基础分页查询")
 public class BasePagingQuery implements Serializable {
-    @ApiModelProperty(value = "第几页", dataType = "int", example = "1", required = true)
+    @Schema(name = "第几页", type = "int", example = "1", required = true)
     private transient Integer page = 1;
 
-    @ApiModelProperty(value = "每页显示条数", dataType = "int", example = "10", required = true)
+    @Schema(name = "每页显示条数", type = "int", example = "10", required = true)
     private transient Integer pageSize = 10;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @ApiModelProperty(value = "关键字")
+    @Schema(name = "关键字")
     private transient String keywords;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @ApiModelProperty(value = "排序字段集")
+    @Schema(name = "排序字段集")
     private transient List<SortKey> sortKeys;
 
     /**
      * 构建好的排序字符串
      */
     @JsonIgnore
-    @ApiModelProperty(hidden = true)
+    @Schema(hidden = true)
     private transient String sortString;
 
     /**

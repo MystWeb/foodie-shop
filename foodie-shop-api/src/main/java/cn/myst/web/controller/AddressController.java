@@ -7,9 +7,9 @@ import cn.myst.web.pojo.bo.AddressBO;
 import cn.myst.web.service.AddressService;
 import cn.myst.web.utils.IMOOCJSONResult;
 import cn.myst.web.utils.MobileEmailUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import java.util.Objects;
  * @author ziming.xing
  * Create Date：2021/6/29
  */
-@Api(value = "地址", tags = "地址的相关接口")
+@Tag(name = "地址", description = "地址的相关接口")
 @RestController
 @RequestMapping("address")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -37,16 +37,16 @@ public class AddressController {
      * 4. 修改收货地址
      * 5. 设置默认地址
      */
-    @ApiOperation(value = "根据用户id查询用户的收货地址列表", notes = "根据用户id查询用户的收货地址列表")
+    @Operation(summary = "根据用户id查询用户的收货地址列表", description = "根据用户id查询用户的收货地址列表")
     @GetMapping("list")
     public IMOOCJSONResult list(
-            @ApiParam(value = "用户id", required = true)
+            @Parameter(description = "用户id", required = true)
             @RequestParam String userId) {
         List<UserAddress> list = addressService.queryAllByUserId(userId);
         return IMOOCJSONResult.ok(list);
     }
 
-    @ApiOperation(value = "用户新增地址", notes = "用户新增地址")
+    @Operation(summary = "用户新增地址", description = "用户新增地址")
     @PostMapping("add")
     public IMOOCJSONResult add(@RequestBody AddressBO addressBO) {
         IMOOCJSONResult checkRes = checkAddress(addressBO);
@@ -99,7 +99,7 @@ public class AddressController {
         return IMOOCJSONResult.ok();
     }
 
-    @ApiOperation(value = "用户修改地址", notes = "用户修改地址")
+    @Operation(summary = "用户修改地址", description = "用户修改地址")
     @PutMapping("update")
     public IMOOCJSONResult update(@RequestBody AddressBO addressBO) {
         if (Objects.isNull(addressBO) || StringUtils.isBlank(addressBO.getAddressId())) {
@@ -113,12 +113,12 @@ public class AddressController {
         return IMOOCJSONResult.ok();
     }
 
-    @ApiOperation(value = "根据用户id、地址id删除对应的用户地址信息", notes = "根据用户id、地址id删除对应的用户地址信息")
+    @Operation(summary = "根据用户id、地址id删除对应的用户地址信息", description = "根据用户id、地址id删除对应的用户地址信息")
     @DeleteMapping("delete")
     public IMOOCJSONResult delete(
-            @ApiParam(value = "用户id", required = true)
+            @Parameter(description = "用户id", required = true)
             @RequestParam String userId,
-            @ApiParam(value = "地址id", required = true)
+            @Parameter(description = "地址id", required = true)
             @RequestParam String addressId) {
         if (StringUtils.isBlank(userId)) {
             return IMOOCJSONResult.errorMsg(EnumAddressValidation.USER_ID_CANNOT_BE_EMPTY.zh);
@@ -130,12 +130,12 @@ public class AddressController {
         return IMOOCJSONResult.ok();
     }
 
-    @ApiOperation(value = "根据用户id、地址id删除对应的用户地址信息", notes = "根据用户id、地址id删除对应的用户地址信息")
+    @Operation(summary = "根据用户id、地址id删除对应的用户地址信息", description = "根据用户id、地址id删除对应的用户地址信息")
     @PutMapping("setDefault")
     public IMOOCJSONResult setDefault(
-            @ApiParam(value = "用户id", required = true)
+            @Parameter(description = "用户id", required = true)
             @RequestParam String userId,
-            @ApiParam(value = "地址id", required = true)
+            @Parameter(description = "地址id", required = true)
             @RequestParam String addressId) {
         if (StringUtils.isBlank(userId)) {
             return IMOOCJSONResult.errorMsg(EnumAddressValidation.USER_ID_CANNOT_BE_EMPTY.zh);

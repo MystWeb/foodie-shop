@@ -5,9 +5,9 @@ import cn.myst.web.enums.EnumPage;
 import cn.myst.web.service.ItemsESService;
 import cn.myst.web.utils.IMOOCJSONResult;
 import cn.myst.web.utils.PagedGridResult;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author ziming.xing
  * Create Date：2021/10/30
  */
-@Api(value = "商品", tags = "商品信息展示的相关接口")
+@Tag(name = "商品", description = "商品信息展示的相关接口")
 @RestController
 @RequestMapping("items")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -28,16 +28,16 @@ public class ItemsController {
 
     private final ItemsESService itemsESService;
 
-    @ApiOperation(value = "搜索商品列表", notes = "搜索商品列表")
+    @Operation(summary = "搜索商品列表", description = "搜索商品列表")
     @GetMapping("/es/search")
     public IMOOCJSONResult search(
-            @ApiParam(value = "关键字", required = true)
+            @Parameter(description = "关键字", required = true)
             @RequestParam String keywords,
-            @ApiParam(value = "排序")
+            @Parameter(description = "排序")
             @RequestParam(required = false) String sort,
-            @ApiParam(value = "查询下一页的第几页")
+            @Parameter(description = "查询下一页的第几页")
             @RequestParam Integer page,
-            @ApiParam(value = "分页的每一页显示的条数")
+            @Parameter(description = "分页的每一页显示的条数")
             @RequestParam Integer pageSize) {
         if (StringUtils.isBlank(keywords)) {
             return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);

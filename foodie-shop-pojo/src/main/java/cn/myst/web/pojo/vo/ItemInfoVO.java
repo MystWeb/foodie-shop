@@ -4,8 +4,7 @@ import cn.myst.web.pojo.Items;
 import cn.myst.web.pojo.ItemsImg;
 import cn.myst.web.pojo.ItemsParam;
 import cn.myst.web.pojo.ItemsSpec;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
@@ -15,20 +14,20 @@ import java.util.List;
  * Create Date：2021/6/15
  * 商品详情VO
  */
-@ApiModel(value = "商品详情VO")
+@Schema(title = "商品详情VO")
 @Data
 public class ItemInfoVO {
 
-    @ApiModelProperty(value = "商品")
+    @Schema(name = "商品")
     private Items item;
 
-    @ApiModelProperty(value = "商品图片列表")
+    @Schema(name = "商品图片列表")
     private List<ItemsImg> itemImgList;
 
-    @ApiModelProperty(value = "商品规格列表")
+    @Schema(name = "商品规格列表")
     private List<ItemsSpec> itemSpecList;
 
-    @ApiModelProperty(value = "商品参数")
+    @Schema(name = "商品参数")
     private ItemsParam itemParams;
 
 }

@@ -4,19 +4,20 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * @author ziming.xing
  * Create Date：2021/5/18
  */
+
 /**
-    * 商品分类 
-    */
-@ApiModel(value="cn-myst-web-pojo-Category")
+ * 商品分类
+ */
+@Schema(title = "cn-myst-web-pojo-Category")
 @Data
 @TableName(value = "category")
 public class Category implements Serializable {
@@ -24,56 +25,56 @@ public class Category implements Serializable {
      * 主键
      */
     @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value="主键")
+    @Schema(name = "主键")
     private Integer id;
 
     /**
      * 分类名称
      */
     @TableField(value = "`name`")
-    @ApiModelProperty(value="分类名称")
+    @Schema(name = "分类名称")
     private String name;
 
     /**
      * 分类类型
      */
     @TableField(value = "`type`")
-    @ApiModelProperty(value="分类类型")
+    @Schema(name = "分类类型")
     private Integer type;
 
     /**
      * 父id
      */
     @TableField(value = "father_id")
-    @ApiModelProperty(value="父id")
+    @Schema(name = "父id")
     private Integer fatherId;
 
     /**
      * 图标
      */
     @TableField(value = "logo")
-    @ApiModelProperty(value="图标")
+    @Schema(name = "图标")
     private String logo;
 
     /**
      * 口号
      */
     @TableField(value = "slogan")
-    @ApiModelProperty(value="口号")
+    @Schema(name = "口号")
     private String slogan;
 
     /**
      * 分类图
      */
     @TableField(value = "cat_image")
-    @ApiModelProperty(value="分类图")
+    @Schema(name = "分类图")
     private String catImage;
 
     /**
      * 背景颜色
      */
     @TableField(value = "bg_color")
-    @ApiModelProperty(value="背景颜色")
+    @Schema(name = "背景颜色")
     private String bgColor;
 
     private static final long serialVersionUID = 1L;

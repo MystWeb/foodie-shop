@@ -8,9 +8,9 @@ import cn.myst.web.pojo.bo.UserBO;
 import cn.myst.web.pojo.vo.UsersVO;
 import cn.myst.web.service.UserService;
 import cn.myst.web.utils.*;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import java.util.Objects;
  * @author ziming.xing
  * Create Date：2021/5/18
  */
-@Api(value = "注册登录", tags = "用户注册登录的相关接口")
+@Tag(name = "注册登录", description = "用户注册登录的相关接口")
 @RestController
 @RequestMapping("passport")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -32,10 +32,10 @@ public class PassportController {
     private final UserService userService;
     private final RedisOperator redisOperator;
 
-    @ApiOperation(value = "用户名是否存在")
+    @Operation(summary = "用户名是否存在")
     @GetMapping("usernameIsExist")
     public IMOOCJSONResult usernameIsExist(
-            @ApiParam(value = "用户名", required = true)
+            @Parameter(description = "用户名", required = true)
             @RequestParam String username) {
         // 1、 判断用户名不能为空
         if (StringUtils.isBlank(username)) {
@@ -50,7 +50,7 @@ public class PassportController {
         return IMOOCJSONResult.ok();
     }
 
-    @ApiOperation("用户注册")
+    @Operation(summary = "用户注册")
     @PostMapping("register")
     public IMOOCJSONResult register(@RequestBody UserBO userBO,
                                     HttpServletRequest request,
@@ -103,7 +103,7 @@ public class PassportController {
         return IMOOCJSONResult.ok(users);
     }
 
-    @ApiOperation("用户登录")
+    @Operation(summary = "用户登录")
     @PostMapping("login")
     public IMOOCJSONResult login(@RequestBody UserBO userBO,
                                  HttpServletRequest request,
@@ -142,10 +142,10 @@ public class PassportController {
         return IMOOCJSONResult.ok(users);
     }
 
-    @ApiOperation("用户退出登录")
+    @Operation(summary = "用户退出登录")
     @PostMapping("logout")
     public IMOOCJSONResult logout(
-            @ApiParam(value = "用户id", required = true)
+            @Parameter(description = "用户id", required = true)
             @RequestParam String userId,
             HttpServletRequest request,
             HttpServletResponse response) {

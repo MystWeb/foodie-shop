@@ -1,7 +1,6 @@
 package cn.myst.web.pojo.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,21 +11,21 @@ import java.io.Serializable;
  * 搜索商品列表VO
  */
 @Data
-@ApiModel(value = "搜索商品列表VO")
+@Schema(title = "搜索商品列表VO")
 public class SearchItemsVO implements Serializable {
-    @ApiModelProperty(value = "商品id")
+    @Schema(name = "商品id")
     private String itemId;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(name = "商品名称")
     private String itemName;
 
-    @ApiModelProperty(value = "商品累计销量")
+    @Schema(name = "商品累计销量")
     private Integer sellCounts;
 
-    @ApiModelProperty(value = "商品图片")
+    @Schema(name = "商品图片")
     private String imgUrl;
 
-    @ApiModelProperty(value = "商品价格", notes = "商品优惠价")
+    @Schema(name = "商品价格", description = "商品优惠价")
     private Integer price;
 
     private static final long serialVersionUID = -3566955103175469971L;

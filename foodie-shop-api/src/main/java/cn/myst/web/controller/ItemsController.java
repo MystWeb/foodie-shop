@@ -11,9 +11,9 @@ import cn.myst.web.pojo.vo.ShopcartVO;
 import cn.myst.web.service.ItemService;
 import cn.myst.web.utils.IMOOCJSONResult;
 import cn.myst.web.utils.PagedGridResult;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import java.util.Objects;
  * @author ziming.xing
  * Create Date：2021/6/15
  */
-@Api(value = "商品", tags = "商品信息展示的相关接口")
+@Tag(name = "商品", description = "商品信息展示的相关接口")
 @RestController
 @RequestMapping("items")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -34,10 +34,10 @@ public class ItemsController extends BaseController {
 
     private final ItemService itemService;
 
-    @ApiOperation(value = "查询商品详情", notes = "查询商品详情")
+    @Operation(summary = "查询商品详情", description = "查询商品详情")
     @GetMapping("info/{itemId}")
     public IMOOCJSONResult info(
-            @ApiParam(value = "商品id", required = true)
+            @Parameter(description = "商品id", required = true)
             @PathVariable String itemId) {
         if (StringUtils.isBlank(itemId)) {
             return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
@@ -55,10 +55,10 @@ public class ItemsController extends BaseController {
         return IMOOCJSONResult.ok(itemInfoVO);
     }
 
-    @ApiOperation(value = "查询商品评价等级", notes = "查询商品评价等级")
+    @Operation(summary = "查询商品评价等级", description = "查询商品评价等级")
     @GetMapping("commentLevel")
     public IMOOCJSONResult getCommentLevel(
-            @ApiParam(value = "商品id", required = true)
+            @Parameter(description = "商品id", required = true)
             @RequestParam String itemId) {
         if (StringUtils.isBlank(itemId)) {
             return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
@@ -67,16 +67,16 @@ public class ItemsController extends BaseController {
         return IMOOCJSONResult.ok(countsVO);
     }
 
-    @ApiOperation(value = "查询商品评论", notes = "查询商品评论")
+    @Operation(summary = "查询商品评论", description = "查询商品评论")
     @GetMapping("comments")
     public IMOOCJSONResult getComments(
-            @ApiParam(value = "商品id", required = true)
+            @Parameter(description = "商品id", required = true)
             @RequestParam String itemId,
-            @ApiParam(value = "评价等级")
+            @Parameter(description = "评价等级")
             @RequestParam(required = false) Integer level,
-            @ApiParam(value = "查询下一页的第几页")
+            @Parameter(description = "查询下一页的第几页")
             @RequestParam Integer page,
-            @ApiParam(value = "分页的每一页显示的条数")
+            @Parameter(description = "分页的每一页显示的条数")
             @RequestParam Integer pageSize) {
         if (StringUtils.isBlank(itemId)) {
             return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
@@ -92,16 +92,16 @@ public class ItemsController extends BaseController {
         return IMOOCJSONResult.ok(grid);
     }
 
-    @ApiOperation(value = "搜索商品列表", notes = "搜索商品列表")
+    @Operation(summary = "搜索商品列表", description = "搜索商品列表")
     @GetMapping("search")
     public IMOOCJSONResult search(
-            @ApiParam(value = "关键字", required = true)
+            @Parameter(description = "关键字", required = true)
             @RequestParam String keywords,
-            @ApiParam(value = "排序")
+            @Parameter(description = "排序")
             @RequestParam(required = false) String sort,
-            @ApiParam(value = "查询下一页的第几页")
+            @Parameter(description = "查询下一页的第几页")
             @RequestParam Integer page,
-            @ApiParam(value = "分页的每一页显示的条数")
+            @Parameter(description = "分页的每一页显示的条数")
             @RequestParam Integer pageSize) {
         if (StringUtils.isBlank(keywords)) {
             return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
@@ -117,16 +117,16 @@ public class ItemsController extends BaseController {
         return IMOOCJSONResult.ok(grid);
     }
 
-    @ApiOperation(value = "根据分类id搜索商品列表", notes = "根据分类id搜索商品列表")
+    @Operation(summary = "根据分类id搜索商品列表", description = "根据分类id搜索商品列表")
     @GetMapping("catItems")
     public IMOOCJSONResult catItems(
-            @ApiParam(value = "三级分类id", required = true)
+            @Parameter(description = "三级分类id", required = true)
             @RequestParam Integer catId,
-            @ApiParam(value = "排序")
+            @Parameter(description = "排序")
             @RequestParam(required = false) String sort,
-            @ApiParam(value = "查询下一页的第几页")
+            @Parameter(description = "查询下一页的第几页")
             @RequestParam Integer page,
-            @ApiParam(value = "分页的每一页显示的条数")
+            @Parameter(description = "分页的每一页显示的条数")
             @RequestParam Integer pageSize) {
         if (Objects.isNull(catId)) {
             return IMOOCJSONResult.errorMsg(EnumBaseException.INCORRECT_REQUEST_PARAMETER.zh);
@@ -142,10 +142,10 @@ public class ItemsController extends BaseController {
         return IMOOCJSONResult.ok(grid);
     }
 
-    @ApiOperation(value = "根据商品规格ids查找最新的商品数据", notes = "用于用户长时间未登录网站，刷新购物车中的数据（主要是商品价格）类似京东淘宝")
+    @Operation(summary = "根据商品规格ids查找最新的商品数据", description = "用于用户长时间未登录网站，刷新购物车中的数据（主要是商品价格）类似京东淘宝")
     @GetMapping("refresh")
     public IMOOCJSONResult refresh(
-            @ApiParam(value = "拼接的规格ids", example = "1001,1003,1005", required = true)
+            @Parameter(description = "拼接的规格ids", example = "1001,1003,1005", required = true)
             @RequestParam String itemSpecIds) {
         if (StringUtils.isBlank(itemSpecIds)) {
             return IMOOCJSONResult.ok();

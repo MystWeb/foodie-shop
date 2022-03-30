@@ -11,9 +11,9 @@ import cn.myst.web.service.CategoryService;
 import cn.myst.web.utils.IMOOCJSONResult;
 import cn.myst.web.utils.JsonUtils;
 import cn.myst.web.utils.RedisOperator;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.tika.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ import java.util.Objects;
  * @author ziming.xing
  * Create Date：2021/5/25
  */
-@Api(value = "首页", tags = "首页展示的相关接口")
+@Tag(name = "首页", description = "首页展示的相关接口")
 @RestController
 @RequestMapping("index")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -46,7 +46,7 @@ public class IndexController {
      * 2. 定时重置，比如每天凌晨三点重置
      * 3. 每个轮播图都有可能是一个广告，每个广告都会有一个过期时间，过期了，再重置
      */
-    @ApiOperation(value = "获取首页轮播图", notes = "获取首页轮播图列表")
+    @Operation(summary = "获取首页轮播图", description = "获取首页轮播图列表")
     @GetMapping("carousel")
     public IMOOCJSONResult carousel() {
         List<Carousel> list;
@@ -65,7 +65,7 @@ public class IndexController {
      * 1、第一次刷新主页查询大分类，渲染展示到首页
      * 2、如果鼠标移动到大分类，则加载子分类的内容，如果已经存在子分类，则不需要加载（懒加载）
      */
-    @ApiOperation(value = "获取商品分类（一级）", notes = "获取商品分类（一级）")
+    @Operation(summary = "获取商品分类（一级）", description = "获取商品分类（一级）")
     @GetMapping("cats")
     public IMOOCJSONResult cats() {
         List<Category> list;
@@ -79,10 +79,10 @@ public class IndexController {
         return IMOOCJSONResult.ok(list);
     }
 
-    @ApiOperation(value = "获取商品子分类", notes = "获取商品子分类")
+    @Operation(summary = "获取商品子分类", description = "获取商品子分类")
     @GetMapping("subCat/{rootCatId}")
     public IMOOCJSONResult subCat(
-            @ApiParam(value = "一级分类id", required = true)
+            @Parameter(description = "一级分类id", required = true)
             @PathVariable Integer rootCatId) {
         if (Objects.isNull(rootCatId)) {
             return IMOOCJSONResult.errorMsg(CLASSIFICATION_NOT_EXIST);
@@ -111,10 +111,10 @@ public class IndexController {
         return IMOOCJSONResult.ok(list);
     }
 
-    @ApiOperation(value = "查询每个一级分类下的最新6条商品数据", notes = "查询每个一级分类下的最新6条商品数据")
+    @Operation(summary = "查询每个一级分类下的最新6条商品数据", description = "查询每个一级分类下的最新6条商品数据")
     @GetMapping("sixNewItems/{rootCatId}")
     public IMOOCJSONResult sixNewItems(
-            @ApiParam(value = "一级分类id", required = true)
+            @Parameter(description = "一级分类id", required = true)
             @PathVariable Integer rootCatId) {
         if (Objects.isNull(rootCatId)) {
             return IMOOCJSONResult.errorMsg(CLASSIFICATION_NOT_EXIST);

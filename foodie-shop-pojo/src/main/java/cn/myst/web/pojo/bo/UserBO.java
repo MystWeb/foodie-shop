@@ -1,7 +1,6 @@
 package cn.myst.web.pojo.bo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,18 +10,18 @@ import java.io.Serializable;
  * Create Date：2021/5/20
  * 业务层交互数据 用户BO
  */
-@ApiModel(value = "用户BO", description = "客户端，用户传入的数据封装在此entity中")
+@Schema(title = "用户BO", description = "客户端，用户传入的数据封装在此entity中")
 @Data
 public class UserBO implements Serializable {
     private static final long serialVersionUID = -1159689849586717724L;
 
-    @ApiModelProperty(value = "用户名", example = "jack", required = true)
+    @Schema(name = "用户名", example = "jack", required = true)
     private String username;
 
-    @ApiModelProperty(value = "密码", example = "123456", required = true)
+    @Schema(name = "密码", example = "123456", required = true)
     private String password;
 
-    @ApiModelProperty(value = "确认密码", example = "123456")
+    @Schema(name = "确认密码", example = "123456")
     private String confirmPassword;
 
 }
