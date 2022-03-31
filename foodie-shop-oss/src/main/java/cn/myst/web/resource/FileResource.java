@@ -20,4 +20,22 @@ public class FileResource {
 
     @Value("${file.server.url}")
     String serverUrl;
+
+    @Value("${file.endpoint}")
+    String endpoint;
+
+    @Value("${file.accessKeyId}")
+    String accessKeyId;
+
+    @Value("${file.accessKeySecret}")
+    String accessKeySecret;
+
+    @Value("${file.bucketName}")
+    String bucketName;
+
+    @Value("${file.objectName}")
+    String objectName;
+
+    @Value("${file.oss.server.url}")
+    String OSSServerUrl;
 }

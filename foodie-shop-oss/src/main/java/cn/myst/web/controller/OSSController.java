@@ -43,7 +43,7 @@ public class OSSController {
     private final UserService userService;
     private final CenterUserService centerUserService;
 
-    @Operation(summary = "用户更换头像", description = "用户更换头像")
+    @Operation(summary = "用户更换头像-FastDFS", description = "用户更换头像-FastDFS")
     @PostMapping(value = "uploadFace", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public IMOOCJSONResult uploadFace(
             @Parameter(description = "用户id", required = true)
@@ -81,6 +81,54 @@ public class OSSController {
 
         // 文件完整路径（含服务器地址）
         String finalUserFacePathUrl = serverUrl + finalFacePath;
+
+        // 更新用户头像到数据库
+        Users users = centerUserService.updateUserFace(userId, finalUserFacePathUrl);
+
+        userService.setNullProperty(users);
+        // 增加令牌token，会整合进redis，分布式回话
+        UsersVO usersVO = userService.convertUsersVO(users);
+
+        CookieUtils.setCookie(request, response, EnumCookie.USER.cookieName, JsonUtils.objectToJson(usersVO), true);
+
+        return IMOOCJSONResult.ok(users);
+    }
+
+    @Operation(summary = "用户更换头像-OSS", description = "用户更换头像-OSS")
+    @PostMapping(value = "uploadOSSFace", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public IMOOCJSONResult uploadOSSFace(
+            @Parameter(description = "用户id", required = true)
+            @RequestParam String userId,
+            @Parameter(description = "文件")
+            @RequestPart MultipartFile file,
+            HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if (Objects.isNull(file)) {
+            return IMOOCJSONResult.errorMsg(EnumBaseException.FILE_CANNOT_BE_EMPTY.zh);
+        }
+        // 校验文件类型
+        if (!FileUtils.isImage(file)) {
+            return IMOOCJSONResult.errorMsg(EnumBaseException.PICTURE_FORMAT_ERROR.zh);
+        }
+        // 获得文件上传的文件名称
+        String filename = file.getOriginalFilename();
+        if (StringUtils.isBlank(filename)) {
+            return IMOOCJSONResult.errorMsg(EnumBaseException.FILE_CANNOT_BE_EMPTY.zh);
+        }
+        // 开始文件上传
+        // 文件重命名 user-face.png -> ["imooc-face", "png"]
+        String[] fileNameArray = filename.split("\\.");
+        // 获取文件的后缀名
+        String suffix = fileNameArray[fileNameArray.length - 1];
+        // 上传的头像最终保存的位置
+        String finalFacePath = ossService.uploadOSS(file, userId, suffix);
+
+        // 校验文件上传结果
+        if (StringUtils.isBlank(finalFacePath)) {
+            return IMOOCJSONResult.errorMsg(EnumBaseException.FILE_UPLOAD_ERROR.zh);
+        }
+
+        // 文件完整路径（含服务器地址）
+        String finalUserFacePathUrl = fileResource.getOSSServerUrl() + finalFacePath;
 
         // 更新用户头像到数据库
         Users users = centerUserService.updateUserFace(userId, finalUserFacePathUrl);
