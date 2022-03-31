@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:mysql://192.168.100.123:3306/foodie-shop-dev?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    password: proaim@2020
+  # redis
+  redis:
+    # Redis 单机模式
+    host: 192.168.20.11
+    port: 6379
+    password: proaim@2013
+    database: 0
+# FastDFS
+fdfs:
+  tracker-list: # tracker服务所在的ip地址和端口号
+    - 192.168.20.191:22122

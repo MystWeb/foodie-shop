@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -74,7 +75,7 @@ public class CenterUserController extends BaseController {
     }
 
     @Operation(summary = "用户更换头像", description = "用户更换头像")
-    @PostMapping("uploadFace")
+    @PostMapping(value = "uploadFace", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public IMOOCJSONResult uploadFace(
             @Parameter(description = "用户id", required = true)
             @RequestParam String userId,

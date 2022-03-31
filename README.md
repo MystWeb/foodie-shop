@@ -34,7 +34,7 @@ foodie-shop
 
 | title(标题)                                                  | description(描述)                                            |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [Java SE Development Kit 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html) | Java SE开发工具包 8                                          |
+| [Java SE Development Kit 17](https://www.oracle.com/java/technologies/downloads/#java17) | Java SE开发工具包                                            |
 | [Maven](http://maven.apache.org/download.cgi)                | Apache Maven是一个软件项目管理和理解工具。基于项目对象模型（POM）的概念，Maven可以从中央信息管理项目的构建，报告和文档。 |
 | [Git](https://git-scm.com/download/win)                      | 分布式版本控制系统                                           |
 | [Tomcat](https://tomcat.apache.org/)                         | Apache Tomcat是由Apache Software Foundation（ASF）开发的一个开源Java WEB应用服务器 |
@@ -77,10 +77,15 @@ foodie-shop
 - 注意：只启动FoodieShopApplication，仅需安装mysql、redis即可
 - 前端源码foodie-shop\foodie-shop-frontend\放入apache-tomcat\webapps\
 - 前端访问入口：http://localhost:8080/foodie-shop-frontend/
+- 前端服务接口地址修改
+  - foodie-shop-frontend\js\app.js
+  - foodie-center-frontend\js\app.js
+
 - 后端Swagger UI
-  - 商品购物系统：http://localhost:8088/swagger-ui/
-  - 用户登录系统：http://localhost:8090/swagger-ui/
-  - 商品搜索系统：http://localhost:8091/swagger-ui/
+  - 商品购物系统：http://localhost:8088/swagger-ui/index.html
+  - 用户登录系统：http://localhost:8090/swagger-ui/index.html
+  - 商品搜索系统：http://localhost:8091/swagger-ui/index.html
+  - OSS系统：http://localhost:8066/swagger-ui/index.html
 
 
 ### Linux CentOS 7
@@ -162,7 +167,7 @@ cat <<EOF>> /etc/docker/daemon.json
         "max-size": "500m",
         "max-file": "3"
     },
-    # 如果启用firewalld，需增加该配置
+    // 如果启用firewalld，需增加该配置
     "iptables": false
 }
 EOF

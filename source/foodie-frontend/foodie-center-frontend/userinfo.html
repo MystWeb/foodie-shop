@@ -229,9 +229,11 @@
 						// 请求后端获得最新数据
 						var serverUrl = app.serverUrl;
 						axios.defaults.withCredentials = true;
+						var fileServerUrl = app.fileServerUrl + 'uploadFace?userId=' + userInfo.id
 						axios.post(
-								serverUrl + '/userInfo/uploadFace?userId=' + userInfo.id, 
-								multiForm, 
+								// serverUrl + '/userInfo/uploadFace?userId=' + userInfo.id,
+								fileServerUrl,
+								multiForm,
 								{
 									headers: {
 										'Content-Type': 'multipart/form-data',
@@ -335,7 +337,7 @@
 						var serverUrl = app.serverUrl;
 						axios.defaults.withCredentials = true;
 						axios.get(
-								serverUrl + '/center/userInfo?userId=' + userInfo.id, 
+								serverUrl + '/center/userInfo?userId=' + userInfo.id,
 								{
 									headers: {
 										'headerUserId': userInfo.id,
