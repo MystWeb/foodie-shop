@@ -22,18 +22,18 @@ import java.util.stream.Collectors;
 @Data
 @Schema(title = "基础分页查询")
 public class BasePagingQuery implements Serializable {
-    @Schema(name = "第几页", type = "int", example = "1", required = true)
+    @Schema(title = "第几页", type = "int", example = "1", required = true)
     private transient Integer page = 1;
 
-    @Schema(name = "每页显示条数", type = "int", example = "10", required = true)
+    @Schema(title = "每页显示条数", type = "int", example = "10", required = true)
     private transient Integer pageSize = 10;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Schema(name = "关键字")
+    @Schema(title = "关键字")
     private transient String keywords;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Schema(name = "排序字段集")
+    @Schema(title = "排序字段集")
     private transient List<SortKey> sortKeys;
 
     /**

@@ -12,28 +12,28 @@ import java.io.Serializable;
 @Schema(title = "地址BO", description = "客户端，用户传入的数据封装在此entity中")
 @Data
 public class AddressBO implements Serializable {
-    @Schema(name = "地址id")
+    @Schema(title = "地址id")
     private String addressId;
 
-    @Schema(name = "关联用户id")
+    @Schema(title = "关联用户id")
     private String userId;
 
-    @Schema(name = "收件人姓名")
+    @Schema(title = "收件人姓名")
     private String receiver;
 
-    @Schema(name = "收件人手机号")
+    @Schema(title = "收件人手机号")
     private String mobile;
 
-    @Schema(name = "省份")
+    @Schema(title = "省份")
     private String province;
 
-    @Schema(name = "城市")
+    @Schema(title = "城市")
     private String city;
 
-    @Schema(name = "区县")
+    @Schema(title = "区县")
     private String district;
 
-    @Schema(name = "详细地址")
+    @Schema(title = "详细地址")
     private String detail;
 
     private static final long serialVersionUID = -8632881206772473412L;

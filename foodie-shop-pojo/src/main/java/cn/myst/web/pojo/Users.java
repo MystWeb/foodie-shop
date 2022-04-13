@@ -27,14 +27,14 @@ public class Users implements Serializable {
      * 主键id 用户id
      */
     @TableId(value = "id", type = IdType.INPUT)
-    @Schema(name = "主键id 用户id")
+    @Schema(title = "主键id 用户id")
     private String id;
 
     /**
      * 用户名 用户名
      */
     @TableField(value = "username")
-    @Schema(name = "用户名 用户名")
+    @Schema(title = "用户名 用户名")
     private String username;
 
     /**
@@ -42,14 +42,14 @@ public class Users implements Serializable {
      */
     @JsonIgnore
     @TableField(value = "`password`")
-    @Schema(name = "密码 密码")
+    @Schema(title = "密码 密码")
     private String password;
 
     /**
      * 昵称 昵称
      */
     @TableField(value = "nickname")
-    @Schema(name = "昵称 昵称")
+    @Schema(title = "昵称 昵称")
     private String nickname;
 
     /**
@@ -57,56 +57,56 @@ public class Users implements Serializable {
      */
     @JsonIgnore
     @TableField(value = "realname")
-    @Schema(name = "真实姓名")
+    @Schema(title = "真实姓名")
     private String realname;
 
     /**
      * 头像
      */
     @TableField(value = "face")
-    @Schema(name = "头像")
+    @Schema(title = "头像")
     private String face;
 
     /**
      * 手机号 手机号
      */
     @TableField(value = "mobile")
-    @Schema(name = "手机号 手机号")
+    @Schema(title = "手机号 手机号")
     private String mobile;
 
     /**
      * 邮箱地址 邮箱地址
      */
     @TableField(value = "email")
-    @Schema(name = "邮箱地址 邮箱地址")
+    @Schema(title = "邮箱地址 邮箱地址")
     private String email;
 
     /**
      * 性别 性别 1:男  0:女  2:保密
      */
     @TableField(value = "sex")
-    @Schema(name = "性别 性别 1:男  0:女  2:保密")
+    @Schema(title = "性别 性别 1:男  0:女  2:保密")
     private Integer sex;
 
     /**
      * 生日 生日
      */
     @TableField(value = "birthday")
-    @Schema(name = "生日 生日")
+    @Schema(title = "生日 生日")
     private Date birthday;
 
     /**
      * 创建时间 创建时间
      */
     @TableField(value = "created_time")
-    @Schema(name = "创建时间 创建时间")
+    @Schema(title = "创建时间 创建时间")
     private Date createdTime;
 
     /**
      * 更新时间 更新时间
      */
     @TableField(value = "updated_time")
-    @Schema(name = "更新时间 更新时间")
+    @Schema(title = "更新时间 更新时间")
     private Date updatedTime;
 
     private static final long serialVersionUID = 1L;

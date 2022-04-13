@@ -13,22 +13,22 @@ import java.io.Serializable;
 @Data
 public class UsersVO implements Serializable {
 
-    @Schema(name = "主键id")
+    @Schema(title = "主键id")
     private String id;
 
-    @Schema(name = "用户名")
+    @Schema(title = "用户名")
     private String username;
 
-    @Schema(name = "昵称")
+    @Schema(title = "昵称")
     private String nickname;
 
-    @Schema(name = "头像")
+    @Schema(title = "头像")
     private String face;
 
-    @Schema(name = "性别 1:男  0:女  2:保密")
+    @Schema(title = "性别 1:男  0:女  2:保密")
     private Integer sex;
 
-    @Schema(name = "用户会话token")
+    @Schema(title = "用户会话token")
     private String userUniqueToken;
 
     private static final long serialVersionUID = -1801442528862175994L;

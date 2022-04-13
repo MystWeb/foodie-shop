@@ -9,14 +9,16 @@ public interface StringPool {
     String AND = "and";
     String AT = "@";
     String ASTERISK = "*";
-    String STAR = ASTERISK;
+    String STAR = "*";
     String BACK_SLASH = "\\";
     String COLON = ":";
+    String DOUBLE_COLON = "::";
     String COMMA = ",";
     String DASH = "-";
     String DOLLAR = "$";
     String DOT = ".";
-    String DOT_DOT = "..";
+    String UNDER_LINE = "_";
+    String DOUBLE_DOT = "..";
     String DOT_CLASS = ".class";
     String DOT_JAVA = ".java";
     String DOT_XML = ".xml";
@@ -55,7 +57,6 @@ public interface StringPool {
     String LEFT_SQ_BRACKET = "[";
     String RIGHT_SQ_BRACKET = "]";
     String TRUE = "true";
-    String UNDERSCORE = "_";
     String UTF_8 = "UTF-8";
     String US_ASCII = "US-ASCII";
     String ISO_8859_1 = "ISO-8859-1";

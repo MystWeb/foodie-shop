@@ -13,19 +13,19 @@ import java.io.Serializable;
 @Data
 public class SubmitOrderBO implements Serializable {
 
-    @Schema(name = "用户id", required = true)
+    @Schema(title = "用户id", required = true)
     private String userId;
 
-    @Schema(name = "规格ids", required = true)
+    @Schema(title = "规格ids", required = true)
     private String itemSpecIds;
 
-    @Schema(name = "地址id", required = true)
+    @Schema(title = "地址id", required = true)
     private String addressId;
 
-    @Schema(name = "支付方式", required = true)
+    @Schema(title = "支付方式", required = true)
     private Integer payMethod;
 
-    @Schema(name = "买家留言")
+    @Schema(title = "买家留言")
     private String leftMsg;
 
     private static final long serialVersionUID = 987105845404795161L;

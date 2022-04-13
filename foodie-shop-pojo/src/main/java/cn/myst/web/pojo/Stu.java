@@ -18,15 +18,15 @@ import java.io.Serializable;
 @TableName(value = "stu")
 public class Stu implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
-    @Schema(name = "id")
+    @Schema(title = "id")
     private Integer id;
 
     @TableField(value = "`name`")
-    @Schema(name = "name")
+    @Schema(title = "name")
     private String name;
 
     @TableField(value = "age")
-    @Schema(name = "age")
+    @Schema(title = "age")
     private Integer age;
 
     private static final long serialVersionUID = 1L;

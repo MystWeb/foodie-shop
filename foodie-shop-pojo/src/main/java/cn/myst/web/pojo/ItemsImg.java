@@ -26,49 +26,49 @@ public class ItemsImg implements Serializable {
      * 图片主键
      */
     @TableId(value = "id", type = IdType.INPUT)
-    @Schema(name = "图片主键")
+    @Schema(title = "图片主键")
     private String id;
 
     /**
      * 商品外键id 商品外键id
      */
     @TableField(value = "item_id")
-    @Schema(name = "商品外键id 商品外键id")
+    @Schema(title = "商品外键id 商品外键id")
     private String itemId;
 
     /**
      * 图片地址 图片地址
      */
     @TableField(value = "url")
-    @Schema(name = "图片地址 图片地址")
+    @Schema(title = "图片地址 图片地址")
     private String url;
 
     /**
      * 顺序 图片顺序，从小到大
      */
     @TableField(value = "sort")
-    @Schema(name = "顺序 图片顺序，从小到大")
+    @Schema(title = "顺序 图片顺序，从小到大")
     private Integer sort;
 
     /**
      * 是否主图 是否主图，1：是，0：否
      */
     @TableField(value = "is_main")
-    @Schema(name = "是否主图 是否主图，1：是，0：否")
+    @Schema(title = "是否主图 是否主图，1：是，0：否")
     private Integer isMain;
 
     /**
      * 创建时间
      */
     @TableField(value = "created_time")
-    @Schema(name = "创建时间")
+    @Schema(title = "创建时间")
     private Date createdTime;
 
     /**
      * 更新时间
      */
     @TableField(value = "updated_time")
-    @Schema(name = "更新时间")
+    @Schema(title = "更新时间")
     private Date updatedTime;
 
     private static final long serialVersionUID = 1L;

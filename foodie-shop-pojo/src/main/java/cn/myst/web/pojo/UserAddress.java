@@ -26,84 +26,84 @@ public class UserAddress implements Serializable {
      * 地址主键id
      */
     @TableId(value = "id", type = IdType.INPUT)
-    @Schema(name = "地址主键id")
+    @Schema(title = "地址主键id")
     private String id;
 
     /**
      * 关联用户id
      */
     @TableField(value = "user_id")
-    @Schema(name = "关联用户id")
+    @Schema(title = "关联用户id")
     private String userId;
 
     /**
      * 收件人姓名
      */
     @TableField(value = "receiver")
-    @Schema(name = "收件人姓名")
+    @Schema(title = "收件人姓名")
     private String receiver;
 
     /**
      * 收件人手机号
      */
     @TableField(value = "mobile")
-    @Schema(name = "收件人手机号")
+    @Schema(title = "收件人手机号")
     private String mobile;
 
     /**
      * 省份
      */
     @TableField(value = "province")
-    @Schema(name = "省份")
+    @Schema(title = "省份")
     private String province;
 
     /**
      * 城市
      */
     @TableField(value = "city")
-    @Schema(name = "城市")
+    @Schema(title = "城市")
     private String city;
 
     /**
      * 区县
      */
     @TableField(value = "district")
-    @Schema(name = "区县")
+    @Schema(title = "区县")
     private String district;
 
     /**
      * 详细地址
      */
     @TableField(value = "detail")
-    @Schema(name = "详细地址")
+    @Schema(title = "详细地址")
     private String detail;
 
     /**
      * 扩展字段
      */
     @TableField(value = "extand")
-    @Schema(name = "扩展字段")
+    @Schema(title = "扩展字段")
     private String extand;
 
     /**
      * 是否默认地址
      */
     @TableField(value = "is_default")
-    @Schema(name = "是否默认地址")
+    @Schema(title = "是否默认地址")
     private Integer isDefault;
 
     /**
      * 创建时间
      */
     @TableField(value = "created_time")
-    @Schema(name = "创建时间")
+    @Schema(title = "创建时间")
     private Date createdTime;
 
     /**
      * 更新时间
      */
     @TableField(value = "updated_time")
-    @Schema(name = "更新时间")
+    @Schema(title = "更新时间")
     private Date updatedTime;
 
     private static final long serialVersionUID = 1L;

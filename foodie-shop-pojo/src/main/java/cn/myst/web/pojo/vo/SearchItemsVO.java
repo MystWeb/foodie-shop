@@ -13,19 +13,19 @@ import java.io.Serializable;
 @Data
 @Schema(title = "搜索商品列表VO")
 public class SearchItemsVO implements Serializable {
-    @Schema(name = "商品id")
+    @Schema(title = "商品id")
     private String itemId;
 
-    @Schema(name = "商品名称")
+    @Schema(title = "商品名称")
     private String itemName;
 
-    @Schema(name = "商品累计销量")
+    @Schema(title = "商品累计销量")
     private Integer sellCounts;
 
-    @Schema(name = "商品图片")
+    @Schema(title = "商品图片")
     private String imgUrl;
 
-    @Schema(name = "商品价格", description = "商品优惠价")
+    @Schema(title = "商品价格", description = "商品优惠价")
     private Integer price;
 
     private static final long serialVersionUID = -3566955103175469971L;

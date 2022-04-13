@@ -15,25 +15,25 @@ import java.io.Serializable;
 @Data
 public class OrderItemsCommentBO implements Serializable {
     @JsonIgnore
-    @Schema(name = "商品评价id")
+    @Schema(title = "商品评价id")
     private String commentId;
 
-    @Schema(name = "商品id")
+    @Schema(title = "商品id")
     private String itemId;
 
-    @Schema(name = "商品名称")
+    @Schema(title = "商品名称")
     private String itemName;
 
-    @Schema(name = "商品规格id")
+    @Schema(title = "商品规格id")
     private String itemSpecId;
 
-    @Schema(name = "商品规格名称")
+    @Schema(title = "商品规格名称")
     private String itemSpecName;
 
-    @Schema(name = "评价等级")
+    @Schema(title = "评价等级")
     private Integer commentLevel;
 
-    @Schema(name = "商品内容")
+    @Schema(title = "商品内容")
     private String content;
 
     private static final long serialVersionUID = 5027520291867621781L;

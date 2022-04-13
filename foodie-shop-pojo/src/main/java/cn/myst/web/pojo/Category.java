@@ -25,56 +25,56 @@ public class Category implements Serializable {
      * 主键
      */
     @TableId(value = "id", type = IdType.AUTO)
-    @Schema(name = "主键")
+    @Schema(title = "主键")
     private Integer id;
 
     /**
      * 分类名称
      */
     @TableField(value = "`name`")
-    @Schema(name = "分类名称")
+    @Schema(title = "分类名称")
     private String name;
 
     /**
      * 分类类型
      */
     @TableField(value = "`type`")
-    @Schema(name = "分类类型")
+    @Schema(title = "分类类型")
     private Integer type;
 
     /**
      * 父id
      */
     @TableField(value = "father_id")
-    @Schema(name = "父id")
+    @Schema(title = "父id")
     private Integer fatherId;
 
     /**
      * 图标
      */
     @TableField(value = "logo")
-    @Schema(name = "图标")
+    @Schema(title = "图标")
     private String logo;
 
     /**
      * 口号
      */
     @TableField(value = "slogan")
-    @Schema(name = "口号")
+    @Schema(title = "口号")
     private String slogan;
 
     /**
      * 分类图
      */
     @TableField(value = "cat_image")
-    @Schema(name = "分类图")
+    @Schema(title = "分类图")
     private String catImage;
 
     /**
      * 背景颜色
      */
     @TableField(value = "bg_color")
-    @Schema(name = "背景颜色")
+    @Schema(title = "背景颜色")
     private String bgColor;
 
     private static final long serialVersionUID = 1L;

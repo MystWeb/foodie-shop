@@ -5,9 +5,24 @@
 ############################################################
 server:
   port: 8066
+  # Spring Boot Tomcat配置详解：https://www.cnblogs.com/javastack/p/9153952.html
   tomcat:
     uri-encoding: UTF-8
+    basedir: "logs/@artifactId@/tomcat"
+    accesslog:
+      enabled: true
+      directory: "logs"
+      encoding: utf-8
+      file-date-format: _yyyy-MM-dd
+      locale: zh_CN
+      max-days: 30
+      prefix: "tomcat_access_log"
+      suffix: ".log"
+      pattern: "[${spring.application.name}] ===> 请求时间-%t 客户端IP-%a 客户端Host-%h
+            客户端协议-%H 线程名称-%I SessionId-%S 请求URL-%U 请求方法-%m 请求状态码-%s 耗时(ms)-%D 连接状态-%X"
   max-http-header-size: 80KB
+  # 开启优雅停止 Web 容器，默认为 IMMEDIATE：立即停止
+  shutdown: graceful
 
 ############################################################
 #
@@ -15,10 +30,14 @@ server:
 #
 ############################################################
 spring:
+  lifecycle:
+    # 优雅停机-最大等待时间
+    timeout-per-shutdown-phase: 30s
   profiles:
     active: dev # 默认启动环境
   application:
-    name: foodie-shop-search # 应用名称
+#    name: foodie-shop-search # 应用名称
+    name: "@artifactId@" # 应用名称
   datasource:
     type: com.zaxxer.hikari.HikariDataSource      # 数据源类型：HikariCP
     driver-class-name: com.mysql.cj.jdbc.Driver   # mysql驱动
@@ -65,6 +84,9 @@ spring:
     encoding: UTF-8
     prefix: classpath:/templates/
     suffix: .html
+    ## thymeleaf 配置 不再检查 templates 文件夹下是否存在模板。
+    check-template: false
+    check-template-location: false
 ############################################################
 #
 # mybatis 配置
@@ -89,3 +111,16 @@ pagehelper:
 fdfs:
   connect-timeout: 30 # 连接的超时时间
   so-timeout: 30 # 读取的超时时间
+
+## actuator监控指标配置
+management:
+  endpoints:
+    web:
+      base-path: /actuator # 配置端点访问前缀
+      exposure:
+        include: '*' # 以 web方式暴露所有端点
+        exclude: info,beans,env #在暴露所有端点的前提下，可以排除某个端点(不暴露)
+  # 应用健康详细信息
+  endpoint:
+    health:
+      show-details: always

@@ -18,16 +18,16 @@ import java.util.List;
 @Data
 public class ItemInfoVO {
 
-    @Schema(name = "商品")
+    @Schema(title = "商品")
     private Items item;
 
-    @Schema(name = "商品图片列表")
+    @Schema(title = "商品图片列表")
     private List<ItemsImg> itemImgList;
 
-    @Schema(name = "商品规格列表")
+    @Schema(title = "商品规格列表")
     private List<ItemsSpec> itemSpecList;
 
-    @Schema(name = "商品参数")
+    @Schema(title = "商品参数")
     private ItemsParam itemParams;
 
 }

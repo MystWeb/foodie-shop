@@ -19,14 +19,14 @@ public class SortKey implements Serializable {
     /**
      * The ID of the attribute to sort by.
      */
-    @Schema(name = "排序字段", description = "要排序的属性的名称")
+    @Schema(title = "排序字段", description = "要排序的属性的名称")
     private String field;
 
 
     /**
      * The sort order. Ascending order, by default.
      */
-    @Schema(name = "排序顺序", description = "排序顺序，默认为升序")
+    @Schema(title = "排序顺序", description = "排序顺序，默认为升序")
     private String sort;
 
     /**

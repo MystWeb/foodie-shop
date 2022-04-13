@@ -13,19 +13,19 @@ import java.io.Serializable;
 @Data
 public class MerchantOrdersVO implements Serializable {
 
-    @Schema(name = "商户订单号")
+    @Schema(title = "商户订单号")
     private String merchantOrderId;
 
-    @Schema(name = "商户方的发起用户的用户主键id")
+    @Schema(title = "商户方的发起用户的用户主键id")
     private String merchantUserId;
 
-    @Schema(name = "实际支付总金额（包含商户所支付的订单费邮费总额）")
+    @Schema(title = "实际支付总金额（包含商户所支付的订单费邮费总额）")
     private Integer amount;
 
-    @Schema(name = "支付方式 1:微信   2:支付宝")
+    @Schema(title = "支付方式 1:微信   2:支付宝")
     private Integer payMethod;
 
-    @Schema(name = "支付成功后的回调地址（学生自定义）")
+    @Schema(title = "支付成功后的回调地址（学生自定义）")
     private String returnUrl;
 
     private static final long serialVersionUID = 7219618759986415299L;

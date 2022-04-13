@@ -14,13 +14,13 @@ import java.io.Serializable;
 @Data
 public class SimpleItemVO implements Serializable {
 
-    @Schema(description = "商品id")
+    @Schema(title = "商品id")
     private String itemId;
 
-    @Schema(description = "商品名称")
+    @Schema(title = "商品名称")
     private String itemName;
 
-    @Schema(description = "图片地址")
+    @Schema(title = "图片地址")
     private String itemUrl;
 
     private static final long serialVersionUID = -1524404605421841016L;

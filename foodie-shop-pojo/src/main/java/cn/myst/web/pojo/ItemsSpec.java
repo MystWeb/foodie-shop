@@ -27,63 +27,63 @@ public class ItemsSpec implements Serializable {
      * 商品规格id
      */
     @TableId(value = "id", type = IdType.INPUT)
-    @Schema(name = "商品规格id")
+    @Schema(title = "商品规格id")
     private String id;
 
     /**
      * 商品外键id
      */
     @TableField(value = "item_id")
-    @Schema(name = "商品外键id")
+    @Schema(title = "商品外键id")
     private String itemId;
 
     /**
      * 规格名称
      */
     @TableField(value = "`name`")
-    @Schema(name = "规格名称")
+    @Schema(title = "规格名称")
     private String name;
 
     /**
      * 库存
      */
     @TableField(value = "stock")
-    @Schema(name = "库存")
+    @Schema(title = "库存")
     private Integer stock;
 
     /**
      * 折扣力度
      */
     @TableField(value = "discounts")
-    @Schema(name = "折扣力度")
+    @Schema(title = "折扣力度")
     private BigDecimal discounts;
 
     /**
      * 优惠价
      */
     @TableField(value = "price_discount")
-    @Schema(name = "优惠价")
+    @Schema(title = "优惠价")
     private Integer priceDiscount;
 
     /**
      * 原价
      */
     @TableField(value = "price_normal")
-    @Schema(name = "原价")
+    @Schema(title = "原价")
     private Integer priceNormal;
 
     /**
      * 创建时间
      */
     @TableField(value = "created_time")
-    @Schema(name = "创建时间")
+    @Schema(title = "创建时间")
     private Date createdTime;
 
     /**
      * 更新时间
      */
     @TableField(value = "updated_time")
-    @Schema(name = "更新时间")
+    @Schema(title = "更新时间")
     private Date updatedTime;
 
     private static final long serialVersionUID = 1L;

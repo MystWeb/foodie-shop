@@ -14,16 +14,16 @@ import java.io.Serializable;
 @Schema(title = "商品评价数量VO")
 public class CommentLevelCountsVO implements Serializable {
 
-    @Schema(name = "所有评价的数量")
+    @Schema(title = "所有评价的数量")
     private Long totalCounts;
 
-    @Schema(name = "好评的数量")
+    @Schema(title = "好评的数量")
     private Long goodCounts;
 
-    @Schema(name = "中评的数量")
+    @Schema(title = "中评的数量")
     private Long normalCounts;
 
-    @Schema(name = "差评的数量")
+    @Schema(title = "差评的数量")
     private Long badCounts;
 
     private static final long serialVersionUID = -3616983867576705847L;

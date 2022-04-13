@@ -15,15 +15,15 @@ import java.io.Serializable;
 public class SubCategoryVO implements Serializable {
     private static final long serialVersionUID = 2628874213436335680L;
 
-    @Schema(name = "三级分类主键")
+    @Schema(title = "三级分类主键")
     private Integer subId;
 
-    @Schema(name = "三级分类名称")
+    @Schema(title = "三级分类名称")
     private String subName;
 
-    @Schema(name = "三级分类类型")
+    @Schema(title = "三级分类类型")
     private Integer subType;
 
-    @Schema(name = "三级分类父id")
+    @Schema(title = "三级分类父id")
     private Integer subFatherId;
 }

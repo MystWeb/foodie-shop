@@ -25,63 +25,63 @@ public class OrderItems implements Serializable {
      * 主键id
      */
     @TableId(value = "id", type = IdType.INPUT)
-    @Schema(name = "主键id")
+    @Schema(title = "主键id")
     private String id;
 
     /**
      * 归属订单id
      */
     @TableField(value = "order_id")
-    @Schema(name = "归属订单id")
+    @Schema(title = "归属订单id")
     private String orderId;
 
     /**
      * 商品id
      */
     @TableField(value = "item_id")
-    @Schema(name = "商品id")
+    @Schema(title = "商品id")
     private String itemId;
 
     /**
      * 商品图片
      */
     @TableField(value = "item_img")
-    @Schema(name = "商品图片")
+    @Schema(title = "商品图片")
     private String itemImg;
 
     /**
      * 商品名称
      */
     @TableField(value = "item_name")
-    @Schema(name = "商品名称")
+    @Schema(title = "商品名称")
     private String itemName;
 
     /**
      * 规格id
      */
     @TableField(value = "item_spec_id")
-    @Schema(name = "规格id")
+    @Schema(title = "规格id")
     private String itemSpecId;
 
     /**
      * 规格名称
      */
     @TableField(value = "item_spec_name")
-    @Schema(name = "规格名称")
+    @Schema(title = "规格名称")
     private String itemSpecName;
 
     /**
      * 成交价格
      */
     @TableField(value = "price")
-    @Schema(name = "成交价格")
+    @Schema(title = "成交价格")
     private Integer price;
 
     /**
      * 购买数量
      */
     @TableField(value = "buy_counts")
-    @Schema(name = "购买数量")
+    @Schema(title = "购买数量")
     private Integer buyCounts;
 
     private static final long serialVersionUID = 1L;

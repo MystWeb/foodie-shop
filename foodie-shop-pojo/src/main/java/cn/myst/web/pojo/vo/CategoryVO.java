@@ -16,22 +16,22 @@ import java.util.List;
 public class CategoryVO implements Serializable {
     private static final long serialVersionUID = 2628874213436335680L;
 
-    @Schema(name = "主键")
+    @Schema(title = "主键")
     private Integer id;
 
-    @Schema(name = "分类名称")
+    @Schema(title = "分类名称")
     private String name;
 
-    @Schema(name = "分类类型")
+    @Schema(title = "分类类型")
     private Integer type;
 
-    @Schema(name = "父id")
+    @Schema(title = "父id")
     private Integer fatherId;
 
     /**
      * 三级分类VO List
      */
-    @Schema(name = "三级分类VO List")
+    @Schema(title = "三级分类VO List")
     private List<SubCategoryVO> subCatList;
 
 }

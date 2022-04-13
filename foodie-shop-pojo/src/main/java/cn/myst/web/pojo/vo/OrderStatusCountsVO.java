@@ -15,16 +15,16 @@ import java.io.Serializable;
 @Builder
 public class OrderStatusCountsVO implements Serializable {
 
-    @Schema(name = "待付款订单数量")
+    @Schema(title = "待付款订单数量")
     private Integer waitPayCounts;
 
-    @Schema(name = "待发货订单数量")
+    @Schema(title = "待发货订单数量")
     private Integer waitDeliverCounts;
 
-    @Schema(name = "待收货订单数量")
+    @Schema(title = "待收货订单数量")
     private Integer waitReceiveCounts;
 
-    @Schema(name = "待评价订单数量")
+    @Schema(title = "待评价订单数量")
     private Integer waitCommentCounts;
 
     private static final long serialVersionUID = -1767149166375539122L;

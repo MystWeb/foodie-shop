@@ -13,25 +13,25 @@ import java.io.Serializable;
 @Data
 public class MySubOrderItemVO implements Serializable {
 
-    @Schema(name = "商品id")
+    @Schema(title = "商品id")
     private String itemId;
 
-    @Schema(name = "商品名称")
+    @Schema(title = "商品名称")
     private String itemName;
 
-    @Schema(name = "商品图片")
+    @Schema(title = "商品图片")
     private String itemImg;
 
-    @Schema(name = "商品规格id")
+    @Schema(title = "商品规格id")
     private String itemSpecId;
 
-    @Schema(name = "商品规格名称")
+    @Schema(title = "商品规格名称")
     private String itemSpecName;
 
-    @Schema(name = "购买数量")
+    @Schema(title = "购买数量")
     private Integer buyCounts;
 
-    @Schema(name = "成交价格")
+    @Schema(title = "成交价格")
     private Integer price;
 
     private static final long serialVersionUID = -1432326213105839720L;

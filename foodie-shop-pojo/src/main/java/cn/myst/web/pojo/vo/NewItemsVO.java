@@ -14,22 +14,22 @@ import java.util.List;
 @Schema(title = "最新商品VO")
 @Data
 public class NewItemsVO implements Serializable {
-    @Schema(name = "一级分类id")
+    @Schema(title = "一级分类id")
     private Integer rootCatId;
 
-    @Schema(name = "一级分类名称")
+    @Schema(title = "一级分类名称")
     private String rootCatName;
 
-    @Schema(name = "口号")
+    @Schema(title = "口号")
     private String slogan;
 
-    @Schema(name = "分类图")
+    @Schema(title = "分类图")
     private String catImage;
 
-    @Schema(name = "背景颜色")
+    @Schema(title = "背景颜色")
     private String bgColor;
 
-    @Schema(name = "6个最新商品的简单数据列表")
+    @Schema(title = "6个最新商品的简单数据列表")
     private List<SimpleItemVO> simpleItemList;
 
     private static final long serialVersionUID = -4637369354538528681L;

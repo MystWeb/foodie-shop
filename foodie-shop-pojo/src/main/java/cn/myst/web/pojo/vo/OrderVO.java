@@ -15,13 +15,13 @@ import java.util.List;
 @Data
 public class OrderVO implements Serializable {
 
-    @Schema(name = "商户订单号")
+    @Schema(title = "商户订单号")
     private String orderId;
 
-    @Schema(name = "商户订单")
+    @Schema(title = "商户订单")
     private MerchantOrdersVO merchantOrdersVO;
 
-    @Schema(name = "待删除的购物车列表")
+    @Schema(title = "待删除的购物车列表")
     private List<ShopcartBO> toBeRemovedShopCartList;
 
     private static final long serialVersionUID = -8583695550044976795L;
