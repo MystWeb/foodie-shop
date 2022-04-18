@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.myst.web.rabbitmq.producer.mapper.BrokerMessageMapper">
+  <resultMap id="BaseResultMap" type="cn.myst.web.rabbitmq.producer.entity.BrokerMessage">
+    <!--@mbg.generated-->
+    <!--@Table broker_message-->
+    <id column="message_id" jdbcType="VARCHAR" property="messageId" />
+    <result column="message" jdbcType="VARCHAR" property="message" typeHandler="cn.myst.web.rabbitmq.common.mybatis.handler.MessageJsonTypeHandler" />
+    <result column="try_count" jdbcType="INTEGER" property="tryCount" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="next_retry" jdbcType="TIMESTAMP" property="nextRetry" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    message_id, message, try_count, `status`, next_retry, create_time, update_time
+  </sql>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update broker_message
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="message = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.message != null">
+            when message_id = #{item.messageId,jdbcType=VARCHAR} then #{item.message,jdbcType=VARCHAR,typeHandler=cn.myst.web.rabbitmq.common.mybatis.handler.MessageJsonTypeHandler}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="try_count = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.tryCount != null">
+            when message_id = #{item.messageId,jdbcType=VARCHAR} then #{item.tryCount,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="`status` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.status != null">
+            when message_id = #{item.messageId,jdbcType=VARCHAR} then #{item.status,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="next_retry = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.nextRetry != null">
+            when message_id = #{item.messageId,jdbcType=VARCHAR} then #{item.nextRetry,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="create_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.createTime != null">
+            when message_id = #{item.messageId,jdbcType=VARCHAR} then #{item.createTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="update_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.updateTime != null">
+            when message_id = #{item.messageId,jdbcType=VARCHAR} then #{item.updateTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where message_id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.messageId,jdbcType=VARCHAR}
+    </foreach>
+  </update>
+  <insert id="batchInsert" parameterType="map">
+    <!--@mbg.generated-->
+    insert into broker_message
+    (message_id, message, try_count, `status`, next_retry, create_time, update_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.messageId,jdbcType=VARCHAR}, #{item.message,jdbcType=VARCHAR,typeHandler=cn.myst.web.rabbitmq.common.mybatis.handler.MessageJsonTypeHandler}, 
+        #{item.tryCount,jdbcType=INTEGER}, #{item.status,jdbcType=VARCHAR}, #{item.nextRetry,jdbcType=TIMESTAMP}, 
+        #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from broker_message
+    where message_id = #{messageId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from broker_message
+    where message_id = #{messageId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.myst.web.rabbitmq.producer.entity.BrokerMessage" >
+    insert into broker_message (message_id, message, try_count,
+    status, next_retry, create_time,
+    update_time)
+    values (#{messageId,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR, typeHandler=cn.myst.web.rabbitmq.common.mybatis.handler.MessageJsonTypeHandler}, #{tryCount,jdbcType=INTEGER},
+    #{status,jdbcType=VARCHAR}, #{nextRetry,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP},
+    #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.myst.web.rabbitmq.producer.entity.BrokerMessage" >
+    insert into broker_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="messageId != null" >
+        message_id,
+      </if>
+      <if test="message != null" >
+        message,
+      </if>
+      <if test="tryCount != null" >
+        try_count,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="nextRetry != null" >
+        next_retry,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="messageId != null" >
+        #{messageId,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null" >
+        #{message,jdbcType=VARCHAR, typeHandler=cn.myst.web.rabbitmq.common.mybatis.handler.MessageJsonTypeHandler},
+      </if>
+      <if test="tryCount != null" >
+        #{tryCount,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="nextRetry != null" >
+        #{nextRetry,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.myst.web.rabbitmq.producer.entity.BrokerMessage" >
+    update broker_message
+    <set >
+      <if test="message != null" >
+        message = #{message,jdbcType=VARCHAR, typeHandler=cn.myst.web.rabbitmq.common.mybatis.handler.MessageJsonTypeHandler},
+      </if>
+      <if test="tryCount != null" >
+        try_count = #{tryCount,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="nextRetry != null" >
+        next_retry = #{nextRetry,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where message_id = #{messageId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.myst.web.rabbitmq.producer.entity.BrokerMessage" >
+    update broker_message
+    set message = #{message,jdbcType=VARCHAR, typeHandler=cn.myst.web.rabbitmq.common.mybatis.handler.MessageJsonTypeHandler},
+    try_count = #{tryCount,jdbcType=INTEGER},
+    status = #{status,jdbcType=VARCHAR},
+    next_retry = #{nextRetry,jdbcType=TIMESTAMP},
+    create_time = #{createTime,jdbcType=TIMESTAMP},
+    update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where message_id = #{messageId,jdbcType=VARCHAR}
+  </update>
+
+
+  <update id="changeBrokerMessageStatus" >
+    update broker_message bm
+    set bm.status = #{brokerMessageStatus,jdbcType=VARCHAR},
+    bm.update_time = #{updateTime, jdbcType=TIMESTAMP}
+    where bm.message_id = #{brokerMessageId,jdbcType=VARCHAR}
+  </update>
+
+
+  <select id="queryBrokerMessageStatus4Timeout" resultMap="BaseResultMap" >
+    <![CDATA[
+	    select message_id, message, try_count, status, next_retry, create_time, update_time
+	    from broker_message bm
+	    where bm.status = #{brokerMessageStatus,jdbcType=VARCHAR}
+	    and bm.next_retry < sysdate()
+    ]]>
+  </select>
+
+  <select id="queryBrokerMessageStatus" resultMap="BaseResultMap" >
+    select message_id, message, try_count, status, next_retry, create_time, update_time
+    from broker_message bm
+    where bm.status = #{brokerMessageStatus,jdbcType=VARCHAR}
+  </select>
+
+
+  <update id="update4TryCount" >
+    update broker_message bm
+    set bm.try_count = bm.try_count + 1,
+    bm.update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where bm.message_id = #{brokerMessageId,jdbcType=VARCHAR}
+  </update>
+</mapper>
