@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+原创：https://chowdera.com/2022/02/202202250012386331.html
+  配置参数
+ 	%d{HH:mm:ss.SSS} 表示输出到毫秒的时间
+ 	%t 输出当前线程名称
+  	%-5level 输出日志级别，-5表示左对齐并且固定输出5个字符，如果不足在右边补0
+  	%logger 日志输出的具体信息，输出logger名称，因为Root Logger没有名称，所以没有输出
+ 	%msg 日志文本
+  	%n 换行
+  其他常用地占比特符有：
+  	%F 输出所在的类文件名，如Log4j2Test.java
+  	%L 输出行号
+  	%M 输出所在方法名
+  	%l 输出语句所在的行数, 包括类名、方法名、文件名、行数
+
+  	[%d{yyyy-MM-dd'T'HH:mm:ss.SSSZZ}] : 用的是UTC时间，原因是 ELK 是UTC时间，为了保持一致
+  	[%thread-%tid] : 线程ID
+  	[%X{hostName}] [%X{ip}] [%X{applicationName}] : X 代表 MDC 自定义的日志输出
+  	[%m] : message，代表要打印的日志内容
+  	'%ex'%n : ex 代表异常， %n 代表换行
+ -->
+
+<!-- configure.status 为设置日志输出级别，级别如下：OFF 、FATAL 、ERROR、WARN、INFO、DEBUG、TRACE、ALL -->
+<!-- configure.monitorInterval 监控间隔 指log4j2每隔3600秒（一小时），自动监控该配置文件是否有变化，如果变化，则自动根据文件内容重新配置 -->
+<configuration status="OFF" monitorInterval="3600">
+
+    <properties>
+        <!-- 项目根目录创建logs文件夹 -->
+        <property name="LOG_HOME">logs</property>
+        <property name="LOG_BACK_HOME">${LOG_HOME}/backup</property>
+        <property name="FILE_NAME">collector</property>
+        <property name="patternLayout">[%d{yyyy-MM-dd'T'HH:mm:ss.SSSZZ}] [%level{length=5}] [%thread-%tid] [%logger]
+            [%X{hostName}] [%X{ip}] [%X{applicationName}] [%F,%L,%C,%M] [%m] ## '%ex'%n
+        </property>
+    </properties>
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="${patternLayout}"/>
+        </Console>
+        <RollingRandomAccessFile name="appAppender" fileName="${LOG_HOME}/app-${FILE_NAME}.log"
+                                 filePattern="${LOG_HOME}/app-${FILE_NAME}-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${patternLayout}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="500MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="errorAppender" fileName="${LOG_HOME}/error-${FILE_NAME}.log"
+                                 filePattern="${LOG_HOME}/error-${FILE_NAME}-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${patternLayout}"/>
+            <Filters>
+                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="500MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingRandomAccessFile>
+    </Appenders>
+    <Loggers>
+        <!-- 业务相关 异步logger -->
+        <AsyncLogger name="cn.myst.web.collector.*" level="info" includeLocation="true">
+            <AppenderRef ref="appAppender"/>
+        </AsyncLogger>
+        <AsyncLogger name="cn.myst.web.collector.*" level="info" includeLocation="true">
+            <AppenderRef ref="errorAppender"/>
+        </AsyncLogger>
+        <Root level="info">
+            <Appender-Ref ref="CONSOLE"/>
+            <Appender-Ref ref="appAppender"/>
+            <AppenderRef ref="errorAppender"/>
+        </Root>
+    </Loggers>
+</configuration>
