@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.myst.web.distribute.demo.mapper.ProductMapper">
+  <resultMap id="BaseResultMap" type="cn.myst.web.distribute.demo.domain.Product">
+    <!--@mbg.generated-->
+    <!--@Table product-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="product_desc" jdbcType="VARCHAR" property="productDesc" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, product_name, price, `count`, product_desc, create_user, create_time, update_user, 
+    update_time
+  </sql>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update product
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="product_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.productName != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.productName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="price = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.price != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.price,jdbcType=DECIMAL}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="`count` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.count != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.count,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="product_desc = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.productDesc != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.productDesc,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="create_user = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.createUser != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.createUser,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="create_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.createTime != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.createTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="update_user = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.updateUser != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.updateUser,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="update_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.updateTime != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.updateTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into product
+    (product_name, price, `count`, product_desc, create_user, create_time, update_user, 
+      update_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.productName,jdbcType=VARCHAR}, #{item.price,jdbcType=DECIMAL}, #{item.count,jdbcType=INTEGER}, 
+        #{item.productDesc,jdbcType=VARCHAR}, #{item.createUser,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+        #{item.updateUser,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+</mapper>

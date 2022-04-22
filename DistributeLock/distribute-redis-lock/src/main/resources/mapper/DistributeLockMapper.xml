@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.myst.web.distribute.mapper.DistributeLockMapper">
+  <resultMap id="BaseResultMap" type="cn.myst.web.distribute.domain.DistributeLock">
+    <!--@mbg.generated-->
+    <!--@Table distribute_lock-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="business_code" jdbcType="VARCHAR" property="businessCode" />
+    <result column="business_name" jdbcType="VARCHAR" property="businessName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, business_code, business_name
+  </sql>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update distribute_lock
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="business_code = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.businessCode != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.businessCode,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="business_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.businessName != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.businessName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into distribute_lock
+    (business_code, business_name)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.businessCode,jdbcType=VARCHAR}, #{item.businessName,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+</mapper>
