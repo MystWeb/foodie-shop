@@ -86,6 +86,10 @@ public class OrderServiceImpl implements OrderService {
         Date nowDate = Date.from(Instant.now());
         newOrder.setCreatedTime(nowDate);
         newOrder.setUpdatedTime(nowDate);
+        // 先插入，后更新（兼容分库分表分片规则）
+        newOrder.setTotalAmount(0);
+        newOrder.setRealPayAmount(0);
+        ordersMapper.insert(newOrder);
 
         // 2. 循环根据itemSpecIds保存订单商品信息表
         String[] itemSpecIdArr = itemSpecIds.split(",");
@@ -138,8 +142,10 @@ public class OrderServiceImpl implements OrderService {
         }
         newOrder.setTotalAmount(totalAmount);
         newOrder.setRealPayAmount(realPayAmount);
+        // 更新时不可以更新分片列
+        newOrder.setUserId(null);
         // 2.6 保存订单
-        ordersMapper.insert(newOrder);
+        ordersMapper.updateById(newOrder);
         // 3. 保存订单状态表
         OrderStatus waitPayOrderStatus = new OrderStatus();
         waitPayOrderStatus.setOrderId(orderId);
