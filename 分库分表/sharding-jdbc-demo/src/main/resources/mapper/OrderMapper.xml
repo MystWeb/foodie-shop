@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.myst.web.sharding.jdbc.demo.mapper.OrderMapper">
+  <resultMap id="BaseResultMap" type="cn.myst.web.sharding.jdbc.demo.domain.Order">
+    <!--@mbg.generated-->
+    <!--@Table order_1-->
+    <id column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="order_amount" jdbcType="DECIMAL" property="orderAmount" />
+    <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    order_id, order_amount, order_status, user_id
+  </sql>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update order_1
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="order_amount = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.orderAmount != null">
+            when order_id = #{item.orderId,jdbcType=BIGINT} then #{item.orderAmount,jdbcType=DECIMAL}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="order_status = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.orderStatus != null">
+            when order_id = #{item.orderId,jdbcType=BIGINT} then #{item.orderStatus,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="user_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.userId != null">
+            when order_id = #{item.orderId,jdbcType=BIGINT} then #{item.userId,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where order_id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.orderId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <insert id="batchInsert" parameterType="map">
+    <!--@mbg.generated-->
+    insert into order_1
+    (order_id, order_amount, order_status, user_id)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.orderId,jdbcType=BIGINT}, #{item.orderAmount,jdbcType=DECIMAL}, #{item.orderStatus,jdbcType=INTEGER}, 
+        #{item.userId,jdbcType=INTEGER})
+    </foreach>
+  </insert>
+</mapper>
